@@ -152,7 +152,6 @@
     
         const audioPlayer = document.getElementById('audio-player');
         let currentTrack = 0;
-        let isPlaying = false;
         let currentTime = 0; // Store current time for pause and resume
     
         // Function to start the audio playback
@@ -163,22 +162,20 @@
             }
             audioPlayer.play();  // Start playing the current track
             audioPlayer.muted = false; // Unmute the audio after the user clicks
-            isPlaying = true;
-            updatePlayPauseButton();
+            updatePlayPauseButton(true);
         }
     
         // Function to pause the audio
         function pauseAudio() {
             currentTime = audioPlayer.currentTime; // Store current time when paused
             audioPlayer.pause();
-            isPlaying = false;
-            updatePlayPauseButton();
+            updatePlayPauseButton(false);
         }
     
         // Function to update play/pause button
-        function updatePlayPauseButton() {
+        function updatePlayPauseButton(isPlaying) {
             const button = document.getElementById('play-pause-button');
-            if (!audioPlayer.paused) {
+            if (isPlaying) {
                 button.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 19H5V5h14v14z"/></svg>'; // Pause icon
             } else {
                 button.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>'; // Play icon
@@ -199,7 +196,7 @@
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track
             audioPlayer.src = audioFiles[currentTrack]; // Set the new track
             audioPlayer.play(); // Play the new track
-            updatePlayPauseButton(); // Update the play/pause button
+            updatePlayPauseButton(true); // Update the button to show pause icon
         });
     
         // Handle the "Backwards" button click
@@ -207,7 +204,7 @@
             currentTrack = (currentTrack - 1 + audioFiles.length) % audioFiles.length; // Go to previous track (looping)
             audioPlayer.src = audioFiles[currentTrack]; // Set the new track
             audioPlayer.play(); // Play the new track
-            updatePlayPauseButton(); // Update the play/pause button to reflect pause state
+            updatePlayPauseButton(true); // Update the button to show pause icon
         });
     
         // Handle the "Forwards" button click
@@ -215,7 +212,7 @@
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track (looping)
             audioPlayer.src = audioFiles[currentTrack]; // Set the new track
             audioPlayer.play(); // Play the new track
-            updatePlayPauseButton(); // Update the play/pause button to reflect pause state
+            updatePlayPauseButton(true); // Update the button to show pause icon
         });
     </script>
 </body>
