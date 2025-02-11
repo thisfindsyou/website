@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap" rel="stylesheet">
+    <title>thisfindsyou</title>
+    <style>
+        body {
+            font-family: 'Old Standard TT', serif; /* Apply Old Standard TT font */
+            background-color: #111;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .months {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 images per row */
+            gap: 20px;
+            justify-items: center;
+            width: 100%;
+        }
+        .month-button {
+            width: 150px; /* Width of the square button */
+            height: 150px; /* Height of the square button */
+            border: 2px solid white;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            opacity: 0; /* Initially hidden */
+            visibility: hidden; /* Ensure the element is invisible but still takes space */
+        }
+        .month-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure the image covers the entire button */
+        }
+        .month-button:hover {
+            transform: scale(1.1); /* Slight zoom effect on hover */
+        }
+        /* Make the January button visible */
+        .month-button.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Calendar</h1>
+    <div class="months">
+        <div class="month-button visible" onclick="window.location.href='january.html'">
+            <img src="assets/images/januarypixel.png" alt="January">
+        </div>
+        <div class="month-button" onclick="window.location.href='february.html'">
+            <img src="assets/images/february.png" alt="February">
+        </div>
+        <div class="month-button" onclick="window.location.href='march.html'">
+            <img src="assets/images/march.png" alt="March">
+        </div>
+        <div class="month-button" onclick="window.location.href='april.html'">
+            <img src="assets/images/april.png" alt="April">
+        </div>
+        <div class="month-button" onclick="window.location.href='may.html'">
+            <img src="assets/images/may.png" alt="May">
+        </div>
+        <div class="month-button" onclick="window.location.href='june.html'">
+            <img src="assets/images/june.png" alt="June">
+        </div>
+        <div class="month-button" onclick="window.location.href='july.html'">
+            <img src="assets/images/july.png" alt="July">
+        </div>
+        <div class="month-button" onclick="window.location.href='august.html'">
+            <img src="assets/images/august.png" alt="August">
+        </div>
+        <div class="month-button" onclick="window.location.href='september.html'">
+            <img src="assets/images/september.png" alt="September">
+        </div>
+        <div class="month-button" onclick="window.location.href='october.html'">
+            <img src="assets/images/october.png" alt="October">
+        </div>
+        <div class="month-button" onclick="window.location.href='november.html'">
+            <img src="assets/images/november.png" alt="November">
+        </div>
+        <div class="month-button" onclick="window.location.href='december.html'">
+            <img src="assets/images/december.png" alt="December">
+        </div>
+    </div>
+
+</body>
+</html>
