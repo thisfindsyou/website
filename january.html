@@ -194,7 +194,7 @@
             if (volumeChangeInterval) clearInterval(volumeChangeInterval);
             
             const startVolume = lastVolume;
-            const volumeDuration = 2000; // Duration for full change (2 seconds)
+            const volumeDuration = 1000; // Duration for full change (1 second)
             const volumeStepInterval = 100; // Update interval in milliseconds
             const steps = volumeDuration / volumeStepInterval;
             const volumeDifference = targetVolume - startVolume;
