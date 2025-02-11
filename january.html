@@ -220,6 +220,7 @@
             const rect = event.target.getBoundingClientRect();
             const yPosition = event.clientY - rect.top; // Mouse Y position relative to the image
             const newVolume = 1 - (yPosition / rect.height); // Convert to volume range [0, 1]
+            newVolume = newVolume * 0.5; // Adjust the volume change speed (half as fast)
             volume = Math.max(0, Math.min(1, newVolume)); // Clamp between 0 and 1
             audioPlayer.volume = volume;
             setBackgroundColor(volume); // Adjust background color based on volume
