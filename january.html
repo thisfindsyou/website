@@ -20,11 +20,31 @@
             font-family: 'Old Standard TT', serif;
         }
 
+        /* Back to Calendar Button */
+        .back-button {
+            font-family: 'Old Standard TT', serif;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            z-index: 100; /* Ensure it's on top of other elements */
+        }
+        .back-button:hover {
+            color: #ddd;
+        }
+
         .image-container {
             position: relative;
             width: 60vw;
             height: 80vh;
-            background-color: white;
+            background-color: #D3D3D3; /* Start with light grey */
             border: 5px solid white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             display: flex;
@@ -32,7 +52,7 @@
             align-items: center;
             overflow: hidden;
             cursor: pointer;
-            z-index: 1; /* Keep the image behind the buttons */
+            transition: background-color 0.2s ease;
         }
 
         img {
@@ -51,7 +71,6 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            z-index: 2; /* Ensure buttons are above the image */
         }
 
         /* Button styles for Backward and Forward buttons */
@@ -91,6 +110,9 @@
 </head>
 <body>
 
+    <!-- Back Button to return to calendar page -->
+    <button class="back-button" onclick="window.location.href='/'">Back to Calendar</button>
+
     <div class="image-container" id="image-container">
         <img src="assets/images/january.png" alt="January">
         
@@ -110,6 +132,7 @@
     </audio>
 
     <div class="controls">
+        <!-- Using SVG for Backwards and Forwards with no hover highlight -->
         <button class="button" id="previous-button">
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M5 12l7 7v-4h7v-6h-7v-4l-7 7z"/></svg> <!-- Back icon -->
         </button>
@@ -126,12 +149,11 @@
             'assets/audio/hanging.mp3',
             'assets/audio/helium.mp3'
         ];
-
+    
         const audioPlayer = document.getElementById('audio-player');
         let currentTrack = 0;
         let currentTime = 0; // Store current time for pause and resume
-        let volume = 0.5; // Start with 50% volume
-
+    
         // Function to start the audio playback
         function startAudio() {
             if (audioPlayer.src !== audioFiles[currentTrack]) {
@@ -142,14 +164,14 @@
             audioPlayer.muted = false; // Unmute the audio after the user clicks
             updatePlayPauseButton(true);
         }
-
+    
         // Function to pause the audio
         function pauseAudio() {
             currentTime = audioPlayer.currentTime; // Store current time when paused
             audioPlayer.pause();
             updatePlayPauseButton(false);
         }
-
+    
         // Function to update play/pause button
         function updatePlayPauseButton(isPlaying) {
             const button = document.getElementById('play-pause-button');
@@ -160,15 +182,59 @@
             }
         }
 
+        // Function to handle volume changes based on mouse movement inside image container
+        let lastVolume = 0.5; // Start with the middle volume value
+        let targetVolume = lastVolume;
+        let volumeChangeInProgress = false; // Flag to track ongoing volume change
+        let lastY = 0; // Store the previous Y position for calculating speed
+        const imageContainer = document.getElementById('image-container');
+
+        // Smooth transition function for volume and background opacity
+        function smoothVolumeTransition() {
+            if (Math.abs(targetVolume - lastVolume) > 0.01) {
+                lastVolume += (targetVolume - lastVolume) * 0.05; // Smooth transition (adjust 0.05 for slower speed)
+                audioPlayer.volume = lastVolume;
+
+                // Change the background opacity gradually (from light grey to dark grey)
+                const greyValue = Math.round(211 - lastVolume * 128); // Grey range from 211 (light grey) to 83 (dark grey)
+                imageContainer.style.backgroundColor = `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
+
+                requestAnimationFrame(smoothVolumeTransition);
+            }
+        }
+
+        imageContainer.addEventListener('mousemove', (event) => {
+            const rect = imageContainer.getBoundingClientRect();
+            const mouseY = event.clientY - rect.top; // Get mouse Y position relative to image container
+
+            const diffY = Math.abs(mouseY - lastY); // Difference between current and last Y position
+            const speedFactor = diffY / rect.height; // Speed factor based on Y position change
+            targetVolume = Math.min(Math.max(1 - (mouseY / rect.height), 0), 1); // Map Y position to volume
+
+            // Adjust the volume speed based on the mouse movement speed
+            targetVolume += (speedFactor - 0.5) * 0.3; // If speedFactor is higher, increase volume faster
+
+            // Ensure the target volume stays between 0 and 1
+            targetVolume = Math.min(Math.max(targetVolume, 0), 1);
+
+            // If volume has changed significantly, start the smooth transition
+            if (!volumeChangeInProgress) {
+                volumeChangeInProgress = true;
+                smoothVolumeTransition();
+            }
+
+            lastY = mouseY; // Update lastY position
+        });
+
         // Handle Play/Pause toggle when clicking anywhere inside the image container
-        document.getElementById('image-container').addEventListener('click', () => {
+        imageContainer.addEventListener('click', () => {
             if (audioPlayer.paused) {
                 startAudio();
             } else {
                 pauseAudio();
             }
         });
-
+    
         // Function to change the audio track when one ends
         audioPlayer.addEventListener('ended', () => {
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track
@@ -176,7 +242,7 @@
             audioPlayer.play(); // Play the new track
             updatePlayPauseButton(true); // Update the button to show pause icon
         });
-
+    
         // Handle the "Backwards" button click
         document.getElementById('previous-button').addEventListener('click', () => {
             currentTrack = (currentTrack - 1 + audioFiles.length) % audioFiles.length; // Go to previous track (looping)
@@ -184,7 +250,7 @@
             audioPlayer.play(); // Play the new track
             updatePlayPauseButton(true); // Update the button to show pause icon
         });
-
+    
         // Handle the "Forwards" button click
         document.getElementById('next-button').addEventListener('click', () => {
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track (looping)
@@ -192,31 +258,11 @@
             audioPlayer.play(); // Play the new track
             updatePlayPauseButton(true); // Update the button to show pause icon
         });
-
-        // Function to handle volume change based on the mouse position inside the image box
-        document.getElementById('image-container').addEventListener('mousemove', (event) => {
-            const rect = event.target.getBoundingClientRect();
-            const yPosition = event.clientY - rect.top; // Mouse Y position relative to the image
-            const newVolume = 1 - (yPosition / rect.height); // Convert to volume range [0, 1]
-            volume = Math.max(0, Math.min(1, newVolume)); // Clamp between 0 and 1
-            audioPlayer.volume = volume;
-            setBackgroundColor(volume); // Adjust background color based on volume
-        });
-
-        // Function to change background color based on volume
-        function setBackgroundColor(volume) {
-            const backgroundColor = `rgb(${volume * 255}, ${volume * 255}, ${volume * 255})`; // From white to black
-            document.body.style.backgroundColor = backgroundColor;
-        }
-
-        // Start the volume at a mid level
-        audioPlayer.volume = volume;
-        setBackgroundColor(volume);
-
-        // Handle spacebar press for Play/Pause toggle
+    
+        // Spacebar play/pause functionality
         window.addEventListener('keydown', (event) => {
             if (event.code === 'Space') {
-                event.preventDefault(); // Prevent the default action of the spacebar (scrolling)
+                event.preventDefault(); // Prevent page scroll
                 if (audioPlayer.paused) {
                     startAudio();
                 } else {
