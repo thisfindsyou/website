@@ -20,23 +20,22 @@
             font-family: 'Old Standard TT', serif;
         }
 
-        /* Back to Calendar Button */
         .back-button {
-            font-family: 'Old Standard TT', serif; /* Apply Old Standard TT font */
+            font-family: 'Old Standard TT', serif;
             position: absolute;
             top: 20px;
             left: 20px;
-            background: none; /* No background */
-            color: white; /* White text */
-            border: none; /* No border */
+            background: none;
+            color: #da6851; /* Light rust red text */
+            border: none;
             padding: 10px 15px;
             font-size: 18px;
             cursor: pointer;
-            text-decoration: none;
             transition: color 0.3s ease;
+            z-index: 100; /* Ensure it's on top of other elements */
         }
         .back-button:hover {
-            color: #ddd; /* Change text color on hover */
+            color: #a84b3b; /* Slightly darker rust red on hover */
         }
 
         .image-container {
@@ -51,6 +50,7 @@
             align-items: center;
             overflow: hidden;
             cursor: pointer;
+            z-index: 1; /* Keep the image behind the buttons */
         }
 
         img {
@@ -69,34 +69,36 @@
             display: flex;
             justify-content: center;
             width: 100%;
+            z-index: 2; /* Ensure buttons are above the image */
         }
 
         /* Button styles for Backward and Forward buttons */
         .button {
-            background-color: transparent; /* No background */
+            background-color: transparent;
             border: none;
             padding: 15px;
             font-size: 24px;
             cursor: pointer;
             margin: 0 20px;
-            color: white; /* Icon color */
-            transition: background-color 0.3s ease;
+            color: #da6851; /* Rust red color for icons */
+            transition: color 0.3s ease; /* Only color transition */
             border-radius: 50%;
         }
 
         .button:hover {
-            background-color: transparent; /* No hover background */
+            color: #a84b3b; /* Slightly darker rust red on hover */
         }
 
         /* Play/Pause Button */
         .play-pause-button {
             position: absolute;
             z-index: 10;
-            background: transparent; /* No background */
+            background: transparent;
             color: white;
             font-size: 32px;
-            border: none; /* No border */
+            border: none;
             cursor: pointer;
+            pointer-events: none; /* Allow mouse events to pass through the play button */
             transition: transform 0.3s ease;
         }
 
@@ -127,12 +129,11 @@
     </audio>
 
     <div class="controls">
-        <!-- Using SVG for Backwards and Forwards with no hover highlight -->
         <button class="button" id="previous-button">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M5 12l7 7v-4h7v-6h-7v-4l-7 7z"/></svg> <!-- Back icon -->
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#a8c1a2"><path d="M5 12l7 7v-4h7v-6h-7v-4l-7 7z"/></svg> <!-- Back icon -->
         </button>
         <button class="button" id="next-button">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 12l-7-7v4H5v6h7v4l7-7z"/></svg> <!-- Forward icon -->
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#a8c1a2"><path d="M19 12l-7-7v4H5v6h7v4l7-7z"/></svg> <!-- Forward icon -->
         </button>
     </div>
 
@@ -141,11 +142,12 @@
         const audioFiles = [
             'assets/audio/worldpool.mp3'
         ];
-    
+
         const audioPlayer = document.getElementById('audio-player');
         let currentTrack = 0;
         let currentTime = 0; // Store current time for pause and resume
-    
+        let volume = 0.5; // Start with 50% volume
+
         // Function to start the audio playback
         function startAudio() {
             if (audioPlayer.src !== audioFiles[currentTrack]) {
@@ -156,14 +158,14 @@
             audioPlayer.muted = false; // Unmute the audio after the user clicks
             updatePlayPauseButton(true);
         }
-    
+
         // Function to pause the audio
         function pauseAudio() {
             currentTime = audioPlayer.currentTime; // Store current time when paused
             audioPlayer.pause();
             updatePlayPauseButton(false);
         }
-    
+
         // Function to update play/pause button
         function updatePlayPauseButton(isPlaying) {
             const button = document.getElementById('play-pause-button');
@@ -173,7 +175,7 @@
                 button.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>'; // Play icon
             }
         }
-    
+
         // Handle Play/Pause toggle when clicking anywhere inside the image container
         document.getElementById('image-container').addEventListener('click', () => {
             if (audioPlayer.paused) {
@@ -182,7 +184,7 @@
                 pauseAudio();
             }
         });
-    
+
         // Function to change the audio track when one ends
         audioPlayer.addEventListener('ended', () => {
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track
@@ -190,7 +192,7 @@
             audioPlayer.play(); // Play the new track
             updatePlayPauseButton(true); // Update the button to show pause icon
         });
-    
+
         // Handle the "Backwards" button click
         document.getElementById('previous-button').addEventListener('click', () => {
             currentTrack = (currentTrack - 1 + audioFiles.length) % audioFiles.length; // Go to previous track (looping)
@@ -198,13 +200,45 @@
             audioPlayer.play(); // Play the new track
             updatePlayPauseButton(true); // Update the button to show pause icon
         });
-    
+
         // Handle the "Forwards" button click
         document.getElementById('next-button').addEventListener('click', () => {
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track (looping)
             audioPlayer.src = audioFiles[currentTrack]; // Set the new track
             audioPlayer.play(); // Play the new track
             updatePlayPauseButton(true); // Update the button to show pause icon
+        });
+
+        // Function to handle volume change based on the mouse position inside the image box
+        document.getElementById('image-container').addEventListener('mousemove', (event) => {
+            const rect = event.target.getBoundingClientRect();
+            const yPosition = event.clientY - rect.top; // Mouse Y position relative to the image
+            const newVolume = 1 - (yPosition / rect.height); // Convert to volume range [0, 1]
+            volume = Math.max(0, Math.min(1, newVolume)); // Clamp between 0 and 1
+            audioPlayer.volume = volume;
+            setBackgroundColor(volume); // Adjust background color based on volume
+        });
+
+        // Function to change background color based on volume
+        function setBackgroundColor(volume) {
+            const backgroundColor = `rgb(${volume * 255}, ${volume * 255}, ${volume * 255})`; // From white to black
+            document.body.style.backgroundColor = backgroundColor;
+        }
+
+        // Start the volume at a mid level
+        audioPlayer.volume = volume;
+        setBackgroundColor(volume);
+
+        // Handle spacebar press for Play/Pause toggle
+        window.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                event.preventDefault(); // Prevent the default action of the spacebar (scrolling)
+                if (audioPlayer.paused) {
+                    startAudio();
+                } else {
+                    pauseAudio();
+                }
+            }
         });
     </script>
 </body>
