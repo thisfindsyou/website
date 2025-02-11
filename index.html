@@ -94,5 +94,49 @@
         </div>
     </div>
 
+<div class="quote" id="fortune"></div>
+
+    <script>
+        var fortuneArray = [
+            ['01', 'You will find your waterfall. Your perfect break of dawn.'],
+            ['02', 'The world is waiting right in front of you - tilted and obscene.'],
+            ['03', 'Turn against the cavity between your limbs. Become one with the mountain beneath you.'],
+            ['04', 'You will live and die - as any good man does.'],
+            ['05', 'Sustain your anger. Don\'t let your eyes glaze over.'],
+            ['06', 'The dark skies will clear. You will soon hear the clock tower just a little brighter.'],
+            ['07', 'In four months, the truth of distance will rear its ugly head.'],
+            ['08', 'Tend to the plants in your garden. Only those properly cared for can withstand the morning\'s frost.'],
+            ['09', 'Your dreams of progress will come to life, a coup d\'état is to come.'],
+            ['10', 'Avoid staring at your reflection for too long. Your basin will overflow.'],
+            ['11', 'Even when the load becomes too much to bear, you are always only one closed eye away from the whimsical.'],
+            ['12', 'The most needed forms of separation can feel senseless.'],
+            ['13', 'Your heart will whisper at last. You will let the cinders turn to ink.'],
+            ['14', 'Someone in your near future will ground you from your self-imposed flash flood.'],
+            ['15', 'You have reached a summit. It is time to sort through your memories, like old friends sharing tea.'],
+            ['16', 'When your eyes meet the eastern sunrise, don\'t forget to turn westwards. Don\'t forget to say goodbye.'],
+            ['17', 'Press your hands against the glass. Languidly flow through time.'],
+            ['18', 'You will be left exposed and uncovered - your rickety framework must be addressed.'],
+            ['19', 'Your prospective soulmates are slipping through your constricting grip.'],
+            ['20', 'Honey kisses will float through the bubblegum sky into your horizon\'s fold.'],
+            ['21', 'You will relive the worst. Your bed will creak under the weight of your flinching body.'],
+            ['22', 'Take solace in the simplicity of lavender. Its long purple gaze doesn\'t abuse the eyes.'],
+            ['23', 'Let your snake skin molt into the dragging seconds.'],
+            ['24', 'Take life by the jugular. Feel its heartbeat once more.'],
+            ['25', 'Find hope in collectivism. Let the golden hue carry you home.'],
+            ['26', 'When sent straight to voicemail, know your sorrows are understood by the keys left on the table.'],
+            ['27', 'Cerulean rivers await your entrance on the other side.'],
+            ['28', 'A rotten harvest is a sign of fruitful years to follow.'],
+            ['29', 'The ideal may not be as it seems. Do its gestures speak your name?'],
+            ['30', 'Improve yourself. Practice makes perfect.']
+        ];
+
+        function getRandomQuote() {
+            var randomIndex = Math.floor(Math.random() * fortuneArray.length);
+            return fortuneArray[randomIndex][1];
+        }
+
+        document.getElementById("fortune").innerText = getRandomQuote();
+    </script>
+
 </body>
 </html>
