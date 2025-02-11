@@ -219,13 +219,9 @@
         document.getElementById('image-container').addEventListener('mousemove', (event) => {
             const rect = event.target.getBoundingClientRect();
             const yPosition = event.clientY - rect.top; // Mouse Y position relative to the image
-            
-            // Scale the mouse movement by 2 to make the change half as fast
-            let newVolume = 1 - (yPosition / rect.height) * 2; // Adjust the volume speed
-            newVolume = Math.max(0, Math.min(1, newVolume)); // Clamp between 0 and 1
-            volume = newVolume; // Update the volume
-        
-            audioPlayer.volume = volume; // Apply the new volume
+            const newVolume = 1 - (yPosition / rect.height); // Convert to volume range [0, 1]
+            volume = Math.max(0, Math.min(1, newVolume)); // Clamp between 0 and 1
+            audioPlayer.volume = volume;
             setBackgroundColor(volume); // Adjust background color based on volume
         });
 
