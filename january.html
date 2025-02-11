@@ -191,12 +191,13 @@
         // Smooth transition function for volume and background opacity
         function smoothVolumeTransition() {
             if (Math.abs(targetVolume - lastVolume) > 0.01) {
-                lastVolume += (targetVolume - lastVolume) * 0.1; // Smooth transition (adjust 0.1 for speed)
+                lastVolume += (targetVolume - lastVolume) * 0.05; // Smooth transition (adjust 0.05 for slower speed)
                 audioPlayer.volume = lastVolume;
 
                 // Change the background opacity gradually (from light grey to dark grey)
                 const greyValue = Math.round(211 - lastVolume * 128); // Grey range from 211 (light grey) to 83 (dark grey)
                 imageContainer.style.backgroundColor = `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
+
                 requestAnimationFrame(smoothVolumeTransition);
             }
         }
