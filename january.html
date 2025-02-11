@@ -44,7 +44,7 @@
             position: relative;
             width: 60vw;
             height: 80vh;
-            background-color: white;
+            background-color: #D3D3D3; /* Start with light grey */
             border: 5px solid white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             display: flex;
@@ -52,6 +52,7 @@
             align-items: center;
             overflow: hidden;
             cursor: pointer;
+            transition: background-color 0.2s ease;
         }
 
         img {
@@ -183,17 +184,32 @@
 
         // Function to handle volume changes based on mouse movement inside image container
         let lastVolume = 0.5; // Start with the middle volume value
+        let targetVolume = lastVolume;
+        let volumeChangeInProgress = false; // Flag to track ongoing volume change
         const imageContainer = document.getElementById('image-container');
+
+        // Smooth transition function for volume and background opacity
+        function smoothVolumeTransition() {
+            if (Math.abs(targetVolume - lastVolume) > 0.01) {
+                lastVolume += (targetVolume - lastVolume) * 0.1; // Smooth transition (adjust 0.1 for speed)
+                audioPlayer.volume = lastVolume;
+
+                // Change the background opacity gradually (from light grey to dark grey)
+                const greyValue = Math.round(211 - lastVolume * 128); // Grey range from 211 (light grey) to 83 (dark grey)
+                imageContainer.style.backgroundColor = `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
+                requestAnimationFrame(smoothVolumeTransition);
+            }
+        }
 
         imageContainer.addEventListener('mousemove', (event) => {
             const rect = imageContainer.getBoundingClientRect();
             const mouseY = event.clientY - rect.top; // Get mouse Y position relative to image container
-            const newVolume = Math.min(Math.max(1 - (mouseY / rect.height), 0), 1); // Map Y position to volume
+            targetVolume = Math.min(Math.max(1 - (mouseY / rect.height), 0), 1); // Map Y position to volume
 
-            // Smooth volume transition
-            if (Math.abs(newVolume - lastVolume) > 0.01) {
-                lastVolume = newVolume;
-                audioPlayer.volume = newVolume;
+            // If volume has changed significantly, start the smooth transition
+            if (!volumeChangeInProgress) {
+                volumeChangeInProgress = true;
+                smoothVolumeTransition();
             }
         });
 
