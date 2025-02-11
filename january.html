@@ -188,31 +188,38 @@
         let lastY = 0; // Store the previous Y position for calculating speed
         const imageContainer = document.getElementById('image-container');
         let volumeChangeInterval;
-    
-        // Smooth volume transition over a concrete time (2 seconds for 0-100 volume range)
+
+        // Smooth volume transition over a concrete time (0.5 seconds for 0-100 volume range)
         function smoothVolumeTransition() {
             if (volumeChangeInterval) clearInterval(volumeChangeInterval);
-            
+        
             const startVolume = lastVolume;
             const volumeDuration = 500; // Duration for full change (0.5 seconds)
-            const volumeStepInterval = 100; // Update interval in milliseconds
+            const volumeStepInterval = 50; // Update interval in milliseconds
             const steps = volumeDuration / volumeStepInterval;
             const volumeDifference = targetVolume - startVolume;
             const stepAmount = volumeDifference / steps;
-            
+        
             let stepCounter = 0;
-    
+        
+            // A smoother approach using easing function for volume change
+            const easeInOut = (t) => {
+                return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // Ease in/out function
+            };
+        
             volumeChangeInterval = setInterval(() => {
                 stepCounter++;
-                lastVolume += stepAmount; // Increment the volume smoothly
-
+                let easingFactor = easeInOut(stepCounter / steps); // Apply easing
+        
+                lastVolume = startVolume + (volumeDifference * easingFactor); // Smoothly adjust the volume
+        
                 // Set the volume
                 audioPlayer.volume = lastVolume;
-
+        
                 // Gradually change background opacity (from light grey to dark grey)
                 const greyValue = Math.round(211 - lastVolume * 128); // Grey range from 211 (light grey) to 83 (dark grey)
                 imageContainer.style.backgroundColor = `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
-
+        
                 if (stepCounter >= steps) {
                     clearInterval(volumeChangeInterval);
                     lastVolume = targetVolume; // Ensure the volume is exactly the target
