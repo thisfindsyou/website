@@ -187,19 +187,37 @@
         let targetVolume = lastVolume;
         let lastY = 0; // Store the previous Y position for calculating speed
         const imageContainer = document.getElementById('image-container');
-
-        // Smooth transition function for volume and background opacity
+        let volumeChangeInterval;
+    
+        // Smooth volume transition over a concrete time (2 seconds for 0-100 volume range)
         function smoothVolumeTransition() {
-            if (Math.abs(targetVolume - lastVolume) > 0.01) {
-                lastVolume += (targetVolume - lastVolume) * 0.1; // Smooth transition (adjust 0.1 for slower speed)
+            if (volumeChangeInterval) clearInterval(volumeChangeInterval);
+            
+            const startVolume = lastVolume;
+            const volumeDuration = 2000; // Duration for full change (2 seconds)
+            const volumeStepInterval = 100; // Update interval in milliseconds
+            const steps = volumeDuration / volumeStepInterval;
+            const volumeDifference = targetVolume - startVolume;
+            const stepAmount = volumeDifference / steps;
+            
+            let stepCounter = 0;
+    
+            volumeChangeInterval = setInterval(() => {
+                stepCounter++;
+                lastVolume += stepAmount; // Increment the volume smoothly
+
+                // Set the volume
                 audioPlayer.volume = lastVolume;
 
-                // Change the background opacity gradually (from light grey to dark grey)
+                // Gradually change background opacity (from light grey to dark grey)
                 const greyValue = Math.round(211 - lastVolume * 128); // Grey range from 211 (light grey) to 83 (dark grey)
                 imageContainer.style.backgroundColor = `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
 
-                requestAnimationFrame(smoothVolumeTransition);
-            }
+                if (stepCounter >= steps) {
+                    clearInterval(volumeChangeInterval);
+                    lastVolume = targetVolume; // Ensure the volume is exactly the target
+                }
+            }, volumeStepInterval);
         }
 
         imageContainer.addEventListener('mousemove', (event) => {
@@ -216,7 +234,7 @@
             // Ensure the target volume stays between 0 and 1
             targetVolume = Math.min(Math.max(targetVolume, 0), 1);
 
-            smoothVolumeTransition();
+            smoothVolumeTransition(); // Apply the smooth transition
 
             lastY = mouseY; // Update lastY position
         });
