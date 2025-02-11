@@ -185,14 +185,13 @@
         // Function to handle volume changes based on mouse movement inside image container
         let lastVolume = 0.5; // Start with the middle volume value
         let targetVolume = lastVolume;
-        let volumeChangeInProgress = false; // Flag to track ongoing volume change
         let lastY = 0; // Store the previous Y position for calculating speed
         const imageContainer = document.getElementById('image-container');
 
         // Smooth transition function for volume and background opacity
         function smoothVolumeTransition() {
             if (Math.abs(targetVolume - lastVolume) > 0.01) {
-                lastVolume += (targetVolume - lastVolume) * 0.05; // Smooth transition (adjust 0.05 for slower speed)
+                lastVolume += (targetVolume - lastVolume) * 0.1; // Smooth transition (adjust 0.1 for slower speed)
                 audioPlayer.volume = lastVolume;
 
                 // Change the background opacity gradually (from light grey to dark grey)
@@ -212,16 +211,12 @@
             targetVolume = Math.min(Math.max(1 - (mouseY / rect.height), 0), 1); // Map Y position to volume
 
             // Adjust the volume speed based on the mouse movement speed
-            targetVolume += (speedFactor - 0.5) * 0.3; // If speedFactor is higher, increase volume faster
+            targetVolume += (speedFactor - 0.5) * 0.5; // If speedFactor is higher, increase volume faster
 
             // Ensure the target volume stays between 0 and 1
             targetVolume = Math.min(Math.max(targetVolume, 0), 1);
 
-            // If volume has changed significantly, start the smooth transition
-            if (!volumeChangeInProgress) {
-                volumeChangeInProgress = true;
-                smoothVolumeTransition();
-            }
+            smoothVolumeTransition();
 
             lastY = mouseY; // Update lastY position
         });
