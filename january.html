@@ -105,12 +105,6 @@
             width: 30px;
             height: 30px;
         }
-
-        /* Volume control */
-        .volume-control {
-            margin-top: 10px;
-            width: 200px;
-        }
     </style>
 </head>
 <body>
@@ -145,9 +139,6 @@
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 12l-7-7v4H5v6h7v4l7-7z"/></svg> <!-- Forward icon -->
         </button>
     </div>
-
-    <!-- Volume Control Slider -->
-    <input type="range" class="volume-control" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
 
     <script>
         // Playlist of audio files
@@ -190,14 +181,24 @@
             }
         }
 
-        // Handle volume slider change
-        const volumeSlider = document.getElementById('volume-slider');
-        volumeSlider.addEventListener('input', (event) => {
-            audioPlayer.volume = event.target.value; // Adjust volume based on slider
+        // Function to handle volume changes based on mouse movement inside image container
+        let lastVolume = 0.5; // Start with the middle volume value
+        const imageContainer = document.getElementById('image-container');
+
+        imageContainer.addEventListener('mousemove', (event) => {
+            const rect = imageContainer.getBoundingClientRect();
+            const mouseY = event.clientY - rect.top; // Get mouse Y position relative to image container
+            const newVolume = Math.min(Math.max(1 - (mouseY / rect.height), 0), 1); // Map Y position to volume
+
+            // Smooth volume transition
+            if (Math.abs(newVolume - lastVolume) > 0.01) {
+                lastVolume = newVolume;
+                audioPlayer.volume = newVolume;
+            }
         });
 
         // Handle Play/Pause toggle when clicking anywhere inside the image container
-        document.getElementById('image-container').addEventListener('click', () => {
+        imageContainer.addEventListener('click', () => {
             if (audioPlayer.paused) {
                 startAudio();
             } else {
