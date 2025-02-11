@@ -149,12 +149,12 @@
             'assets/audio/helium.mp3',
             'assets/audio/worldpool.mp3'
         ];
-        
+    
         const audioPlayer = document.getElementById('audio-player');
         let currentTrack = 0;
         let isPlaying = false;
         let currentTime = 0; // Store current time for pause and resume
-
+    
         // Function to start the audio playback
         function startAudio() {
             if (audioPlayer.src !== audioFiles[currentTrack]) {
@@ -166,7 +166,7 @@
             isPlaying = true;
             updatePlayPauseButton();
         }
-
+    
         // Function to pause the audio
         function pauseAudio() {
             currentTime = audioPlayer.currentTime; // Store current time when paused
@@ -174,7 +174,7 @@
             isPlaying = false;
             updatePlayPauseButton();
         }
-
+    
         // Function to update play/pause button
         function updatePlayPauseButton() {
             const button = document.getElementById('play-pause-button');
@@ -184,7 +184,7 @@
                 button.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>'; // Play icon
             }
         }
-
+    
         // Handle Play/Pause toggle when clicking anywhere inside the image container
         document.getElementById('image-container').addEventListener('click', () => {
             if (audioPlayer.paused) {
@@ -193,26 +193,29 @@
                 pauseAudio();
             }
         });
-
+    
         // Function to change the audio track when one ends
         audioPlayer.addEventListener('ended', () => {
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track
             audioPlayer.src = audioFiles[currentTrack]; // Set the new track
             audioPlayer.play(); // Play the new track
+            updatePlayPauseButton(); // Update the play/pause button
         });
-
+    
         // Handle the "Backwards" button click
         document.getElementById('previous-button').addEventListener('click', () => {
             currentTrack = (currentTrack - 1 + audioFiles.length) % audioFiles.length; // Go to previous track (looping)
             audioPlayer.src = audioFiles[currentTrack]; // Set the new track
             audioPlayer.play(); // Play the new track
+            updatePlayPauseButton(); // Update the play/pause button to reflect pause state
         });
-
+    
         // Handle the "Forwards" button click
         document.getElementById('next-button').addEventListener('click', () => {
             currentTrack = (currentTrack + 1) % audioFiles.length; // Go to next track (looping)
             audioPlayer.src = audioFiles[currentTrack]; // Set the new track
             audioPlayer.play(); // Play the new track
+            updatePlayPauseButton(); // Update the play/pause button to reflect pause state
         });
     </script>
 </body>
