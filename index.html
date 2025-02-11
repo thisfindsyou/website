@@ -32,27 +32,27 @@
 </head>
 <body>
     <div class="image-container">
-        <img src="january.png" alt="January">
+        <img src="assets/images/january.png" alt="January">
     </div>
 
     <!-- Audio Playlist -->
     <audio id="audio-player" loop>
-        <source src="decaf.mp3" type="audio/mpeg">
-        <source src="twothousandand8.mp3" type="audio/mpeg">
-        <source src="hanging.mp3" type="audio/mpeg">
-        <source src="helium.mp3" type="audio/mpeg">
-        <source src="worldpool.mp3" type="audio/mpeg">
+        <source src="assets/audio/decaf.mp3" type="audio/mpeg">
+        <source src="assets/audio/twothousandand8.mp3" type="audio/mpeg">
+        <source src="assets/audio/hanging.mp3" type="audio/mpeg">
+        <source src="assets/audio/helium.mp3" type="audio/mpeg">
+        <source src="assets/audio/worldpool.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
     <script>
         // Playlist of audio files
         const audioFiles = [
-            'decaf.mp3',
-            'twothousandand8.mp3',
-            'hanging.mp3',
-            'helium.mp3',
-            'worldpool.mp3'
+            'assets/audio/decaf.mp3',
+            'assets/audio/twothousandand8.mp3',
+            'assets/audio/hanging.mp3',
+            'assets/audio/helium.mp3',
+            'assets/audio/worldpool.mp3'
         ];
         const audioPlayer = document.getElementById('audio-player');
         let currentTrack = 0;
