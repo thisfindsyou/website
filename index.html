@@ -12,31 +12,35 @@
             background-color: #111;
             color: white;
             display: flex;
-            justify-content: flex-start; /* Align content towards the top */
+            justify-content: space-between;
             align-items: center;
-            height: 100vh;
-            margin: 0;
             flex-direction: column;
-            padding-top: 20px; /* Add some padding from the top */
+            margin: 0;
+            height: 100vh; /* Full viewport height */
+            overflow: hidden; /* Prevent scrolling */
         }
 
         h1 {
-            margin-bottom: 10px;
-            font-size: 2em; /* Increase the size for the calendar title */
+            margin: 0;
+            font-size: 2.5vh; /* Adjusted font size to fit */
+            padding-top: 2vh;
         }
 
         .months {
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 4 images per row */
-            gap: 20px;
+            gap: 2vh;
             justify-items: center;
             width: 100%;
-            margin-bottom: auto; /* Prevent the months grid from being pushed down */
+            height: 55vh; /* 55% of the viewport height */
+            box-sizing: border-box;
         }
 
         .month-button {
-            width: 180px; /* Make the icons larger */
-            height: 180px;
+            width: 10vw; /* Make the buttons responsive using vw units */
+            height: 10vw;
+            max-width: 180px; /* Limit maximum size */
+            max-height: 180px;
             border: 2px solid white;
             overflow: hidden;
             cursor: pointer;
@@ -61,10 +65,14 @@
         }
 
         .quote {
-            margin-top: auto; /* Push the quote to the bottom */
-            font-size: 1.2em;
+            font-size: 2vh; /* Adjusted font size for quotes */
             text-align: center;
-            padding: 20px;
+            padding: 1vh;
+            height: 8vh; /* Ensure space for quote at the bottom */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
     </style>
 </head>
