@@ -193,24 +193,14 @@
             updatePlayPauseButton(true); // Update the button to show pause icon
         });
 
-        // Handle mouse events to control volume by clicking and holding on the image
-        let isMouseDown = false;
-
-        document.getElementById('image-container').addEventListener('mousedown', () => {
-            isMouseDown = true;
-        });
-
-        document.addEventListener('mouseup', () => {
-            isMouseDown = false;
-        });
-
-        document.addEventListener('mousemove', (event) => {
-            if (isMouseDown) {
-                const newVolume = 1 - (event.clientY / window.innerHeight); // Invert Y-axis for intuitive control
-                volume = Math.max(0, Math.min(1, newVolume)); // Clamp between 0 and 1
-                audioPlayer.volume = volume;
-                setBackgroundColor(volume); // Adjust background color based on volume
-            }
+        // Function to handle volume change based on the mouse position inside the image box
+        document.getElementById('image-container').addEventListener('mousemove', (event) => {
+            const rect = event.target.getBoundingClientRect();
+            const yPosition = event.clientY - rect.top; // Mouse Y position relative to the image
+            const newVolume = 1 - (yPosition / rect.height); // Convert to volume range [0, 1]
+            volume = Math.max(0, Math.min(1, newVolume)); // Clamp between 0 and 1
+            audioPlayer.volume = volume;
+            setBackgroundColor(volume); // Adjust background color based on volume
         });
 
         // Function to change background color based on volume
