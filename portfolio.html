@@ -188,12 +188,36 @@
             opacity: 1;
         }
 
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 2.5vh;
+            width: 100%;
+        }
+
+        .show-card {
+            break-inside: avoid;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 2.5vh;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .show-card img {
+            width: 100%;
+            display: block;
+        }
+
         @media (max-width: 600px) {
             .portfolio-grid {
                 grid-template-columns: 1fr;
             }
 
-            
+            .masonry-grid {
+                column-count: 1;
+            }
         }
     </style>
 </head>
@@ -275,6 +299,23 @@
                     <div class="card-date">May 6, 2026</div>
                 </div>
             </a>
+
+        </div>
+    </div>
+
+    <div class="portfolio-section">
+        <div class="section-label">Past Shows</div>
+        <div class="masonry-grid">
+
+            <!-- Portraiture show - Kingston NY, May 2026 -->
+            <div class="show-card">
+                <img src="assets/images/portraiture-poster.jpg" alt="Portraiture show poster — Kingston NY">
+            </div>
+
+            <!-- Hyperlink Hum - Bushwick, April 4 -->
+            <div class="show-card">
+                <img src="assets/images/hyperlink-hum.png" alt="Hyperlink Hum show poster — Bushwick">
+            </div>
 
         </div>
     </div>
