@@ -79,22 +79,25 @@
             box-sizing: border-box;
         }
 
-        .portfolio-link {
+        .top-nav {
             position: absolute;
             top: 20px;
-            right: 20px;
-            color: white;
-            text-decoration: none;
-            font-size: 1.2vh;
-            padding: 10px 20px;
-            border: 2px solid white;
-            transition: all 0.3s ease;
+            left: 20px;
+            display: flex;
+            gap: 1.5rem;
             z-index: 10;
         }
 
-        .portfolio-link:hover {
-            background: white;
-            color: #111;
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.8vh;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .top-nav a:hover {
+            opacity: 1;
         }
 
         /* Social Media Footer */
@@ -133,69 +136,15 @@
         .social-link.instagram:hover svg { fill: #E1306C; }
         .social-link.tiktok:hover svg    { fill: #FF0050; }
 
-        /* Creative Navigation Button */
-        .nav-button {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: #a8c1a2;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
 
-        .nav-button:hover {
-            background: #8c9d87;
-            transform: scale(1.1);
-        }
-
-        .nav-menu {
-            position: fixed;
-            bottom: 140px;
-            right: 20px;
-            background: rgba(26, 26, 26, 0.98);
-            border: 2px solid #a8c1a2;
-            border-radius: 8px;
-            padding: 1rem;
-            display: none;
-            flex-direction: column;
-            gap: 0.8rem;
-            z-index: 100;
-            min-width: 150px;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-menu.active {
-            display: flex;
-        }
-
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .nav-menu a:hover {
-            background: rgba(168, 193, 162, 0.2);
-            color: #a8c1a2;
-        }
     </style>
 </head>
 <body>
 
-    <a href="/portfolio" class="portfolio-link">Portfolio</a>
+    <nav class="top-nav">
+        <a href="/portfolio">portfolio</a>
+        <a href="mailto:clovehitch@thisfindsyou.com">contact</a>
+    </nav>
     <h1>Calendar</h1>
     <div class="months">
         <div class="month-button visible" onclick="window.location.href='january'">
@@ -242,7 +191,7 @@
     <!-- Social Media Footer -->
     <div class="social-footer">
         <a href="https://soundcloud.com/thisfindsyou" target="_blank" class="social-link soundcloud" aria-label="SoundCloud">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.175 12.225c-.041 0-.079.01-.116.013-.067-3.99 3.117-7.229 7.109-7.229 1.705 0 3.267.604 4.496 1.601.148.12.22.296.22.472v13.484c0 .191-.104.357-.26.441H1.68c-.286 0-.52-.23-.52-.516l-.003-.025c0-.003.002-.005.002-.008l.016-8.233zm21.32-3.283c-1.088 0-1.975.883-1.975 1.971v7.312c0 1.088.887 1.971 1.975 1.971s1.975-.883 1.975-1.971v-7.312c0-1.088-.887-1.971-1.975-1.971zm-4.02-1.08c-1.088 0-1.975.883-1.975 1.971v9.392c0 1.088.887 1.971 1.975 1.971s1.975-.883 1.975-1.971V9.833c0-1.088-.887-1.971-1.975-1.971zm-4.02 1.44c-1.088 0-1.975.883-1.975 1.971v7.952c0 1.088.887 1.971 1.975 1.971s1.975-.883 1.975-1.971v-7.952c0-1.088-.887-1.971-1.975-1.971z"/></svg>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.56 8.87V17h8.76c.96 0 1.76-.8 1.76-1.76 0-.97-.8-1.76-1.76-1.76-.06 0-.12 0-.18.01A3.52 3.52 0 0 0 16.88 11a3.56 3.56 0 0 0-3.19 2 2.64 2.64 0 0 0-2.13-4.13zm-2.37 1.35c-.26 0-.53.02-.79.07v6.71h1.58V10.3a4.43 4.43 0 0 0-.79-.08zm-2.36.98c-.28 0-.56.05-.82.14v5.66h1.64v-5.74a4.43 4.43 0 0 0-.82-.06zm-2.37 1.16c-.32 0-.64.08-.93.22v4.42h1.86v-4.52a3.56 3.56 0 0 0-.93-.12zm-2.36 1.65v2.99h1.58v-2.52a1.33 1.33 0 0 0-.79-.47z"/></svg>
         </a>
         <a href="https://thisfindsyou.bandcamp.com" target="_blank" class="social-link bandcamp" aria-label="Bandcamp">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>
@@ -255,44 +204,7 @@
         </a>
     </div>
 
-    <!-- Creative Navigation Button -->
-    <button class="nav-button" id="nav-toggle" aria-label="Toggle navigation">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="1"/>
-            <circle cx="12" cy="5" r="1"/>
-            <circle cx="12" cy="19" r="1"/>
-        </svg>
-    </button>
-
-    <div class="nav-menu" id="nav-menu">
-        <a href="/">Calendar</a>
-        <a href="/portfolio">Portfolio</a>
-        <a href="mailto:clovehitch@thisfindsyou.com">Contact</a>
-    </div>
-
     <script>
-        // Navigation menu toggle
-        const navButton = document.getElementById('nav-toggle');
-        const navMenu = document.getElementById('nav-menu');
-
-        navButton.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.nav-button') && !e.target.closest('.nav-menu')) {
-                navMenu.classList.remove('active');
-            }
-        });
-
-        // Close menu when a link is clicked
-        navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-            });
-        });
-
         var fortuneArray = [
             ['01', 'You will find your waterfall. Your perfect break of dawn.'],
             ['02', 'The world is waiting right in front of you - tilted and obscene.'],
