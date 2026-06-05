@@ -45,7 +45,8 @@
             transition: opacity 0.2s ease;
         }
 
-        .site-nav:hover .nav-toggle {
+        .site-nav:hover .nav-toggle,
+        .site-nav:has(.nav-dropdown.open) .nav-toggle {
             opacity: 1;
         }
 
