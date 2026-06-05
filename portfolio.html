@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <title>Portfolio - thisfindsyou</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Old Standard TT', serif;
+            background-color: #111;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 3vh 2vw;
+        }
+
+        h1 {
+            font-size: 2.5vh;
+            margin-bottom: 3vh;
+            letter-spacing: 1px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3vh;
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: 5vh;
+        }
+
+        .portfolio-card {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: white;
+            position: relative;
+        }
+
+        .portfolio-card:hover {
+            transform: scale(1.05);
+            border-color: #666;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-album {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+            color: #aaa;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            font-weight: bold;
+        }
+
+        .card-feature {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: auto;
+            color: #ddd;
+            font-style: italic;
+        }
+
+        /* Social Media Footer */
+        .social-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(17, 17, 17, 0.95);
+            border-top: 1px solid #333;
+            padding: 1.5vh 2vw;
+            display: flex;
+            justify-content: center;
+            gap: 3vw;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-link:hover {
+            color: #a8c1a2;
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        /* Creative Navigation Button */
+        .nav-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #a8c1a2;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-button:hover {
+            background: #8c9d87;
+            transform: scale(1.1);
+        }
+
+        .nav-menu {
+            position: fixed;
+            bottom: 140px;
+            right: 20px;
+            background: rgba(26, 26, 26, 0.98);
+            border: 2px solid #a8c1a2;
+            border-radius: 8px;
+            padding: 1rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.8rem;
+            z-index: 100;
+            min-width: 150px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-menu.active {
+            display: flex;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(168, 193, 162, 0.2);
+            color: #a8c1a2;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 2vh;
+            }
+
+            body {
+                padding-bottom: 100px;
+            }
+
+            .social-footer {
+                gap: 2vw;
+                padding: 1vh 1vw;
+            }
+
+            .social-link {
+                font-size: 0.8rem;
+            }
+
+            .nav-button {
+                width: 45px;
+                height: 45px;
+                bottom: 90px;
+            }
+
+            .nav-menu {
+                bottom: 145px;
+                right: 10px;
+                min-width: 130px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-footer {
+                gap: 1vw;
+                padding: 1.5vh 1vw;
+            }
+
+            .nav-button {
+                width: 40px;
+                height: 40px;
+                bottom: 70px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Portfolio</h1>
+
+    <div class="portfolio-grid">
+        <!-- quedronol - Together -->
+        <a href="https://quedro.bandcamp.com/album/together" target="_blank" class="portfolio-card">
+            <div class="card-image">🎵</div>
+            <div class="card-content">
+                <div>
+                    <div class="card-album">quedronol</div>
+                    <div class="card-title">Together</div>
+                </div>
+                <div class="card-feature">featuring thisfindsyou on "Starry night" (6:27)</div>
+            </div>
+        </a>
+
+        <!-- zayok - In Elsewhere -->
+        <a href="https://zayok.bandcamp.com/album/in-elsewhere" target="_blank" class="portfolio-card">
+            <div class="card-image">🎵</div>
+            <div class="card-content">
+                <div>
+                    <div class="card-album">zayok</div>
+                    <div class="card-title">In elsewhere</div>
+                </div>
+                <div class="card-feature">featuring thisfindsyou on "Three more seventeens" (6:49)</div>
+            </div>
+        </a>
+
+        <!-- s&jar Mix -->
+        <a href="https://soundcloud.com/radiosandjar/thisfindsyou-014" target="_blank" class="portfolio-card">
+            <div class="card-image">🎙️</div>
+            <div class="card-content">
+                <div>
+                    <div class="card-album">s&jar</div>
+                    <div class="card-title">thisfindsyou (014)</div>
+                </div>
+                <div class="card-feature">"to trust that the sun will rise again, to believe"</div>
+            </div>
+        </a>
+
+        <!-- Portraiture - F7 -->
+        <a href="https://portraitureplatform.bandcamp.com/album/some-things-never-change-but-we-wont-always-be-around-to-see-them-2" target="_blank" class="portfolio-card">
+            <div class="card-image">🎵</div>
+            <div class="card-content">
+                <div>
+                    <div class="card-album">Portraiture</div>
+                    <div class="card-title">Some Things Never Change...</div>
+                </div>
+                <div class="card-feature">with myohmy on "F7 (500 houses)" (4:17)</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Social Media Footer -->
+    <div class="social-footer">
+        <a href="https://soundcloud.com/thisfindsyou" target="_blank" class="social-link">
+            <span class="social-icon">☁️</span> soundcloud
+        </a>
+        <a href="https://thisfindsyou.bandcamp.com" target="_blank" class="social-link">
+            <span class="social-icon">🎵</span> bandcamp
+        </a>
+        <a href="https://instagram.com/thisfindsyou" target="_blank" class="social-link">
+            <span class="social-icon">📷</span> instagram
+        </a>
+        <a href="https://tiktok.com/@thisfindsyou" target="_blank" class="social-link">
+            <span class="social-icon">🎬</span> tiktok
+        </a>
+    </div>
+
+    <!-- Creative Navigation Button -->
+    <button class="nav-button" id="nav-toggle" aria-label="Toggle navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="12" cy="5" r="1"/>
+            <circle cx="12" cy="19" r="1"/>
+        </svg>
+    </button>
+
+    <div class="nav-menu" id="nav-menu">
+        <a href="/">Calendar</a>
+        <a href="/portfolio">Portfolio</a>
+        <a href="mailto:clovehitch@thisfindsyou.com">Contact</a>
+    </div>
+
+    <script>
+        const navButton = document.getElementById('nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        navButton.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-button') && !e.target.closest('.nav-menu')) {
+                navMenu.classList.remove('active');
+            }
+        });
+
+        // Close menu when a link is clicked
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+    </script>
+
+</body>
+</html>
