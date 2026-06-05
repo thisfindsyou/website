@@ -15,11 +15,10 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            gap: 2vh;
             margin: 0;
             height: 100vh;
             overflow: hidden;
-            padding: 6vh 2vw 8vh;
+            padding: 8vh 2vw 8vh;
             box-sizing: border-box;
         }
 
@@ -34,13 +33,6 @@
             margin: 0;
             font-weight: normal;
             letter-spacing: 1px;
-        }
-
-        h1 {
-            font-size: 2.5vh;
-            font-weight: normal;
-            letter-spacing: 1px;
-            margin: 0;
         }
 
         .months {
@@ -159,6 +151,16 @@
         .social-link.bandcamp:hover svg  { fill: #0087BE; }
         .social-link.instagram:hover svg { fill: #E1306C; }
 
+        @media (max-width: 600px) {
+            .month-button {
+                width: 18vw;
+                height: 18vw;
+            }
+            .months {
+                gap: 2vh;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -167,7 +169,7 @@
         <a href="/portfolio">portfolio</a>
         <a href="mailto:clovehitch@thisfindsyou.com">contact</a>
     </nav>
-    <h1>Calendar</h1>
+    <h1 class="page-title">Calendar</h1>
     <div class="months">
         <div class="month-button visible" onclick="window.location.href='january'">
             <img src="assets/images/januarypixel.png" alt="January">
