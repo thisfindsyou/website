@@ -48,15 +48,32 @@
             transition: opacity 0.2s ease;
         }
 
-        .site-nav:hover .nav-toggle,
         .site-nav:has(.nav-dropdown.open) .nav-toggle {
             opacity: 1;
         }
 
-        .site-nav:hover,
         .site-nav:has(.nav-dropdown.open) {
             background: rgba(17, 17, 17, 0.95);
             backdrop-filter: blur(10px);
+        }
+
+        .nav-dropdown.open {
+            display: flex;
+            margin-top: 0.1rem;
+        }
+
+        @media (hover: hover) {
+            .site-nav:hover .nav-toggle {
+                opacity: 1;
+            }
+            .site-nav:hover {
+                background: rgba(17, 17, 17, 0.95);
+                backdrop-filter: blur(10px);
+            }
+            .site-nav:hover .nav-dropdown {
+                display: flex;
+                margin-top: 0.1rem;
+            }
         }
 
         .nav-dropdown {
@@ -64,12 +81,6 @@
             flex-direction: column;
             gap: 0;
             position: relative;
-        }
-
-        .site-nav:hover .nav-dropdown,
-        .nav-dropdown.open {
-            display: flex;
-            margin-top: 0.1rem;
         }
 
         .nav-dropdown a {
@@ -82,19 +93,6 @@
             line-height: 1.7;
             position: relative;
             padding-left: 16px;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
-                linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-            background-size: 1px calc(50% - 0.5px), 1px calc(50% - 0.5px);
-            background-position: 0 0, 0 calc(50% + 0.5px);
-            background-repeat: no-repeat, no-repeat;
-        }
-
-        .nav-dropdown a:last-child {
-            background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-            background-size: 1px calc(50% - 0.5px);
-            background-position: 0 0;
-            background-repeat: no-repeat;
         }
 
         .nav-dropdown a::before {
@@ -104,6 +102,19 @@
             top: 50%;
             width: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-dropdown a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-dropdown a:last-child::after {
+            height: 50%;
         }
 
         .nav-dropdown a:hover {
