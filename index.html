@@ -129,13 +129,6 @@
             opacity: 1;
         }
 
-        .site-nav:hover,
-        .site-nav:has(.nav-dropdown.open) {
-            background: rgba(17, 17, 17, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 0.3rem 0.8rem 0.3rem 0.5rem;
-        }
-
         .nav-dropdown {
             display: none;
             flex-direction: column;
@@ -146,6 +139,9 @@
         .site-nav:hover .nav-dropdown,
         .nav-dropdown.open {
             display: flex;
+            background: rgba(17, 17, 17, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.15rem 0.8rem 0.3rem 0.5rem;
             margin-top: 0.1rem;
         }
 
@@ -159,19 +155,14 @@
             line-height: 1.7;
             position: relative;
             padding-left: 16px;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
-                linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-            background-size: 1px calc(50% - 0.5px), 1px calc(50% - 0.5px);
-            background-position: 0 0, 0 calc(50% + 0.5px);
-            background-repeat: no-repeat, no-repeat;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+            background-size: 1px 100%;
+            background-position: 0 0;
+            background-repeat: no-repeat;
         }
 
         .nav-dropdown a:last-child {
-            background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-            background-size: 1px calc(50% - 0.5px);
-            background-position: 0 0;
-            background-repeat: no-repeat;
+            background-size: 1px 50%;
         }
 
         .nav-dropdown a::before {
