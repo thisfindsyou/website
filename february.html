@@ -10,7 +10,8 @@
         body {
             margin: 0;
             padding: 0;
-            padding-bottom: 55px;
+            padding-top: 50px;
+            padding-bottom: 60px;
             box-sizing: border-box;
             height: 100vh;
             display: flex;
@@ -35,7 +36,7 @@
             font-family: 'Old Standard TT', serif;
             color: white;
             text-decoration: none;
-            font-size: 1.8vh;
+            font-size: 13px;
             opacity: 0.5;
             transition: opacity 0.2s ease;
         }
@@ -46,8 +47,8 @@
 
         .image-container {
             position: relative;
-            width: 60vw;
-            height: 80vh;
+            width: 55vw;
+            height: calc(100vh - 185px);
             background-color: white;
             border: 5px solid white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -56,7 +57,7 @@
             align-items: center;
             overflow: hidden;
             cursor: pointer;
-            z-index: 1; /* Keep the image behind the buttons */
+            z-index: 1;
         }
 
         img {
