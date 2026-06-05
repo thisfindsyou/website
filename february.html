@@ -23,25 +23,54 @@
             font-family: 'Old Standard TT', serif;
         }
 
-        .top-nav {
+        /* Site nav — dropdown */
+        .site-nav {
             position: fixed;
             top: 20px;
             left: 20px;
-            display: flex;
-            gap: 1.5rem;
-            z-index: 100;
+            z-index: 200;
         }
 
-        .top-nav a {
-            font-family: 'Old Standard TT', serif;
+        .nav-toggle {
+            background: none;
+            border: none;
             color: white;
-            text-decoration: none;
+            font-family: 'Old Standard TT', serif;
             font-size: 13px;
-            opacity: 0.5;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            cursor: pointer;
+            padding: 0;
             transition: opacity 0.2s ease;
         }
 
-        .top-nav a:hover {
+        .site-nav:hover .nav-toggle {
+            opacity: 1;
+        }
+
+        .nav-dropdown {
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .site-nav:hover .nav-dropdown,
+        .nav-dropdown.open {
+            display: flex;
+        }
+
+        .nav-dropdown a {
+            color: white;
+            text-decoration: none;
+            font-family: 'Old Standard TT', serif;
+            font-size: 13px;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown a:hover {
             opacity: 1;
         }
 
@@ -150,8 +179,14 @@
 </head>
 <body>
 
-    <nav class="top-nav">
-        <a href="/">calendar</a>
+    <nav class="site-nav" id="siteNav">
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Menu">thisfindsyou</button>
+        <div class="nav-dropdown" id="navDropdown">
+            <a href="/">calendar</a>
+            <a href="/portfolio">portfolio</a>
+            <a href="/blog">blog</a>
+            <a href="mailto:clovehitch@thisfindsyou.com">contact</a>
+        </div>
     </nav>
 
     <div class="image-container" id="image-container">
@@ -296,6 +331,23 @@
                 }
             }
         });
+
+        // Nav dropdown toggle (mobile)
+        (function() {
+            var toggle = document.getElementById('navToggle');
+            var dropdown = document.getElementById('navDropdown');
+            toggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var isOpen = dropdown.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', isOpen);
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#siteNav')) {
+                    dropdown.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        })();
 
     </script>
 </body>
