@@ -58,22 +58,13 @@
             position: relative;
         }
 
-        .nav-dropdown::before {
-            content: '';
-            position: absolute;
-            left: 0.5rem;
-            top: -0.2rem;
-            height: 0.2rem;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
         .site-nav:hover .nav-dropdown,
         .nav-dropdown.open {
             display: flex;
             background: rgba(17, 17, 17, 0.95);
             backdrop-filter: blur(10px);
-            padding: 0.3rem 0.8rem 0.6rem 0.5rem;
-            margin-top: 0.2rem;
+            padding: 0.15rem 0.8rem 0.3rem 0.5rem;
+            margin-top: 0.1rem;
         }
 
         .nav-dropdown a {
@@ -86,30 +77,23 @@
             line-height: 1.7;
             position: relative;
             padding-left: 16px;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+            background-size: 1px 100%;
+            background-position: 0 0;
+            background-repeat: no-repeat;
+        }
+
+        .nav-dropdown a:last-child {
+            background-size: 1px 50%;
         }
 
         .nav-dropdown a::before {
             content: '';
             position: absolute;
             left: 0;
-            top: 0;
-            width: 10px;
-            height: 50%;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-dropdown a::after {
-            content: '';
-            position: absolute;
-            left: 0;
             top: 50%;
-            height: 50%;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-dropdown a:last-child::after {
-            display: none;
+            width: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .nav-dropdown a:hover {
