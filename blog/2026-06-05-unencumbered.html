@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-    <title>Blog - thisfindsyou</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <title>I remember unencumbered - thisfindsyou</title>
     <style>
         * {
             margin: 0;
@@ -22,20 +22,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        h1 {
-            position: fixed;
-            top: 44px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            font-family: 'Old Standard TT', serif;
-            font-size: 2.5vh;
-            font-weight: normal;
-            letter-spacing: 1px;
-            white-space: nowrap;
-            margin: 0;
         }
 
         /* Site nav — dropdown */
@@ -89,90 +75,78 @@
             opacity: 1;
         }
 
-        /* Blog content */
-        .blog-content {
+        /* Post content */
+        .post-container {
             max-width: 600px;
             width: 100%;
-            margin-top: 2vh;
         }
 
-        .post-list {
-            list-style: none;
-        }
-
-        .post-entry {
-            padding: 2.2vh 0;
+        .post-header {
+            margin-bottom: 3vh;
+            padding-bottom: 2vh;
             border-bottom: 1px solid #222;
-        }
-
-        .post-entry:first-child {
-            border-top: 1px solid #222;
         }
 
         .post-meta {
             display: flex;
             align-items: baseline;
             gap: 0.8rem;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.8rem;
         }
 
         .post-date {
             font-size: 0.75rem;
             color: #555;
             letter-spacing: 0.3px;
-            white-space: nowrap;
         }
 
         .post-type {
             font-size: 0.7rem;
             letter-spacing: 0.5px;
             padding: 1px 5px;
-            border: 1px solid #333;
-            color: #666;
+            border: 1px solid #2e2e2e;
+            color: #555;
             text-transform: lowercase;
         }
 
-        .post-type.post {
-            border-color: #444;
-            color: #777;
-        }
-
-        .post-type.note {
-            border-color: #2e2e2e;
-            color: #555;
-        }
-
         .post-title {
-            display: block;
+            font-size: 1.4rem;
+            font-weight: normal;
+            line-height: 1.35;
+            letter-spacing: 0.3px;
+        }
+
+        .post-body {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: #ccc;
+        }
+
+        .post-body p {
+            margin-bottom: 1.8em;
+        }
+
+        .post-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-footer {
+            margin-top: 4vh;
+            padding-top: 2vh;
+            border-top: 1px solid #222;
+        }
+
+        .back-link {
             color: white;
             text-decoration: none;
-            font-size: 1.05rem;
-            line-height: 1.4;
-            transition: opacity 0.2s ease;
-            margin-bottom: 0.3rem;
-        }
-
-        .post-title:hover {
-            opacity: 0.6;
-        }
-
-        .post-excerpt {
             font-size: 0.8rem;
-            color: #777;
-            font-style: italic;
-            line-height: 1.5;
+            opacity: 0.4;
+            transition: opacity 0.2s ease;
+            letter-spacing: 0.3px;
         }
 
-        .empty-state {
-            padding: 4vh 0;
-            border-top: 1px solid #222;
-            border-bottom: 1px solid #222;
-        }
-
-        .empty-state p {
-            font-size: 0.85rem;
-            color: #444;
-            font-style: italic;
+        .back-link:hover {
+            opacity: 1;
         }
 
         /* Social Media Footer */
@@ -210,7 +184,7 @@
         .social-link.instagram:hover svg { fill: #E1306C; }
 
         @media (max-width: 600px) {
-            .blog-content {
+            .post-container {
                 padding: 0 1rem;
             }
         }
@@ -228,21 +202,37 @@
         </div>
     </nav>
 
-    <h1>Blog</h1>
+    <div class="post-container">
 
-    <div class="blog-content">
-        <ul class="post-list">
+        <header class="post-header">
+            <div class="post-meta">
+                <span class="post-date">Jun 05, 2026</span>
+                <span class="post-type">post</span>
+            </div>
+            <h1 class="post-title">I remember unencumbered</h1>
+        </header>
 
-            <li class="post-entry">
-                <div class="post-meta">
-                    <span class="post-date">Jun 05, 2026</span>
-                    <span class="post-type post">post</span>
-                </div>
-                <a href="/blog/2026-06-05-unencumbered" class="post-title">I remember unencumbered</a>
-                <p class="post-excerpt">Grassy knees and sweaty shin pads</p>
-            </li>
+        <div class="post-body">
+            <p>
+                Grassy knees and sweaty shin pads<br>
+                Tree forts in the park and empty skylines<br>
+                The comfort of a soreness I could pin down
+            </p>
+            <p>
+                "The Show Goes On" on the radio while crying to YA fiction<br>
+                Pacing around the room from a relationship on TV
+            </p>
+            <p>
+                Netbook in my bunk bed<br>
+                With a picture of the moon as the screensaver<br>
+                I used to want to be an astronaut<br>
+                Now I just want to be healthy
+            </p>
+        </div>
 
-        </ul>
+        <footer class="post-footer">
+            <a href="/blog" class="back-link">← blog</a>
+        </footer>
 
     </div>
 
