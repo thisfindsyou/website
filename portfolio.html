@@ -195,7 +195,42 @@
         .nav-dropdown {
             display: none;
             flex-direction: column;
-            gap: 0;
+            gap: 0.35rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            margin-left: 0.15rem;
+            padding-left: 0.65rem;
+            padding-top: 0.15rem;
+            padding-bottom: 0;
+        }
+
+        .site-nav:hover .nav-dropdown,
+        .nav-dropdown.open {
+            display: flex;
+            background: rgba(17, 17, 17, 0.95);
+            backdrop-filter: blur(10px);
+            padding-right: 0.8rem;
+            margin-top: 0.2rem;
+        }
+
+        .nav-dropdown a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-family: 'Old Standard TT', serif;
+            font-size: 13px;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown a::before {
+            content: '─ ';
+            font-family: monospace;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.2);
+            margin-right: 0.2rem;
+        }
+
+        .nav-dropdown a:hover {
+            color: white;
         }
 
         .site-nav:hover .nav-dropdown,
