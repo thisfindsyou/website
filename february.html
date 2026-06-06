@@ -675,21 +675,22 @@
                 list.className = 'file-list';
 
                 if (files.length > 0) {
-                    // show up to 2 files directly; 3rd slot → "⋯ +N more"
-                    const showDirect = files.length <= 3 ? files : files.slice(0, 2);
+                    // 1-2 files: show all directly; 3+ files: show first + "& +N"
+                    const showDirect = files.length <= 2 ? files : files.slice(0, 1);
 
                     showDirect.forEach((f, i) => {
                         const item = document.createElement('div');
                         item.className = 'file-entry' + (d === selectedDay && i === currentTrack ? ' active' : '');
                         item.textContent = displayName(f);
+                        item.title = displayName(f);
                         item.addEventListener('click', e => { e.stopPropagation(); selectDay(d, i); });
                         list.appendChild(item);
                     });
 
-                    if (files.length > 3) {
+                    if (files.length > 2) {
                         const more = document.createElement('div');
                         more.className = 'file-more';
-                        more.textContent = `⋯ +${files.length - 2} more`;
+                        more.textContent = `& +${files.length - 1}`;
                         more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, files, d); });
                         list.appendChild(more);
                     }
@@ -723,6 +724,7 @@
             const item = document.createElement('div');
             item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
             item.textContent = displayName(f);
+            item.title = displayName(f);
             item.addEventListener('mousedown', e => {
                 e.preventDefault();
                 e.stopPropagation();
