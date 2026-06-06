@@ -485,12 +485,16 @@
 
         /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
-            body { padding-bottom: 65px; }
+            body { height: 100vh; height: 100svh; padding-bottom: 65px; }
             .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; }
             .player-inner { padding: 0 0.6rem; }
             .calendar-section { padding: 0.3rem 0.6rem calc(0.2rem + 19px); }
             .month-nav-bar h1 { font-size: 2vh; }
-            .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
+            .player-row { align-items: stretch; justify-content: flex-start; }
+            .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
+            #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
+            #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
+            .image-container { flex-shrink: 0; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
             .calendar-grid-wrap  { max-width: 100%; }
             .day-headers         { gap: 0.18rem; }
