@@ -234,7 +234,7 @@
             flex: 1;
             min-height: 0;
             overflow: hidden;
-            padding: 0.4rem 1.2rem calc(0.3rem + 1px);
+            padding: 0.4rem 1.2rem calc(0.3rem + 4px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -473,15 +473,20 @@
             transition: color 0.3s;
         }
         .social-link svg { width: 20px; height: 20px; fill: #555; transition: fill 0.3s; }
-        .social-link.soundcloud:hover svg { fill: #FF5500; }
-        .social-link.bandcamp:hover svg   { fill: #0087BE; }
-        .social-link.instagram:hover svg  { fill: #E1306C; }
+        @media (hover: hover) {
+            .social-link.soundcloud:hover svg { fill: #FF5500; }
+            .social-link.bandcamp:hover svg   { fill: #0087BE; }
+            .social-link.instagram:hover svg  { fill: #E1306C; }
+        }
+        .social-link.soundcloud:active svg { fill: #FF5500; }
+        .social-link.bandcamp:active svg   { fill: #0087BE; }
+        .social-link.instagram:active svg  { fill: #E1306C; }
 
         /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
             .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; }
             .player-inner { padding: 0 0.6rem; }
-            .calendar-section { padding: 0.3rem 0.6rem 0.2rem; }
+            .calendar-section { padding: 0.3rem 0.6rem calc(0.2rem + 4px); }
             .month-nav-bar h1 { font-size: 2vh; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
