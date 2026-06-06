@@ -202,6 +202,13 @@
             text-overflow: ellipsis;
             max-width: 60vw;
         }
+        .file-name a {
+            color: white;
+            text-decoration: none;
+            opacity: 1;
+            vertical-align: baseline;
+        }
+        .file-name a:hover { text-decoration: underline; }
         .file-blog-wrap {
             white-space: nowrap;
             vertical-align: baseline;
@@ -909,11 +916,8 @@
 
          if (blog) {
              if (!currentFiles.length) {
-                 nameEl.textContent = '';
-                 nameEl.title = '';
-                 blogEl.textContent = blogDisplayName(blog);
-                 blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
-                 blogWrap.style.display = '';
+                 nameEl.innerHTML = '<a href="' + blog + '?from=' + MONTHS[currentMonthIndex] + '" target="_blank" rel="noopener noreferrer">' + blogDisplayName(blog) + '</a>';
+                 blogWrap.style.display = 'none';
              } else {
                  blogEl.textContent = blogDisplayName(blog);
                  blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
