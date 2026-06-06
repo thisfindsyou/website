@@ -201,11 +201,6 @@
         .file-blog-wrap {
             white-space: nowrap;
         }
-        .file-blog-wrap .blog-label {
-            font-size: 0.65rem;
-            opacity: 0.4;
-            letter-spacing: 0.3px;
-        }
         .file-blog-wrap a {
             font-size: 0.8rem;
             font-style: italic;
@@ -542,7 +537,7 @@
             <div class="file-info">
                 <span class="file-date" id="fileDate"></span>
                 <span class="file-name" id="fileName">—</span>
-                <span class="file-blog-wrap" id="fileBlogWrap" style="display:none"><span class="blog-label">blog:</span> <a id="fileBlog" target="_blank" rel="noopener noreferrer"></a></span>
+                <span class="file-blog-wrap" id="fileBlogWrap" style="display:none"><a id="fileBlog" target="_blank" rel="noopener noreferrer"></a></span>
             </div>
         </div>
     </section>
@@ -620,7 +615,7 @@
     }
 
     function blogDisplayName(url) {
-        return url.split('/').pop().replace(/^\d{4}-\d{2}-\d{2}-/, '');
+        return url.split('/').pop().replace(/^\d{4}-\d{2}-\d{2}-/, '') + '.txt';
     }
 
     // ── Data helpers ───────────────────────────────────────────────────
