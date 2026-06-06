@@ -198,6 +198,38 @@
             text-overflow: ellipsis;
             max-width: 60vw;
         }
+        .file-blog-wrap {
+            font-size: 0.65rem;
+            opacity: 0.4;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+        .file-blog-wrap a {
+            font-size: 0.8rem;
+            font-style: italic;
+            font-weight: bold;
+            letter-spacing: 0.2px;
+            color: white;
+            text-decoration: none;
+        }
+        .file-blog-wrap a:hover { text-decoration: underline; }
+
+        .blog-entry {
+            font-size: 0.57rem;
+            font-style: italic;
+            opacity: 0.55;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: inherit;
+            text-decoration: none;
+            line-height: 1.3;
+            display: block;
+        }
+        .blog-entry:hover { opacity: 1; text-decoration: underline; }
+        .cal-cell.selected .blog-entry { opacity: 0.6; color: #000; }
+        .cal-cell.selected .blog-entry:hover { opacity: 1; }
+
 
         /* ── Calendar section (bottom 50%) ───────────────────────── */
         .calendar-section {
@@ -221,6 +253,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
+            padding-bottom: 1px;
         }
 
         .day-headers {
@@ -507,6 +540,7 @@
             <div class="file-info">
                 <span class="file-date" id="fileDate"></span>
                 <span class="file-name" id="fileName">—</span>
+                <span class="file-blog-wrap" id="fileBlogWrap" style="display:none">blog: <a id="fileBlog" target="_blank" rel="noopener noreferrer"></a></span>
             </div>
         </div>
     </section>
@@ -576,6 +610,17 @@
         return f.replace(/^\d{4}-\d{2}-\d{2}-/, '');
     }
 
+    function blogForDay(day) {
+        const data = calendarData[monthKey()];
+        if (!data) return null;
+        const entry = data.find(d => d.day === day);
+        return (entry && entry.blog) ? entry.blog : null;
+    }
+
+    function blogDisplayName(url) {
+        return url.split('/').pop().replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    }
+
     // ── Data helpers ───────────────────────────────────────────────────
     function monthKey() {
         return `${YEAR}-${String(currentMonthIndex + 1).padStart(2, '0')}`;
@@ -614,8 +659,9 @@
 
         for (let d = 1; d <= days; d++) {
             const files = filesForDay(d);
+            const blog  = blogForDay(d);
             const cell  = document.createElement('div');
-            cell.className = 'cal-cell' + (files.length ? ' has-files' : '');
+            cell.className = 'cal-cell' + (files.length || blog ? ' has-files' : '');
             if (d === selectedDay) cell.classList.add('selected');
 
             // day number
@@ -624,27 +670,40 @@
             num.textContent = d;
             cell.appendChild(num);
 
-            if (files.length > 0) {
+            if (files.length > 0 || blog) {
                 const list = document.createElement('div');
                 list.className = 'file-list';
 
-                // show up to 2 files directly; 3rd slot → "⋯ +N more"
-                const showDirect = files.length <= 3 ? files : files.slice(0, 2);
+                if (files.length > 0) {
+                    // show up to 2 files directly; 3rd slot → "⋯ +N more"
+                    const showDirect = files.length <= 3 ? files : files.slice(0, 2);
 
-                showDirect.forEach((f, i) => {
-                    const item = document.createElement('div');
-                    item.className = 'file-entry' + (d === selectedDay && i === currentTrack ? ' active' : '');
-                    item.textContent = displayName(f);
-                    item.addEventListener('click', e => { e.stopPropagation(); selectDay(d, i); });
-                    list.appendChild(item);
-                });
+                    showDirect.forEach((f, i) => {
+                        const item = document.createElement('div');
+                        item.className = 'file-entry' + (d === selectedDay && i === currentTrack ? ' active' : '');
+                        item.textContent = displayName(f);
+                        item.addEventListener('click', e => { e.stopPropagation(); selectDay(d, i); });
+                        list.appendChild(item);
+                    });
 
-                if (files.length > 3) {
-                    const more = document.createElement('div');
-                    more.className = 'file-more';
-                    more.textContent = `⋯ +${files.length - 2} more`;
-                    more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, files, d); });
-                    list.appendChild(more);
+                    if (files.length > 3) {
+                        const more = document.createElement('div');
+                        more.className = 'file-more';
+                        more.textContent = `⋯ +${files.length - 2} more`;
+                        more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, files, d); });
+                        list.appendChild(more);
+                    }
+                }
+
+                if (blog) {
+                    const blogLink = document.createElement('a');
+                    blogLink.className = 'blog-entry';
+                    blogLink.href = blog;
+                    blogLink.target = '_blank';
+                    blogLink.rel = 'noopener noreferrer';
+                    blogLink.textContent = blogDisplayName(blog);
+                    blogLink.addEventListener('click', e => e.stopPropagation());
+                    list.appendChild(blogLink);
                 }
 
                 cell.appendChild(list);
@@ -743,15 +802,29 @@
     }
 
     function updateFileInfo() {
-        const dateEl = document.getElementById('fileDate');
-        const nameEl = document.getElementById('fileName');
-        if (!currentFiles.length || selectedDay === null) {
+        const dateEl   = document.getElementById('fileDate');
+        const nameEl   = document.getElementById('fileName');
+        const blogWrap = document.getElementById('fileBlogWrap');
+        const blogEl   = document.getElementById('fileBlog');
+        const blog     = selectedDay !== null ? blogForDay(selectedDay) : null;
+
+        if (selectedDay === null) {
             dateEl.textContent = '';
             nameEl.textContent = '—';
+            blogWrap.style.display = 'none';
             return;
         }
+
         dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${selectedDay}, ${YEAR}`;
-        nameEl.textContent = displayName(currentFiles[currentTrack]);
+        nameEl.textContent = currentFiles.length ? displayName(currentFiles[currentTrack]) : '';
+
+        if (blog) {
+            blogEl.textContent = blogDisplayName(blog);
+            blogEl.href = blog;
+            blogWrap.style.display = '';
+        } else {
+            blogWrap.style.display = 'none';
+        }
     }
 
     // ── File navigation (within a day) ────────────────────────────────
