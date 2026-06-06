@@ -697,13 +697,18 @@
         const days = daysWithFiles();
         if (!days.length) { goToMonth((currentMonthIndex - 1 + 12) % 12, true); return; }
 
-        if (selectedDay === null) { selectDay(days[days.length - 1]); return; }
+        if (selectedDay === null) {
+            const d = days[days.length - 1];
+            selectDay(d, filesForDay(d).length - 1); // last file of last day
+            return;
+        }
 
         const idx = days.indexOf(selectedDay);
         if (idx <= 0) {
-            goToMonth((currentMonthIndex - 1 + 12) % 12, true); // last day of prev month
+            goToMonth((currentMonthIndex - 1 + 12) % 12, true); // last file of last day of prev month
         } else {
-            selectDay(days[idx - 1]);
+            const d = days[idx - 1];
+            selectDay(d, filesForDay(d).length - 1); // last file of previous day
         }
     }
 
@@ -740,7 +745,9 @@
         sessionStorage.removeItem('calNav');
 
         if (days.length) {
-            selectDay(selectLast ? days[days.length - 1] : days[0], 0, false);
+            const d = selectLast ? days[days.length - 1] : days[0];
+            const track = selectLast ? filesForDay(d).length - 1 : 0;
+            selectDay(d, track, false);
         } else {
             selectedDay = null;
             currentFiles = [];
@@ -776,9 +783,25 @@
     });
 
     window.addEventListener('keydown', e => {
-        if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
-        if (e.code === 'ArrowRight') { e.preventDefault(); nextDay(); }
-        if (e.code === 'ArrowLeft')  { e.preventDefault(); prevDay(); }
+        if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+        if (e.code === 'ArrowRight') {
+            e.preventDefault();
+            // next file on this day if available, otherwise first file of next day
+            if (currentFiles.length && currentTrack < currentFiles.length - 1) {
+                nextFile();
+            } else {
+                nextDay();
+            }
+        }
+        if (e.code === 'ArrowLeft') {
+            e.preventDefault();
+            // prev file on this day if available, otherwise last file of prev day
+            if (currentFiles.length && currentTrack > 0) {
+                prevFile();
+            } else {
+                prevDay();
+            }
+        }
     });
 
     // close dropdown on outside click
