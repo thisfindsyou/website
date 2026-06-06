@@ -401,7 +401,7 @@
     <nav class="site-nav" id="siteNav">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Menu">thisfindsyou</button>
         <div class="nav-dropdown" id="navDropdown">
-            <a href="/">calendar</a>
+            <a href="/january" id="calNavLink">calendar</a>
             <a href="/portfolio">portfolio</a>
             <a href="/blog">blog</a>
             <a href="mailto:clovehitch@thisfindsyou.com">contact</a>
@@ -468,6 +468,9 @@
     // ── Detect month from URL ──────────────────────────────────────────
     const slug = window.location.pathname.replace(/^\//, '').replace(/\.html$/, '');
     let currentMonthIndex = Math.max(0, MONTHS.indexOf(slug));
+
+    // ── Point calendar nav link to current real-world month ────────────
+    document.getElementById('calNavLink').href = '/' + MONTHS[new Date().getMonth()];
 
     // ── State ──────────────────────────────────────────────────────────
     let calendarData = {};
@@ -601,24 +604,30 @@
     }
 
     // ── Audio ──────────────────────────────────────────────────────────
+    // Use browser events as single source of truth for isPlaying state.
+    // Never manually set isPlaying = true/false — let the events do it.
+    audioEl.addEventListener('play',  () => { isPlaying = true;  updatePlayBtn(); });
+    audioEl.addEventListener('pause', () => { isPlaying = false; updatePlayBtn(); });
+
     function playFile(file) {
         audioEl.src = `assets/audio/${file}`;
+        audioEl.load(); // required for src change to take effect in all browsers
         audioEl.muted = false;
-        audioEl.play().catch(() => {});
-        isPlaying = true;
-        updatePlayBtn();
+        audioEl.play().catch(() => {}); // browser may block; events handle state
     }
 
     function togglePlay() {
         if (!currentFiles.length) return;
         if (isPlaying) {
             audioEl.pause();
-            isPlaying = false;
         } else {
-            audioEl.play().catch(() => {});
-            isPlaying = true;
+            // if no src loaded yet (e.g. first interaction on page load), load the file
+            if (!audioEl.src || audioEl.readyState === 0) {
+                playFile(currentFiles[currentTrack]);
+            } else {
+                audioEl.play().catch(() => {});
+            }
         }
-        updatePlayBtn();
     }
 
     function updatePlayBtn() {
@@ -628,7 +637,8 @@
     }
 
     // ── Selection ──────────────────────────────────────────────────────
-    function selectDay(day, trackIndex) {
+    // autoplay=false on init so browser autoplay policy isn't triggered
+    function selectDay(day, trackIndex, autoplay = true) {
         selectedDay  = day;
         currentFiles = filesForDay(day);
         currentTrack = typeof trackIndex === 'number'
@@ -636,7 +646,7 @@
             : 0;
         renderCalendar();
         updateFileInfo();
-        if (currentFiles.length) playFile(currentFiles[currentTrack]);
+        if (currentFiles.length && autoplay) playFile(currentFiles[currentTrack]);
     }
 
     function updateFileInfo() {
@@ -651,7 +661,24 @@
         nameEl.textContent = currentFiles[currentTrack];
     }
 
-    // ── Day navigation ─────────────────────────────────────────────────
+    // ── File navigation (player ← → buttons) ──────────────────────────
+    function nextFile() {
+        if (!currentFiles.length) return;
+        currentTrack = (currentTrack + 1) % currentFiles.length;
+        updateFileInfo();
+        renderCalendar();
+        playFile(currentFiles[currentTrack]);
+    }
+
+    function prevFile() {
+        if (!currentFiles.length) return;
+        currentTrack = (currentTrack - 1 + currentFiles.length) % currentFiles.length;
+        updateFileInfo();
+        renderCalendar();
+        playFile(currentFiles[currentTrack]);
+    }
+
+    // ── Day navigation (keyboard arrows) ───────────────────────────────
     function nextDay() {
         const days = daysWithFiles();
         if (!days.length) { goToMonth((currentMonthIndex + 1) % 12, false); return; }
@@ -713,7 +740,7 @@
         sessionStorage.removeItem('calNav');
 
         if (days.length) {
-            selectDay(selectLast ? days[days.length - 1] : days[0]);
+            selectDay(selectLast ? days[days.length - 1] : days[0], 0, false);
         } else {
             selectedDay = null;
             currentFiles = [];
@@ -735,11 +762,18 @@
     // ── Event Listeners ────────────────────────────────────────────────
     document.getElementById('prevMonthBtn').addEventListener('click', () => goToMonth((currentMonthIndex - 1 + 12) % 12, false));
     document.getElementById('nextMonthBtn').addEventListener('click', () => goToMonth((currentMonthIndex + 1) % 12, false));
-    document.getElementById('previous-button').addEventListener('click', prevDay);
-    document.getElementById('next-button').addEventListener('click', nextDay);
+    document.getElementById('previous-button').addEventListener('click', prevFile);
+    document.getElementById('next-button').addEventListener('click', nextFile);
     document.getElementById('image-container').addEventListener('click', togglePlay);
 
-    audioEl.addEventListener('ended', nextDay);
+    // when a file ends: advance to next file on this day, or next day if last file
+    audioEl.addEventListener('ended', () => {
+        if (currentTrack < currentFiles.length - 1) {
+            nextFile();
+        } else {
+            nextDay();
+        }
+    });
 
     window.addEventListener('keydown', e => {
         if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
