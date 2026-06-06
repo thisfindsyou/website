@@ -484,8 +484,6 @@
             .calendar-section { padding: 0.3rem 0.6rem 0.2rem; }
             .month-nav-bar h1 { font-size: 2vh; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
-            #previous-button { right: auto; left:  0.3rem; }
-            #next-button    { left:  auto; right: 0.3rem; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
             .calendar-grid-wrap  { max-width: 100%; }
             .day-headers         { gap: 0.18rem; }
@@ -695,7 +693,7 @@
                 if (blog) {
                     const blogLink = document.createElement('a');
                     blogLink.className = 'blog-entry';
-                    blogLink.href = blog;
+                    blogLink.href = blog + '?from=' + MONTHS[currentMonthIndex];
                     blogLink.target = '_blank';
                     blogLink.rel = 'noopener noreferrer';
                     blogLink.textContent = blogDisplayName(blog);

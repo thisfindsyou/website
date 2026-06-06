@@ -169,6 +169,8 @@
             margin-top: 4vh;
             padding-top: 2vh;
             border-top: 1px solid #222;
+            display: flex;
+            gap: 1.5rem;
         }
 
         .back-link {
@@ -268,6 +270,7 @@
 
         <footer class="post-footer">
             <a href="/blog" class="back-link">← blog</a>
+            <a href="#" class="back-link" id="calBackBtn" style="display:none">← </a>
         </footer>
 
     </div>
@@ -290,6 +293,17 @@
         const MONTHS = ['january','february','march','april','may','june',
                         'july','august','september','october','november','december'];
         document.getElementById('calNavLink').href = '/' + MONTHS[new Date().getMonth()];
+
+        // Calendar back link
+        (function() {
+            var from = new URLSearchParams(window.location.search).get('from');
+            if (from) {
+                var btn = document.getElementById('calBackBtn');
+                btn.href = '/' + from;
+                btn.textContent = '← ' + from;
+                btn.style.display = '';
+            }
+        })();
 
         // Nav dropdown toggle (mobile)
         (function() {
