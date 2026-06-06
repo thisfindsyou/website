@@ -207,12 +207,15 @@
         }
         .file-blog-wrap a {
             font-size: 0.8rem;
-            font-style: italic;
             font-weight: bold;
             letter-spacing: 0.2px;
             color: white;
             text-decoration: none;
             opacity: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60vw;
         }
         .file-blog-wrap a:hover { text-decoration: underline; }
 
@@ -891,7 +894,9 @@
          }
 
          dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${ordinal(selectedDay)}, ${YEAR}`;
-         nameEl.textContent = currentFiles.length ? fileLabel(selectedDay, currentFiles[currentTrack]) : '—';
+         const label = currentFiles.length ? fileLabel(selectedDay, currentFiles[currentTrack]) : '—';
+         nameEl.textContent = label;
+         nameEl.title = label;
 
          if (blog) {
              blogEl.textContent = blogDisplayName(blog);
