@@ -493,10 +493,10 @@
 
         /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
-            body { height: 100vh; height: 100svh; padding-bottom: 65px; }
+            body { height: 100vh; height: 100svh; padding-bottom: 100px; }
             .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; }
-            .player-inner { padding: 0 0.6rem; }
-            .calendar-section { padding: 0.3rem 0.6rem calc(0.2rem + 19px); }
+            .player-inner { padding: 0; }
+            .calendar-section { flex: 2; padding: 0.3rem 0.6rem calc(0.2rem + 4px); }
             .month-nav-bar h1 { font-size: 2vh; }
             .player-row { align-items: stretch; justify-content: flex-start; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
@@ -504,7 +504,7 @@
             #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
             .image-container { flex-shrink: 0; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
-            .calendar-grid-wrap  { max-width: 100%; }
+            .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 146px) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
             .day-headers         { gap: 0.18rem; }
             .day-header          { font-size: 0.52rem; }
             .calendar            { gap: 0.18rem; }
@@ -689,8 +689,8 @@
                 list.className = 'file-list';
 
                 if (files.length > 0) {
-                    // 1-2 files: show all directly; 3+ files: show first + "& +N"
-                    const showDirect = files.length <= 2 ? files : files.slice(0, 1);
+                    // 1-2 files: show all directly; 3+ files: show first 2 + "& +N"
+                    const showDirect = files.length <= 2 ? files : files.slice(0, 2);
 
                     showDirect.forEach((f, i) => {
                         const item = document.createElement('div');
@@ -704,7 +704,7 @@
                     if (files.length > 2) {
                         const more = document.createElement('div');
                         more.className = 'file-more';
-                        more.textContent = `& +${files.length - 1}`;
+                        more.textContent = `& +${files.length - 2}`;
                         more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, files, d); });
                         list.appendChild(more);
                     }
