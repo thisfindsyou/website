@@ -689,89 +689,96 @@
             grid.appendChild(el);
         }
 
-        for (let d = 1; d <= days; d++) {
-            const files = filesForDay(d);
-            const blog  = blogForDay(d);
-            const cell  = document.createElement('div');
-            cell.className = 'cal-cell' + (files.length || blog ? ' has-files' : '');
-            if (d === selectedDay) cell.classList.add('selected');
+         for (let d = 1; d <= days; d++) {
+             const files = filesForDay(d);
+             const blog  = blogForDay(d);
+             const cell  = document.createElement('div');
+             cell.className = 'cal-cell' + (files.length || blog ? ' has-files' : '');
+             if (d === selectedDay) cell.classList.add('selected');
 
-            // day number
-            const num = document.createElement('div');
-            num.className = 'day-num';
-            num.textContent = d;
-            cell.appendChild(num);
+             // day number
+             const num = document.createElement('div');
+             num.className = 'day-num';
+             num.textContent = d;
+             cell.appendChild(num);
 
-            if (files.length > 0 || blog) {
-                const list = document.createElement('div');
-                list.className = 'file-list';
+             if (files.length > 0 || blog) {
+                 const list = document.createElement('div');
+                 list.className = 'file-list';
 
-                if (files.length > 0) {
-                     // Count badge opens dropdown for 1+ files.
-                     const count = document.createElement('div');
-                     count.className = 'file-more';
-                     count.textContent = files.length === 1 ? '1 file' : `${files.length} files`;
-                     count.addEventListener('click', e => { e.stopPropagation(); openDropdown(count, files, d); });
-                     list.appendChild(count);
-                 }
+                 // Combine files and blog into a single list for the dropdown
+                 const allItems = [...files];
+                 if (blog) allItems.push(blog);
+                 const totalCount = allItems.length;
 
-                if (blog) {
-                    const blogLink = document.createElement('a');
-                    blogLink.className = 'blog-entry';
-                    blogLink.href = blog + '?from=' + MONTHS[currentMonthIndex];
-                    blogLink.target = '_blank';
-                    blogLink.rel = 'noopener noreferrer';
-                    blogLink.textContent = blogDisplayName(blog);
-                    blogLink.addEventListener('click', e => e.stopPropagation());
-                    list.appendChild(blogLink);
-                }
+                 // Count badge includes both files and blog post
+                 const count = document.createElement('div');
+                 count.className = 'file-more';
+                 count.textContent = totalCount === 1 ? '1 file' : `${totalCount} files`;
+                 count.addEventListener('click', e => { e.stopPropagation(); openDropdown(count, files, blog, d); });
+                 list.appendChild(count);
 
-                cell.appendChild(list);
-                cell.addEventListener('click', () => selectDay(d, 0));
-            }
+                 cell.appendChild(list);
+                 cell.addEventListener('click', () => selectDay(d, 0));
+             }
 
-            grid.appendChild(cell);
-        }
+             grid.appendChild(cell);
+         }
     }
 
-    // ── Dropdown ───────────────────────────────────────────────────────
-    function openDropdown(triggerEl, files, day) {
-        const dd = document.getElementById('file-dropdown');
-        dd.innerHTML = '';
+     // ── Dropdown ───────────────────────────────────────────────────────
+     function openDropdown(triggerEl, files, blog, day) {
+         const dd = document.getElementById('file-dropdown');
+         dd.innerHTML = '';
 
-        files.forEach((f, i) => {
-            const item = document.createElement('div');
-            item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
-            item.textContent = displayName(f);
-            item.title = displayName(f);
-            item.addEventListener('mousedown', e => {
-                e.preventDefault();
-                e.stopPropagation();
-                selectDay(day, i);
-                closeDropdown();
-            });
-            dd.appendChild(item);
-        });
+         // Add audio files to dropdown
+         files.forEach((f, i) => {
+             const item = document.createElement('div');
+             item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
+             item.textContent = displayName(f);
+             item.title = displayName(f);
+             item.addEventListener('mousedown', e => {
+                 e.preventDefault();
+                 e.stopPropagation();
+                 selectDay(day, i);
+                 closeDropdown();
+             });
+             dd.appendChild(item);
+         });
 
-        dd.style.display = 'block';
+         // Add blog post to dropdown if it exists
+         if (blog) {
+             const blogItem = document.createElement('div');
+             blogItem.className = 'dd-item';
+             blogItem.textContent = blogDisplayName(blog);
+             blogItem.title = blogDisplayName(blog);
+             blogItem.addEventListener('mousedown', e => {
+                 e.preventDefault();
+                 e.stopPropagation();
+                 window.location.href = blog + '?from=' + MONTHS[currentMonthIndex];
+             });
+             dd.appendChild(blogItem);
+         }
 
-        const rect  = triggerEl.getBoundingClientRect();
-        const ddH   = dd.offsetHeight;
-        const below = window.innerHeight - rect.bottom;
+         dd.style.display = 'block';
 
-        dd.style.top  = (below >= ddH + 8 ? rect.bottom + 4 : rect.top - ddH - 4) + 'px';
+         const rect  = triggerEl.getBoundingClientRect();
+         const ddH   = dd.offsetHeight;
+         const below = window.innerHeight - rect.bottom;
 
-        // Position dropdown left or right based on trigger position
-        if (rect.left > window.innerWidth / 2) {
-            // Right side: expand leftward
-            dd.style.right = Math.max(8, window.innerWidth - rect.right) + 'px';
-            dd.style.left = 'auto';
-        } else {
-            // Left side: expand rightward
-            dd.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 310)) + 'px';
-            dd.style.right = 'auto';
-        }
-    }
+         dd.style.top  = (below >= ddH + 8 ? rect.bottom + 4 : rect.top - ddH - 4) + 'px';
+
+         // Position dropdown left or right based on trigger position
+         if (rect.left > window.innerWidth / 2) {
+             // Right side: expand leftward
+             dd.style.right = Math.max(8, window.innerWidth - rect.right) + 'px';
+             dd.style.left = 'auto';
+         } else {
+             // Left side: expand rightward
+             dd.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 310)) + 'px';
+             dd.style.right = 'auto';
+         }
+     }
 
     function closeDropdown() {
         document.getElementById('file-dropdown').style.display = 'none';
