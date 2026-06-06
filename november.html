@@ -752,8 +752,8 @@
          files.forEach((f, i) => {
              const item = document.createElement('div');
              item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
-             item.textContent = fileLabel(day, f);
-             item.title = fileLabel(day, f);
+             item.textContent = displayName(f);
+             item.title = displayName(f);
              item.addEventListener('mousedown', e => {
                  e.preventDefault();
                  e.stopPropagation();
