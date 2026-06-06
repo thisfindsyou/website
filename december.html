@@ -702,9 +702,8 @@
                 const list = document.createElement('div');
                 list.className = 'file-list';
 
-                if (files.length > 1) {
-                    // Multiple files: count badge opens dropdown.
-                    // Single file: cell is clean — cell click plays directly.
+                if (files.length > 0) {
+                    // Count badge opens dropdown for 1+ files.
                     const count = document.createElement('div');
                     count.className = 'file-more';
                     count.textContent = files.length;
