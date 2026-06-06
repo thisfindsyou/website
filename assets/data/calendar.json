@@ -2,7 +2,9 @@
   "2026-01": [
     { "day": 4,  "files": ["2026-01-04-decaf.mp3"] },
     { "day": 11, "files": ["2026-01-11-twothousandand8.mp3"] },
+    { "day": 15, "files": ["2026-01-15-test-a.mp3", "2026-01-15-test-b.mp3"] },
     { "day": 17, "files": ["2026-01-17-hanging.mp3"] },
+    { "day": 20, "files": ["2026-01-20-test-a.mp3", "2026-01-20-test-b.mp3", "2026-01-20-test-c.mp3", "2026-01-20-test-d.mp3"] },
     { "day": 23, "files": ["2026-01-23-helium.mp3"] }
   ],
   "2026-02": [
