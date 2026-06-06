@@ -104,8 +104,10 @@
         /* ── Social footer ───────────────────────────────────────── */
         .social-footer {
             position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(17, 17, 17, 0.95);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(17, 17, 17, 0.97);
             border-top: 1px solid #222;
             padding: 1.2vh 2vw;
             display: flex;
@@ -115,13 +117,19 @@
         }
 
         .social-link {
-            color: #555;
+            color: #666;
             text-decoration: none;
             display: flex;
             align-items: center;
-            transition: color 0.3s;
+            transition: color 0.3s ease;
         }
-        .social-link svg { width: 20px; height: 20px; fill: #555; transition: fill 0.3s; }
+
+        .social-link svg {
+            width: 22px;
+            height: 22px;
+            fill: #666;
+            transition: fill 0.3s ease;
+        }
         @media (hover: hover) {
             .social-link.soundcloud:hover svg { fill: #FF5500; }
             .social-link.bandcamp:hover svg   { fill: #0087BE; }
