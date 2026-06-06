@@ -494,37 +494,41 @@
         .social-link.bandcamp:active svg   { fill: #0087BE; }
         .social-link.instagram:active svg  { fill: #E1306C; }
 
-        /* ── Mobile ──────────────────────────────────────────────────── */
-        @media (max-width: 768px) {
-            :root { --footer-h: calc(2.4vh + 25px); }
-            html { height: -webkit-fill-available; }
-            body { height: 100vh; height: -webkit-fill-available; height: 100svh; padding-bottom: var(--footer-h); }
-            .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; }
-            .player-inner { padding: 0; }
-            .calendar-section { flex: 2; padding: 0.3rem 0.6rem calc(0.2rem + 4px); }
-            .month-nav-bar h1 { font-size: 2vh; }
-            .player-row { align-items: stretch; justify-content: flex-start; }
-            .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
-            #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
-            #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
-            .image-container { width: auto; height: 100%; flex-shrink: 0; }
-            .file-name { font-size: 0.7rem; max-width: 55vw; }
-            .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
-            .day-headers         { gap: 0.18rem; }
-            .day-header          { font-size: 0.52rem; }
-            .calendar            { gap: 0.18rem; }
-            .cal-cell            { padding: 0.18rem 0.2rem; }
-            .day-num { font-size: 0.62rem; }
-            .file-entry { font-size: 0.5rem; }
-            .file-more { font-size: 0.48rem; }
-        }
-
-        /* ── Mobile tall phones (≥ 700px, e.g. iPhone 12+) ──────────── */
-        @media (max-width: 768px) and (min-height: 700px) {
-            .player-section   { flex: 9; }
-            .calendar-section { flex: 11; }
-            .calendar-grid-wrap { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 11 / 20 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
-        }
+         /* ── Mobile ──────────────────────────────────────────────────── */
+         @media (max-width: 768px) {
+             :root { --footer-h: calc(2.4vh + 25px); }
+             html { height: -webkit-fill-available; }
+             body { height: 100vh; height: -webkit-fill-available; height: 100svh; padding-bottom: var(--footer-h); }
+             .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
+             .player-inner { padding: 0; }
+             /* Calendar: fixed 6-row height derived from screen width; player fills the rest.
+                Formula: 6 × (cell_size + gap) − gap + overhead
+                where cell_size = (100vw − 2×0.6rem − 6×0.18rem) / 7
+                simplifies to: 6 × (100vw − 1.02rem) / 7 + 1.29rem + 4px
+                max-height cap guards against short/square devices. */
+             .calendar-section {
+                 flex: none;
+                 height: calc(6 * (100vw - 1.02rem) / 7 + 1.29rem + 4px);
+                 max-height: calc((100svh - 46px - var(--footer-h)) * 2 / 3);
+                 padding: 0.3rem 0.6rem calc(0.2rem + 4px);
+             }
+             /* max-width formula: only constrains when max-height cap is active */
+             .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
+             .month-nav-bar h1 { font-size: 2vh; }
+             .player-row { align-items: stretch; justify-content: flex-start; }
+             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
+             #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
+             #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
+             .image-container { width: auto; height: 100%; flex-shrink: 0; }
+             .file-name { font-size: 0.7rem; max-width: 55vw; }
+             .day-headers         { gap: 0.18rem; }
+             .day-header          { font-size: 0.52rem; }
+             .calendar            { gap: 0.18rem; }
+             .cal-cell            { padding: 0.18rem 0.2rem; }
+             .day-num { font-size: 0.62rem; }
+             .file-entry { font-size: 0.5rem; }
+             .file-more { font-size: 0.48rem; }
+         }
     </style>
 </head>
 <body>
