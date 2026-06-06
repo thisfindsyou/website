@@ -236,7 +236,7 @@
             flex: 1;
             min-height: 0;
             overflow: hidden;
-            padding: 0.4rem 1.2rem 0.3rem;
+            padding: 0.4rem 1.2rem calc(0.3rem + 1px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -253,7 +253,6 @@
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
-            padding-bottom: 1px;
         }
 
         .day-headers {
@@ -633,7 +632,7 @@
         const data = calendarData[monthKey()];
         if (!data) return [];
         const entry = data.find(d => d.day === day);
-        return entry ? entry.files : [];
+        return entry ? (entry.files || []) : [];
     }
 
     function daysWithFiles() {
