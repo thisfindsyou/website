@@ -11,7 +11,9 @@
     { "day": 14, "files": ["2026-02-14-worldpool.mp3"] }
   ],
   "2026-03": [],
-  "2026-04": [],
+  "2026-04": [
+    { "day": 4, "files": ["2026-04-04-hlh01.jpg"], "labels": {"2026-04-04-hlh01.jpg": "Hyperlink Hum 01"} }
+  ],
   "2026-05": [
     { "day": 24, "blog": "/blog/2026-05-24-unencumbered" }
   ],

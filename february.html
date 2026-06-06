@@ -640,6 +640,23 @@
         return f.replace(/^\d{4}-\d{2}-\d{2}-/, '');
     }
 
+    function isImageFile(f) {
+        return /\.(jpg|jpeg|png|gif|webp)$/i.test(f);
+    }
+
+    function ordinal(n) {
+        const s = ['th','st','nd','rd'];
+        const v = n % 100;
+        return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    function fileLabel(day, f) {
+        const data = calendarData[monthKey()];
+        if (!data) return displayName(f);
+        const entry = data.find(d => d.day === day);
+        return (entry && entry.labels && entry.labels[f]) || displayName(f);
+    }
+
     function blogForDay(day) {
         const data = calendarData[monthKey()];
         if (!data) return null;
@@ -735,8 +752,8 @@
          files.forEach((f, i) => {
              const item = document.createElement('div');
              item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
-             item.textContent = displayName(f);
-             item.title = displayName(f);
+             item.textContent = fileLabel(day, f);
+             item.title = fileLabel(day, f);
              item.addEventListener('mousedown', e => {
                  e.preventDefault();
                  e.stopPropagation();
@@ -802,7 +819,21 @@
     audioEl.addEventListener('pause', () => { isPlaying = false; updatePlayBtn(); });
 
     function playFile(file) {
-        // only reassign src if the file actually changed — preserves pause position
+        if (isImageFile(file)) {
+            const img    = document.getElementById('month-image');
+            const noImg  = document.getElementById('no-image-text');
+            const webp   = file.replace(/\.\w+$/, '.webp');
+            img.onload   = () => { img.style.display = 'block'; noImg.style.display = 'none'; };
+            img.onerror  = () => { img.style.display = 'none';  noImg.style.display = ''; };
+            img.src      = `assets/images/${webp}`;
+            document.getElementById('play-pause-btn').style.display = 'none';
+            loadedFile = file;
+            return;
+        }
+
+        document.getElementById('play-pause-btn').style.display = '';
+        updateImage();
+
         if (file !== loadedFile) {
             audioEl.src = `assets/audio/${file}`;
             loadedFile = file;
@@ -836,7 +867,13 @@
             : 0;
         renderCalendar();
         updateFileInfo();
-        if (currentFiles.length && autoplay) playFile(currentFiles[currentTrack]);
+        if (currentFiles.length) {
+            if (isImageFile(currentFiles[currentTrack])) {
+                playFile(currentFiles[currentTrack]);
+            } else if (autoplay) {
+                playFile(currentFiles[currentTrack]);
+            }
+        }
     }
 
     function updateFileInfo() {
@@ -853,8 +890,8 @@
              return;
          }
 
-         dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${selectedDay}, ${YEAR}`;
-         nameEl.textContent = currentFiles.length ? displayName(currentFiles[currentTrack]) : '—';
+         dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${ordinal(selectedDay)}, ${YEAR}`;
+         nameEl.textContent = currentFiles.length ? fileLabel(selectedDay, currentFiles[currentTrack]) : '—';
 
          if (blog) {
              blogEl.textContent = blogDisplayName(blog);
