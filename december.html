@@ -101,6 +101,7 @@
             justify-content: center;
             gap: 0.6rem;
             position: relative;
+            container-type: size; /* enables cqw/cqh on children */
         }
 
         .day-nav-btn {
@@ -126,8 +127,10 @@
 
         .image-container {
             aspect-ratio: 1;
-            width: auto;
-            height: 100%;
+            /* Square that fits within whichever is smaller: container width or height.
+               Prevents clipping when the window is short and image would exceed content width. */
+            width: min(100cqw, 100cqh);
+            height: auto;
             position: relative;
             cursor: pointer;
             overflow: hidden;
@@ -504,7 +507,7 @@
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
             #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
             #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
-            .image-container { flex-shrink: 0; }
+            .image-container { width: auto; height: 100%; flex-shrink: 0; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
             .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
             .day-headers         { gap: 0.18rem; }
@@ -672,6 +675,8 @@
 
         const days   = daysInMonth(currentMonthIndex);
         const offset = (firstDayOf(currentMonthIndex) + 6) % 7; // Mon=0 … Sun=6
+        const rowCount = Math.ceil((offset + days) / 7);
+        document.documentElement.style.setProperty('--cal-rows', rowCount);
 
         // blank cells before month start
         for (let i = 0; i < offset; i++) {
@@ -698,10 +703,9 @@
                 list.className = 'file-list';
 
                 if (files.length > 0) {
-                    // 1-2 files: show all directly; 3+ files: show first 2 + "& +N"
-                    const showDirect = files.length <= 2 ? files : files.slice(0, 2);
-
-                    showDirect.forEach((f, i) => {
+                    // Render all files; trimOverflowCells() will hide any that don't fit
+                    // and add a "+N" indicator after layout.
+                    files.forEach((f, i) => {
                         const item = document.createElement('div');
                         item.className = 'file-entry' + (d === selectedDay && i === currentTrack ? ' active' : '');
                         item.textContent = displayName(f);
@@ -709,14 +713,6 @@
                         item.addEventListener('click', e => { e.stopPropagation(); selectDay(d, i); });
                         list.appendChild(item);
                     });
-
-                    if (files.length > 2) {
-                        const more = document.createElement('div');
-                        more.className = 'file-more';
-                        more.textContent = `& +${files.length - 2}`;
-                        more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, files, d); });
-                        list.appendChild(more);
-                    }
                 }
 
                 if (blog) {
@@ -734,8 +730,42 @@
                 cell.addEventListener('click', () => selectDay(d, 0));
             }
 
+            cell.dataset.day = d;
             grid.appendChild(cell);
         }
+
+        // After layout: hide overflowing file entries and show "+N"
+        requestAnimationFrame(trimOverflowCells);
+    }
+
+    // ── Overflow trim: hide file entries that don't fit, show "+N" ─────
+    function trimOverflowCells() {
+        document.querySelectorAll('#calendar .cal-cell:not(.empty)').forEach(cell => {
+            const list = cell.querySelector('.file-list');
+            if (!list) return;
+            const entries = [...list.querySelectorAll('.file-entry')];
+            if (!entries.length || cell.scrollHeight <= cell.clientHeight) return;
+
+            const day = parseInt(cell.dataset.day);
+            const allFiles = filesForDay(day);
+
+            // Insert "+N" before any blog entry so it sits below visible file entries
+            const more = document.createElement('div');
+            more.className = 'file-more';
+            more.textContent = '+1';
+            more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, allFiles, day); });
+            list.insertBefore(more, list.querySelector('.blog-entry'));
+
+            let hidden = 0;
+            for (let i = entries.length - 1; i >= 0; i--) {
+                if (cell.scrollHeight <= cell.clientHeight) break;
+                entries[i].style.display = 'none';
+                hidden++;
+                more.textContent = `+${hidden}`;
+            }
+
+            if (hidden === 0) more.remove();
+        });
     }
 
     // ── Dropdown ───────────────────────────────────────────────────────
