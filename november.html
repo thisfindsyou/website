@@ -829,30 +829,30 @@
     }
 
     function updateFileInfo() {
-        const dateEl   = document.getElementById('fileDate');
-        const nameEl   = document.getElementById('fileName');
-        const blogWrap = document.getElementById('fileBlogWrap');
-        const blogEl   = document.getElementById('fileBlog');
-        const blog     = selectedDay !== null ? blogForDay(selectedDay) : null;
+         const dateEl   = document.getElementById('fileDate');
+         const nameEl   = document.getElementById('fileName');
+         const blogWrap = document.getElementById('fileBlogWrap');
+         const blogEl   = document.getElementById('fileBlog');
+         const blog     = selectedDay !== null ? blogForDay(selectedDay) : null;
 
-        if (selectedDay === null) {
-            dateEl.textContent = '';
-            nameEl.textContent = '—';
-            blogWrap.style.display = 'none';
-            return;
-        }
+         if (selectedDay === null) {
+             dateEl.textContent = '';
+             nameEl.textContent = '';
+             blogWrap.style.display = 'none';
+             return;
+         }
 
-        dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${selectedDay}, ${YEAR}`;
-        nameEl.textContent = currentFiles.length ? displayName(currentFiles[currentTrack]) : '';
+         dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${selectedDay}, ${YEAR}`;
+         nameEl.textContent = currentFiles.length ? displayName(currentFiles[currentTrack]) : '—';
 
-        if (blog) {
-            blogEl.textContent = blogDisplayName(blog);
-            blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
-            blogWrap.style.display = '';
-        } else {
-            blogWrap.style.display = 'none';
-        }
-    }
+         if (blog) {
+             blogEl.textContent = blogDisplayName(blog);
+             blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
+             blogWrap.style.display = '';
+         } else {
+             blogWrap.style.display = 'none';
+         }
+     }
 
     // ── File navigation (within a day) ────────────────────────────────
     function nextFile() {
