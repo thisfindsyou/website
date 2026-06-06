@@ -897,14 +897,26 @@
          }
 
          dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${ordinal(selectedDay)}, ${YEAR}`;
-         const label = currentFiles.length ? fileLabel(selectedDay, currentFiles[currentTrack]) : '—';
-         nameEl.textContent = label;
-         nameEl.title = label;
+
+         if (currentFiles.length) {
+             const label = fileLabel(selectedDay, currentFiles[currentTrack]);
+             nameEl.textContent = label;
+             nameEl.title = label;
+         } else {
+             nameEl.textContent = '';
+             nameEl.title = '';
+         }
 
          if (blog) {
-             blogEl.textContent = blogDisplayName(blog);
-             blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
-             blogWrap.style.display = '';
+             if (!currentFiles.length) {
+                 nameEl.textContent = blogDisplayName(blog);
+                 nameEl.title = blogDisplayName(blog);
+                 blogWrap.style.display = 'none';
+             } else {
+                 blogEl.textContent = blogDisplayName(blog);
+                 blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
+                 blogWrap.style.display = '';
+             }
          } else {
              blogWrap.style.display = 'none';
          }
