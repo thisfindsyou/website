@@ -262,8 +262,7 @@
         </div>
 
         <footer class="post-footer">
-            <a href="/blog" class="back-link">← blog</a>
-            <a href="#" class="back-link" id="calBackBtn" style="display:none">← </a>
+            <a href="/blog" class="back-link" id="backLink">← blog</a>
         </footer>
 
     </div>
@@ -287,14 +286,13 @@
                         'july','august','september','october','november','december'];
         document.getElementById('calNavLink').href = '/' + MONTHS[new Date().getMonth()];
 
-        // Calendar back link
+        // Back link: points to wherever you came from (?from=may → /may, else /blog)
         (function() {
             var from = new URLSearchParams(window.location.search).get('from');
-            if (from) {
-                var btn = document.getElementById('calBackBtn');
-                btn.href = '/' + from;
-                btn.textContent = '← ' + from;
-                btn.style.display = '';
+            if (from && from !== 'blog') {
+                var link = document.getElementById('backLink');
+                link.href = '/' + from;
+                link.textContent = '← ' + from;
             }
         })();
 

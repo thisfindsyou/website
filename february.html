@@ -820,7 +820,7 @@
 
         if (blog) {
             blogEl.textContent = blogDisplayName(blog);
-            blogEl.href = blog;
+            blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
             blogWrap.style.display = '';
         } else {
             blogWrap.style.display = 'none';
