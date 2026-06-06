@@ -35,7 +35,7 @@
         /* same width constraint as .calendar-grid-wrap */
         .player-inner {
             width: 100%;
-            max-width: calc(7 * (50vh - 102px) / 6 + 1.5rem);
+            max-width: calc(7 * (50vh - 102px - 1.25rem) / 6 + 1.5rem);
             padding: 0 1.2rem;
             display: flex;
             flex-direction: column;
@@ -248,7 +248,7 @@
            where cell_size = (50vh − 102px − 5×gap) / 6            */
         .calendar-grid-wrap {
             width: 100%;
-            max-width: calc(7 * (50vh - 102px) / 6 + 1.5rem);
+            max-width: calc(7 * (50vh - 102px - 1.25rem) / 6 + 1.5rem);
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
@@ -514,6 +514,13 @@
             .day-num { font-size: 0.62rem; }
             .file-entry { font-size: 0.5rem; }
             .file-more { font-size: 0.48rem; }
+        }
+
+        /* ── Mobile tall phones (≥ 700px, e.g. iPhone 12+) ──────────── */
+        @media (max-width: 768px) and (min-height: 700px) {
+            .player-section   { flex: 2; }
+            .calendar-section { flex: 3; }
+            .calendar-grid-wrap { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 3 / 5 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
         }
     </style>
 </head>
