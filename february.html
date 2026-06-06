@@ -27,8 +27,20 @@
             min-height: 0;
             display: flex;
             flex-direction: column;
-            padding: 0.4rem 1.2rem 0.3rem;
+            align-items: center;
+            padding: 0.4rem 0 0.3rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        /* same width constraint as .calendar-grid-wrap */
+        .player-inner {
+            width: 100%;
+            max-width: calc(7 * (50vh - 102px) / 6 + 1.5rem);
+            padding: 0 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
         }
 
         .month-navigation {
@@ -54,19 +66,30 @@
         }
         .month-nav-btn:hover { opacity: 1; }
 
-        /* page title — fixed, centred, matches portfolio */
-        .page-title {
+        /* fixed month nav bar: ← title → */
+        .month-nav-bar {
             position: fixed;
             top: 44px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            white-space: nowrap;
+        }
+
+        .month-nav-bar h1 {
             font-family: 'Old Standard TT', serif;
             font-size: 2.5vh;
             font-weight: normal;
             letter-spacing: 1px;
-            white-space: nowrap;
             margin: 0;
+        }
+
+        .month-nav-bar .month-nav-btn {
+            font-size: 1.8vh;
+            padding: 0 0.3rem;
         }
 
         /* player row: prev arrow | image | next arrow */
@@ -419,12 +442,12 @@
 
         /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
-            .player-section { padding: 0.3rem 0.6rem 0.2rem; }
+            .player-section { padding: 0.3rem 0 0.2rem; }
+            .player-inner { padding: 0 0.6rem; }
             .calendar-section { padding: 0.3rem 0.6rem 0.2rem; }
-            .month-title { min-width: 130px; font-size: 0.85rem; }
+            .month-nav-bar h1 { font-size: 2vh; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
-            .page-title          { font-size: 2vh; }
             .calendar-grid-wrap  { max-width: 100%; }
             .day-headers         { gap: 0.18rem; }
             .day-header          { font-size: 0.52rem; }
@@ -449,30 +472,32 @@
         </div>
     </nav>
 
-    <h1 class="page-title" id="monthTitle"></h1>
+    <!-- ── Fixed month nav bar: ← January 2026 → ───────────────────── -->
+    <div class="month-nav-bar">
+        <button class="month-nav-btn" id="prevMonthBtn">←</button>
+        <h1 id="monthTitle"></h1>
+        <button class="month-nav-btn" id="nextMonthBtn">→</button>
+    </div>
 
     <!-- ── Player (top 50%) ──────────────────────────────────────────── -->
     <section class="player-section">
-        <div class="month-navigation">
-            <button class="month-nav-btn" id="prevMonthBtn">←</button>
-            <button class="month-nav-btn" id="nextMonthBtn">→</button>
-        </div>
-
-        <div class="player-row">
-            <button class="day-nav-btn" id="previous-button" aria-label="Previous day">←</button>
-            <div class="image-container" id="image-container">
-                <img id="month-image" src="" alt="" style="display:none">
-                <span id="no-image-text" class="no-image-text"></span>
-                <button id="play-pause-btn" class="play-pause-btn" aria-label="Play/Pause">
-                    <svg class="play-icon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                </button>
+        <div class="player-inner">
+            <div class="player-row">
+                <button class="day-nav-btn" id="previous-button" aria-label="Previous day">←</button>
+                <div class="image-container" id="image-container">
+                    <img id="month-image" src="" alt="" style="display:none">
+                    <span id="no-image-text" class="no-image-text"></span>
+                    <button id="play-pause-btn" class="play-pause-btn" aria-label="Play/Pause">
+                        <svg class="play-icon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                </div>
+                <button class="day-nav-btn" id="next-button" aria-label="Next day">→</button>
             </div>
-            <button class="day-nav-btn" id="next-button" aria-label="Next day">→</button>
-        </div>
 
-        <div class="file-info">
-            <span class="file-date" id="fileDate"></span>
-            <span class="file-name" id="fileName">—</span>
+            <div class="file-info">
+                <span class="file-date" id="fileDate"></span>
+                <span class="file-name" id="fileName">—</span>
+            </div>
         </div>
     </section>
 
