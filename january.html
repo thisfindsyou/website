@@ -501,19 +501,19 @@
             body { height: 100vh; height: -webkit-fill-available; height: 100svh; padding-bottom: var(--footer-h); }
             .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
             .player-inner { padding: 0; }
-            /* Calendar gets exactly the height its grid needs; player fills the rest.
-               Formula: rows × (cell_size + gap) − gap + overhead
+            /* Calendar: fixed 6-row height derived from screen width; player fills the rest.
+               Formula: 6 × (cell_size + gap) − gap + overhead
                where cell_size = (100vw − 2×0.6rem − 6×0.18rem) / 7
-               simplifies to: rows × (100vw − 1.02rem) / 7 + 1.29rem + 4px
+               simplifies to: 6 × (100vw − 1.02rem) / 7 + 1.29rem + 4px
                max-height cap guards against short/square devices. */
             .calendar-section {
                 flex: none;
-                height: calc(var(--cal-rows, 6) * (100vw - 1.02rem) / 7 + 1.29rem + 4px);
+                height: calc(6 * (100vw - 1.02rem) / 7 + 1.29rem + 4px);
                 max-height: calc((100svh - 46px - var(--footer-h)) * 2 / 3);
                 padding: 0.3rem 0.6rem calc(0.2rem + 4px);
             }
             /* max-width formula: only constrains when max-height cap is active */
-            .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / var(--cal-rows, 6) + 6 * 0.18rem); }
+            .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
             .month-nav-bar h1 { font-size: 2vh; }
             .player-row { align-items: stretch; justify-content: flex-start; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
@@ -706,17 +706,14 @@
                 const list = document.createElement('div');
                 list.className = 'file-list';
 
-                if (files.length > 0) {
-                    // Render all files; trimOverflowCells() will hide any that don't fit
-                    // and add a "+N" indicator after layout.
-                    files.forEach((f, i) => {
-                        const item = document.createElement('div');
-                        item.className = 'file-entry' + (d === selectedDay && i === currentTrack ? ' active' : '');
-                        item.textContent = displayName(f);
-                        item.title = displayName(f);
-                        item.addEventListener('click', e => { e.stopPropagation(); selectDay(d, i); });
-                        list.appendChild(item);
-                    });
+                if (files.length > 1) {
+                    // Multiple files: count badge opens dropdown.
+                    // Single file: cell is clean — cell click plays directly.
+                    const count = document.createElement('div');
+                    count.className = 'file-more';
+                    count.textContent = files.length;
+                    count.addEventListener('click', e => { e.stopPropagation(); openDropdown(count, files, d); });
+                    list.appendChild(count);
                 }
 
                 if (blog) {
@@ -734,42 +731,8 @@
                 cell.addEventListener('click', () => selectDay(d, 0));
             }
 
-            cell.dataset.day = d;
             grid.appendChild(cell);
         }
-
-        // After layout: hide overflowing file entries and show "+N"
-        requestAnimationFrame(trimOverflowCells);
-    }
-
-    // ── Overflow trim: hide file entries that don't fit, show "+N" ─────
-    function trimOverflowCells() {
-        document.querySelectorAll('#calendar .cal-cell:not(.empty)').forEach(cell => {
-            const list = cell.querySelector('.file-list');
-            if (!list) return;
-            const entries = [...list.querySelectorAll('.file-entry')];
-            if (!entries.length || cell.scrollHeight <= cell.clientHeight) return;
-
-            const day = parseInt(cell.dataset.day);
-            const allFiles = filesForDay(day);
-
-            // Insert "+N" before any blog entry so it sits below visible file entries
-            const more = document.createElement('div');
-            more.className = 'file-more';
-            more.textContent = '+1';
-            more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, allFiles, day); });
-            list.insertBefore(more, list.querySelector('.blog-entry'));
-
-            let hidden = 0;
-            for (let i = entries.length - 1; i >= 0; i--) {
-                if (cell.scrollHeight <= cell.clientHeight) break;
-                entries[i].style.display = 'none';
-                hidden++;
-                more.textContent = `+${hidden}`;
-            }
-
-            if (hidden === 0) more.remove();
-        });
     }
 
     // ── Dropdown ───────────────────────────────────────────────────────
