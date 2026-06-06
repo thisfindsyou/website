@@ -167,8 +167,21 @@
         .calendar-section {
             flex: 1;
             min-height: 0;
-            overflow-y: auto;
+            overflow: hidden;
             padding: 0.4rem 1.2rem 0.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* grid wrapper — width-constrained so 6 rows of square cells
+           always fit in the available height without scrolling.
+           Formula: 7 cells × cell_size + 6 gaps
+           where cell_size = (50vh − 102px − 5×gap) / 6            */
+        .calendar-grid-wrap {
+            width: 100%;
+            max-width: calc(7 * (50vh - 102px) / 6 + 1.5rem);
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
@@ -405,10 +418,11 @@
             .month-title { min-width: 130px; font-size: 0.85rem; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
+            .calendar-grid-wrap { max-width: 100%; }
             .day-headers { gap: 0.18rem; }
             .day-header  { font-size: 0.52rem; }
             .calendar    { gap: 0.18rem; }
-            .cal-cell    { padding: 0.22rem 0.22rem; }
+            .cal-cell    { padding: 0.18rem 0.2rem; }
             .day-num { font-size: 0.62rem; }
             .file-entry { font-size: 0.5rem; }
             .file-more { font-size: 0.48rem; }
@@ -456,16 +470,18 @@
 
     <!-- ── Calendar (bottom 50%) ─────────────────────────────────────── -->
     <section class="calendar-section">
-        <div class="day-headers">
-            <div class="day-header">M</div>
-            <div class="day-header">T</div>
-            <div class="day-header">W</div>
-            <div class="day-header">T</div>
-            <div class="day-header">F</div>
-            <div class="day-header">S</div>
-            <div class="day-header">S</div>
+        <div class="calendar-grid-wrap">
+            <div class="day-headers">
+                <div class="day-header">M</div>
+                <div class="day-header">T</div>
+                <div class="day-header">W</div>
+                <div class="day-header">T</div>
+                <div class="day-header">F</div>
+                <div class="day-header">S</div>
+                <div class="day-header">S</div>
+            </div>
+            <div id="calendar" class="calendar"></div>
         </div>
-        <div id="calendar" class="calendar"></div>
     </section>
 
     <!-- ── Global file dropdown ──────────────────────────────────────── -->
@@ -507,8 +523,15 @@
     let currentFiles = [];
     let currentTrack = 0;
     let isPlaying    = false;
+    let loadedFile   = null; // tracks which file is currently in the audio element
 
     const audioEl = document.getElementById('audio-player');
+
+    // ── Display helpers ────────────────────────────────────────────────
+    // Strip YYYY-MM-DD- prefix from stored filenames for display
+    function displayName(f) {
+        return f.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    }
 
     // ── Data helpers ───────────────────────────────────────────────────
     function monthKey() {
@@ -568,7 +591,7 @@
                 showDirect.forEach((f, i) => {
                     const item = document.createElement('div');
                     item.className = 'file-entry' + (d === selectedDay && i === currentTrack ? ' active' : '');
-                    item.textContent = f;
+                    item.textContent = displayName(f);
                     item.addEventListener('click', e => { e.stopPropagation(); selectDay(d, i); });
                     list.appendChild(item);
                 });
@@ -597,7 +620,7 @@
         files.forEach((f, i) => {
             const item = document.createElement('div');
             item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
-            item.textContent = f;
+            item.textContent = displayName(f);
             item.addEventListener('mousedown', e => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -639,10 +662,13 @@
     audioEl.addEventListener('pause', () => { isPlaying = false; updatePlayBtn(); });
 
     function playFile(file) {
-        audioEl.src = `assets/audio/${file}`;
-        audioEl.load(); // required for src change to take effect in all browsers
+        // only reassign src if the file actually changed — preserves pause position
+        if (file !== loadedFile) {
+            audioEl.src = `assets/audio/${file}`;
+            loadedFile = file;
+        }
         audioEl.muted = false;
-        audioEl.play().catch(() => {}); // browser may block; events handle state
+        audioEl.play().catch(err => console.warn('play blocked:', err));
     }
 
     function togglePlay() {
@@ -650,12 +676,7 @@
         if (isPlaying) {
             audioEl.pause();
         } else {
-            // if no src loaded yet (e.g. first interaction on page load), load the file
-            if (!audioEl.src || audioEl.readyState === 0) {
-                playFile(currentFiles[currentTrack]);
-            } else {
-                audioEl.play().catch(() => {});
-            }
+            playFile(currentFiles[currentTrack]);
         }
     }
 
@@ -687,7 +708,7 @@
             return;
         }
         dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${selectedDay}, ${YEAR}`;
-        nameEl.textContent = currentFiles[currentTrack];
+        nameEl.textContent = displayName(currentFiles[currentTrack]);
     }
 
     // ── File navigation (player ← → buttons) ──────────────────────────
