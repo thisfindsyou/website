@@ -199,9 +199,11 @@
             max-width: 60vw;
         }
         .file-blog-wrap {
+            white-space: nowrap;
+        }
+        .file-blog-wrap .blog-label {
             font-size: 0.65rem;
             opacity: 0.4;
-            white-space: nowrap;
             letter-spacing: 0.3px;
         }
         .file-blog-wrap a {
@@ -211,6 +213,7 @@
             letter-spacing: 0.2px;
             color: white;
             text-decoration: none;
+            opacity: 1;
         }
         .file-blog-wrap a:hover { text-decoration: underline; }
 
@@ -539,7 +542,7 @@
             <div class="file-info">
                 <span class="file-date" id="fileDate"></span>
                 <span class="file-name" id="fileName">—</span>
-                <span class="file-blog-wrap" id="fileBlogWrap" style="display:none">blog: <a id="fileBlog" target="_blank" rel="noopener noreferrer"></a></span>
+                <span class="file-blog-wrap" id="fileBlogWrap" style="display:none"><span class="blog-label">blog:</span> <a id="fileBlog" target="_blank" rel="noopener noreferrer"></a></span>
             </div>
         </div>
     </section>
