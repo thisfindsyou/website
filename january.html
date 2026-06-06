@@ -909,9 +909,11 @@
 
          if (blog) {
              if (!currentFiles.length) {
-                 nameEl.textContent = blogDisplayName(blog);
-                 nameEl.title = blogDisplayName(blog);
-                 blogWrap.style.display = 'none';
+                 nameEl.textContent = '';
+                 nameEl.title = '';
+                 blogEl.textContent = blogDisplayName(blog);
+                 blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
+                 blogWrap.style.display = '';
              } else {
                  blogEl.textContent = blogDisplayName(blog);
                  blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
