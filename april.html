@@ -751,7 +751,7 @@
 
     async function loadCalendarData() {
         try {
-            const res  = await fetch('/assets/data/calendar.json');
+            const res  = await fetch('/assets/data/calendar.json?v=' + Date.now());
             calendarData = await res.json();
         } catch(e) {
             console.error('Could not load calendar data', e);

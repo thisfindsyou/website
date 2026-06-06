@@ -3,10 +3,11 @@
     { "day": 4,  "files": ["2026-01-04-decaf.mp3"] },
     { "day": 11, "files": ["2026-01-11-twothousandand8.mp3"] },
     { "day": 17, "files": ["2026-01-17-hanging.mp3"] },
-    { "day": 23, "files": ["2026-01-23-helium.mp3"] },
-    { "day": 29, "files": ["2026-01-29-worldpool.mp3"] }
+    { "day": 23, "files": ["2026-01-23-helium.mp3"] }
   ],
-  "2026-02": [],
+  "2026-02": [
+    { "day": 14, "files": ["2026-02-14-worldpool.mp3"] }
+  ],
   "2026-03": [],
   "2026-04": [],
   "2026-05": [],
