@@ -760,7 +760,17 @@
         const below = window.innerHeight - rect.bottom;
 
         dd.style.top  = (below >= ddH + 8 ? rect.bottom + 4 : rect.top - ddH - 4) + 'px';
-        dd.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 310)) + 'px';
+
+        // Position dropdown left or right based on trigger position
+        if (rect.left > window.innerWidth / 2) {
+            // Right side: expand leftward
+            dd.style.right = Math.max(8, window.innerWidth - rect.right) + 'px';
+            dd.style.left = 'auto';
+        } else {
+            // Left side: expand rightward
+            dd.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 310)) + 'px';
+            dd.style.right = 'auto';
+        }
     }
 
     function closeDropdown() {
