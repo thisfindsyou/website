@@ -138,6 +138,13 @@
         .social-link.soundcloud:active svg { fill: #FF5500; }
         .social-link.bandcamp:active svg   { fill: #0087BE; }
         .social-link.instagram:active svg  { fill: #E1306C; }
+
+        /* ── Mobile ──────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            :root { --footer-h: calc(2.4vh + 25px); }
+            html { height: -webkit-fill-available; }
+            body { height: 100vh; height: -webkit-fill-available; height: 100svh; padding-bottom: var(--footer-h); }
+        }
     </style>
 </head>
 <body>

@@ -493,7 +493,9 @@
 
         /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
-            body { height: 100vh; height: 100svh; padding-bottom: 100px; }
+            :root { --footer-h: calc(2.4vh + 25px); }
+            html { height: -webkit-fill-available; }
+            body { height: 100vh; height: -webkit-fill-available; height: 100svh; padding-bottom: var(--footer-h); }
             .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; }
             .player-inner { padding: 0; }
             .calendar-section { flex: 2; padding: 0.3rem 0.6rem calc(0.2rem + 4px); }
@@ -504,7 +506,7 @@
             #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
             .image-container { flex-shrink: 0; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
-            .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 146px) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
+            .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
             .day-headers         { gap: 0.18rem; }
             .day-header          { font-size: 0.52rem; }
             .calendar            { gap: 0.18rem; }
