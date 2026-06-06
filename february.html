@@ -11,7 +11,7 @@
 
         body {
             font-family: 'Old Standard TT', serif;
-            background-color: #000;
+            background-color: #111;
             color: white;
             height: 100vh;
             overflow: hidden;
@@ -484,9 +484,10 @@
 
         /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
+            body { padding-bottom: 65px; }
             .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; }
             .player-inner { padding: 0 0.6rem; }
-            .calendar-section { padding: 0.3rem 0.6rem calc(0.2rem + 4px); }
+            .calendar-section { padding: 0.3rem 0.6rem calc(0.2rem + 19px); }
             .month-nav-bar h1 { font-size: 2vh; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
