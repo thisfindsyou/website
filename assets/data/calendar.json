@@ -15,6 +15,7 @@
     { "day": 4, "files": ["2026-04-04-hlh01.jpg"], "labels": {"2026-04-04-hlh01.jpg": "Hyperlink Hum 01"} }
   ],
   "2026-05": [
+    { "day": 16, "files": ["2026-05-16-portraitureVA2.jpg"], "labels": {"2026-05-16-portraitureVA2.jpg": "Portraiture VA2 Release Show"} },
     { "day": 24, "blog": "/blog/2026-05-24-unencumbered" }
   ],
   "2026-06": [],
