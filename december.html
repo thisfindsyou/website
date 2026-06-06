@@ -5,236 +5,284 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap" rel="stylesheet">
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-    <link rel="preload" as="image" href="assets/images/december.webp">
     <title>thisfindsyou</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            margin: 0;
-            padding: 0;
-            padding-top: 50px;
-            padding-bottom: 60px;
-            box-sizing: border-box;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: #000;
-            overflow-y: auto;
             font-family: 'Old Standard TT', serif;
-        }
-
-        .main-content {
+            background-color: #000;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            padding: 1rem 2vw;
-            flex: 1;
+            padding-top: 46px;
+            padding-bottom: 50px;
         }
 
-        /* Month Navigation */
+        /* ── Player section (top 50%) ─────────────────────────────── */
+        .player-section {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 0.4rem 1.2rem 0.3rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
         .month-navigation {
             display: flex;
             align-items: center;
-            gap: 2rem;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            width: 100%;
             justify-content: center;
+            gap: 1.2rem;
+            flex-shrink: 0;
+            padding-bottom: 0.3rem;
         }
 
-        .month-nav-button {
+        .month-nav-btn {
             background: none;
             border: none;
             color: white;
             font-family: 'Old Standard TT', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            opacity: 0.45;
+            transition: opacity 0.2s;
+            padding: 0.2rem 0.6rem;
+            line-height: 1;
+        }
+        .month-nav-btn:hover { opacity: 1; }
+
+        .month-title {
+            font-size: 0.95rem;
+            letter-spacing: 1.5px;
+            min-width: 160px;
+            text-align: center;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        /* player row: prev arrow | image | next arrow */
+        .player-row {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .day-nav-btn {
+            background: none;
+            border: none;
+            color: #a8c1a2;
+            font-family: 'Old Standard TT', serif;
             font-size: 1.3rem;
             cursor: pointer;
             opacity: 0.6;
-            transition: opacity 0.2s ease;
-            padding: 0.5rem 1rem;
+            transition: opacity 0.2s;
+            padding: 0.5rem 0.4rem;
+            flex-shrink: 0;
+            line-height: 1;
         }
+        .day-nav-btn:hover { opacity: 1; }
 
-        .month-nav-button:hover {
-            opacity: 1;
-        }
-
-        .month-title {
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            min-width: 200px;
-            text-align: center;
-        }
-
-        /* Image Container */
         .image-container {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
             position: relative;
-            width: 55vw;
-            height: 400px;
-            max-width: 800px;
-            background-color: white;
-            border: 5px solid white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
             cursor: pointer;
-            z-index: 1;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
 
-        img {
-            object-fit: cover;
+        .image-container img {
             width: 100%;
             height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
-        audio {
-            display: none;
+        .no-image-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.18);
+            font-style: italic;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            pointer-events: none;
         }
 
-        /* File Info Display */
+        .play-pause-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            line-height: 0;
+        }
+        .image-container:hover .play-pause-btn { opacity: 0.85; pointer-events: auto; }
+        .play-icon { width: 38px; height: 38px; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6)); }
+
+        /* file info strip */
         .file-info {
-            text-align: center;
-            padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            width: 100%;
-            max-width: 600px;
+            flex-shrink: 0;
+            padding-top: 0.3rem;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.6rem;
+            min-height: 1.6rem;
         }
 
         .file-date {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
+            opacity: 0.4;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .file-name {
-            font-size: 1.3rem;
+            font-size: 0.8rem;
             font-weight: bold;
-            letter-spacing: 0.5px;
-            word-break: break-word;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60vw;
         }
 
-        /* Calendar Grid */
+        /* ── Calendar section (bottom 50%) ───────────────────────── */
+        .calendar-section {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 0.4rem 1.2rem 0.3rem;
+        }
+
         .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-            width: 100%;
-            max-width: 700px;
+            gap: 0.25rem;
+            align-content: start;
+            height: 100%;
         }
 
-        .calendar-day-header {
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.8rem;
-            opacity: 0.6;
-            padding: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.5rem;
+        .cal-cell {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.28rem 0.3rem;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            background-color: transparent;
-            font-size: 0.9rem;
-        }
-
-        .calendar-day:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .calendar-day.empty {
+            flex-direction: column;
+            background: transparent;
             cursor: default;
-            opacity: 0.3;
+            position: relative;
+            transition: border-color 0.15s, background-color 0.15s;
+            min-height: 2.2rem;
         }
 
-        .calendar-day.empty:hover {
-            background-color: transparent;
-            border-color: rgba(255, 255, 255, 0.2);
+        .cal-cell.has-files {
+            cursor: pointer;
+            border-color: rgba(255, 255, 255, 0.28);
         }
-
-        .calendar-day.has-files {
+        .cal-cell.has-files:hover {
+            background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.5);
         }
-
-        .calendar-day.selected {
-            background-color: white;
+        .cal-cell.selected {
+            background: white;
             color: #000;
             border-color: white;
+        }
+        .cal-cell.selected:hover { background: rgba(255, 255, 255, 0.92); }
+        .cal-cell.empty {
+            opacity: 0.12;
+            border-color: rgba(255, 255, 255, 0.08);
+            cursor: default;
+        }
+
+        .day-num {
             font-weight: bold;
+            font-size: 0.72rem;
+            line-height: 1;
+            margin-bottom: 0.12rem;
+            flex-shrink: 0;
         }
 
-        .day-number {
-            font-weight: bold;
-        }
-
-        .file-indicator {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 5px;
-            height: 5px;
-            background-color: white;
-            border-radius: 50%;
-            opacity: 0.6;
-        }
-
-        .calendar-day.selected .file-indicator {
-            background-color: #000;
-        }
-
-        /* Audio Controls */
-        .controls {
+        .file-list {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            width: 100%;
+            flex-direction: column;
+            gap: 0.04rem;
+            overflow: hidden;
         }
 
-        .button {
-            background-color: transparent;
-            border: none;
-            padding: 10px;
-            font-size: 24px;
+        .file-entry {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.57rem;
+            opacity: 0.7;
             cursor: pointer;
-            color: #a8c1a2;
-            transition: color 0.3s ease;
-            border-radius: 50%;
+            line-height: 1.3;
         }
+        .file-entry:hover { opacity: 1; text-decoration: underline; }
+        .cal-cell.selected .file-entry { opacity: 0.65; color: #000; }
+        .cal-cell.selected .file-entry:hover { opacity: 1; }
+        .cal-cell.selected .file-entry.active { opacity: 1; font-weight: bold; }
+        .file-entry.active { opacity: 1; font-weight: bold; }
 
-        .button:hover {
-            color: #8c9d87;
-        }
-
-        .play-pause-button {
-            position: absolute;
-            z-index: 10;
-            background: transparent;
-            color: white;
-            font-size: 32px;
-            border: none;
+        .file-more {
+            font-size: 0.55rem;
+            opacity: 0.5;
             cursor: pointer;
-            pointer-events: none;
-            transition: transform 0.3s ease;
+            font-style: italic;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .file-more:hover { opacity: 0.9; }
+        .cal-cell.selected .file-more { color: #000; opacity: 0.5; }
+        .cal-cell.selected .file-more:hover { opacity: 0.9; }
+
+        /* ── File Dropdown ──────────────────────────────────────────── */
+        #file-dropdown {
+            position: fixed;
+            display: none;
+            z-index: 1000;
+            background: rgba(12, 12, 12, 0.97);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 3px;
+            padding: 0.25rem 0;
+            min-width: 180px;
+            max-width: 300px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
         }
 
-        .icon {
-            width: 30px;
-            height: 30px;
+        .dd-item {
+            padding: 0.32rem 0.7rem;
+            font-size: 0.62rem;
+            font-family: 'Old Standard TT', serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+            transition: background 0.12s, color 0.12s;
         }
+        .dd-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        .dd-item.playing { color: white; font-weight: bold; }
 
-        /* Site nav — dropdown */
+        /* ── Site nav ────────────────────────────────────────────────── */
         .site-nav {
             position: fixed;
             top: calc(20px - 0.3rem);
@@ -253,35 +301,23 @@
             opacity: 0.6;
             cursor: pointer;
             padding: 0;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.2s;
         }
 
-        .site-nav:has(.nav-dropdown.open) .nav-toggle {
-            opacity: 1;
-        }
-
+        .site-nav:has(.nav-dropdown.open) .nav-toggle { opacity: 1; }
         .site-nav:has(.nav-dropdown.open) {
-            background: rgba(17, 17, 17, 0.95);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(10px);
         }
-
-        .nav-dropdown.open {
-            display: flex;
-            margin-top: 0.1rem;
-        }
+        .nav-dropdown.open { display: flex; margin-top: 0.1rem; }
 
         @media (hover: hover) {
-            .site-nav:hover .nav-toggle {
-                opacity: 1;
-            }
+            .site-nav:hover .nav-toggle { opacity: 1; }
             .site-nav:hover {
-                background: rgba(17, 17, 17, 0.95);
+                background: rgba(0, 0, 0, 0.95);
                 backdrop-filter: blur(10px);
             }
-            .site-nav:hover .nav-dropdown {
-                display: flex;
-                margin-top: 0.1rem;
-            }
+            .site-nav:hover .nav-dropdown { display: flex; margin-top: 0.1rem; }
         }
 
         .nav-dropdown {
@@ -292,51 +328,39 @@
         }
 
         .nav-dropdown a {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255,255,255,0.5);
             text-decoration: none;
             font-family: 'Old Standard TT', serif;
             font-size: 13px;
-            transition: color 0.2s ease;
+            transition: color 0.2s;
             white-space: nowrap;
             line-height: 1.7;
             position: relative;
             padding-left: 16px;
         }
-
         .nav-dropdown a::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 50%;
+            left: 0; top: 50%;
             width: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255,255,255,0.2);
         }
-
         .nav-dropdown a::after {
             content: '';
             position: absolute;
-            left: 0;
-            top: 0;
+            left: 0; top: 0;
             height: 100%;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255,255,255,0.2);
         }
+        .nav-dropdown a:last-child::after { height: 50%; }
+        .nav-dropdown a:hover { color: white; }
 
-        .nav-dropdown a:last-child::after {
-            height: 50%;
-        }
-
-        .nav-dropdown a:hover {
-            color: white;
-        }
-
-        /* Social Media Footer */
+        /* ── Social footer ───────────────────────────────────────────── */
         .social-footer {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             background: rgba(0, 0, 0, 0.95);
-            border-top: 1px solid #333;
+            border-top: 1px solid #1a1a1a;
             padding: 1.2vh 2vw;
             display: flex;
             justify-content: space-evenly;
@@ -345,63 +369,35 @@
         }
 
         .social-link {
-            color: #666;
+            color: #555;
             text-decoration: none;
             display: flex;
             align-items: center;
-            transition: color 0.3s ease;
+            transition: color 0.3s;
         }
-
-        .social-link svg {
-            width: 22px;
-            height: 22px;
-            fill: #666;
-            transition: fill 0.3s ease;
-        }
-
+        .social-link svg { width: 20px; height: 20px; fill: #555; transition: fill 0.3s; }
         .social-link.soundcloud:hover svg { fill: #FF5500; }
-        .social-link.bandcamp:hover svg  { fill: #0087BE; }
-        .social-link.instagram:hover svg { fill: #E1306C; }
+        .social-link.bandcamp:hover svg   { fill: #0087BE; }
+        .social-link.instagram:hover svg  { fill: #E1306C; }
 
+        /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
-            .main-content {
-                gap: 1rem;
-                padding: 0.5rem 1vw;
-            }
-
-            .image-container {
-                width: 90vw;
-                height: 250px;
-            }
-
-            .month-navigation {
-                gap: 1rem;
-                font-size: 1.2rem;
-            }
-
-            .month-title {
-                min-width: 150px;
-                font-size: 1.2rem;
-            }
-
-            .calendar {
-                max-width: 100%;
-                gap: 0.3rem;
-            }
-
-            .file-info {
-                max-width: 100%;
-                padding: 0.7rem;
-            }
-
-            .file-name {
-                font-size: 1rem;
-            }
+            .player-section { padding: 0.3rem 0.6rem 0.2rem; }
+            .calendar-section { padding: 0.3rem 0.6rem 0.2rem; }
+            .month-title { min-width: 130px; font-size: 0.85rem; }
+            .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
+            .file-name { font-size: 0.7rem; max-width: 55vw; }
+            .calendar { gap: 0.18rem; }
+            .cal-cell { padding: 0.22rem 0.22rem; min-height: 1.8rem; }
+            .day-num { font-size: 0.62rem; }
+            .file-entry { font-size: 0.5rem; }
+            .file-more { font-size: 0.48rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ── Nav ───────────────────────────────────────────────────────── -->
     <nav class="site-nav" id="siteNav">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Menu">thisfindsyou</button>
         <div class="nav-dropdown" id="navDropdown">
@@ -412,362 +408,371 @@
         </div>
     </nav>
 
-    <div class="main-content">
+    <!-- ── Player (top 50%) ──────────────────────────────────────────── -->
+    <section class="player-section">
         <div class="month-navigation">
-            <button class="month-nav-button" id="prevMonthBtn">←</button>
-            <div class="month-title" id="monthTitle">December 2026</div>
-            <button class="month-nav-button" id="nextMonthBtn">→</button>
+            <button class="month-nav-btn" id="prevMonthBtn">←</button>
+            <span class="month-title" id="monthTitle"></span>
+            <button class="month-nav-btn" id="nextMonthBtn">→</button>
         </div>
 
-        <div class="image-container" id="image-container">
-            <img src="assets/images/december.webp" alt="December" width="1800" height="1350">
-            <button id="play-pause-button" class="play-pause-button">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-            </button>
+        <div class="player-row">
+            <button class="day-nav-btn" id="previous-button" aria-label="Previous day">←</button>
+            <div class="image-container" id="image-container">
+                <img id="month-image" src="" alt="" style="display:none">
+                <span id="no-image-text" class="no-image-text"></span>
+                <button id="play-pause-btn" class="play-pause-btn" aria-label="Play/Pause">
+                    <svg class="play-icon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+            </div>
+            <button class="day-nav-btn" id="next-button" aria-label="Next day">→</button>
         </div>
 
         <div class="file-info">
-            <div class="file-date" id="fileDate"></div>
-            <div class="file-name" id="fileName">Select a day with files</div>
+            <span class="file-date" id="fileDate"></span>
+            <span class="file-name" id="fileName">—</span>
         </div>
+    </section>
 
-        <div class="calendar" id="calendar"></div>
+    <!-- ── Calendar (bottom 50%) ─────────────────────────────────────── -->
+    <section class="calendar-section">
+        <div id="calendar" class="calendar"></div>
+    </section>
 
-        <div class="controls">
-            <button class="button" id="previous-button">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#a8c1a2"><path d="M5 12l7 7v-4h7v-6h-7v-4l-7 7z"/></svg>
-            </button>
-            <button class="button" id="next-button">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#a8c1a2"><path d="M19 12l-7-7v4H5v6h7v4l7-7z"/></svg>
-            </button>
-        </div>
-    </div>
+    <!-- ── Global file dropdown ──────────────────────────────────────── -->
+    <div id="file-dropdown" role="menu"></div>
 
-    <audio id="audio-player" muted></audio>
+    <audio id="audio-player"></audio>
 
-    <!-- Social Media Footer -->
+    <!-- ── Social footer ─────────────────────────────────────────────── -->
     <div class="social-footer">
         <a href="https://soundcloud.com/thisfindsyou" target="_blank" class="social-link soundcloud" aria-label="SoundCloud">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"/></svg>
         </a>
         <a href="https://thisfindsyou.bandcamp.com" target="_blank" class="social-link bandcamp" aria-label="Bandcamp">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5H0z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5H0z"/></svg>
         </a>
         <a href="https://instagram.com/thisfindsyou" target="_blank" class="social-link instagram" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738Z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738Z"/></svg>
         </a>
     </div>
 
     <script>
-        // Configuration
-        const MONTHS = ['december', 'december', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-        const MONTH_NAMES = ['December', 'December', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        const MONTH_IMAGES = {
-            'december': 'assets/images/december.webp',
-            'december': 'assets/images/december.webp'
-        };
+    // ── Config ─────────────────────────────────────────────────────────
+    const MONTHS = ['january','february','march','april','may','june',
+                    'july','august','september','october','november','december'];
+    const MONTH_NAMES = ['January','February','March','April','May','June',
+                         'July','August','September','October','November','December'];
+    const YEAR = new Date().getFullYear();
 
-        // State
-        let calendarData = {};
-        let currentMonthIndex = 11; // December
-        let selectedDay = null;
-        let currentTrack = 0;
-        let isPlaying = false;
-        let currentTime = 0;
-        let currentFiles = [];
-        let allDaysWithFiles = [];
+    // ── Detect month from URL ──────────────────────────────────────────
+    const slug = window.location.pathname.replace(/^\//, '').replace(/\.html$/, '');
+    let currentMonthIndex = Math.max(0, MONTHS.indexOf(slug));
 
-        const audioPlayer = document.getElementById('audio-player');
+    // ── State ──────────────────────────────────────────────────────────
+    let calendarData = {};
+    let selectedDay  = null;
+    let currentFiles = [];
+    let currentTrack = 0;
+    let isPlaying    = false;
 
-        // Load calendar data
-        async function loadCalendarData() {
-            try {
-                const response = await fetch('/assets/data/calendar.json');
-                calendarData = await response.json();
-                initializeMonth();
-            } catch (error) {
-                console.error('Error loading calendar data:', error);
+    const audioEl = document.getElementById('audio-player');
+
+    // ── Data helpers ───────────────────────────────────────────────────
+    function monthKey() {
+        return `${YEAR}-${String(currentMonthIndex + 1).padStart(2, '0')}`;
+    }
+
+    function daysInMonth(m) { return new Date(YEAR, m + 1, 0).getDate(); }
+    function firstDayOf(m)  { return new Date(YEAR, m, 1).getDay(); }
+
+    function filesForDay(day) {
+        const data = calendarData[monthKey()];
+        if (!data) return [];
+        const entry = data.find(d => d.day === day);
+        return entry ? entry.files : [];
+    }
+
+    function daysWithFiles() {
+        const data = calendarData[monthKey()];
+        if (!data) return [];
+        return data.map(d => d.day).sort((a, b) => a - b);
+    }
+
+    // ── Calendar render ────────────────────────────────────────────────
+    function renderCalendar() {
+        const grid   = document.getElementById('calendar');
+        grid.innerHTML = '';
+
+        const days   = daysInMonth(currentMonthIndex);
+        const offset = firstDayOf(currentMonthIndex);
+
+        // blank cells before month start
+        for (let i = 0; i < offset; i++) {
+            const el = document.createElement('div');
+            el.className = 'cal-cell empty';
+            grid.appendChild(el);
+        }
+
+        for (let d = 1; d <= days; d++) {
+            const files = filesForDay(d);
+            const cell  = document.createElement('div');
+            cell.className = 'cal-cell' + (files.length ? ' has-files' : '');
+            if (d === selectedDay) cell.classList.add('selected');
+
+            // day number
+            const num = document.createElement('div');
+            num.className = 'day-num';
+            num.textContent = d;
+            cell.appendChild(num);
+
+            if (files.length > 0) {
+                const list = document.createElement('div');
+                list.className = 'file-list';
+
+                // show up to 2 files directly; 3rd slot → "⋯ +N more"
+                const showDirect = files.length <= 3 ? files : files.slice(0, 2);
+
+                showDirect.forEach((f, i) => {
+                    const item = document.createElement('div');
+                    item.className = 'file-entry' + (d === selectedDay && i === currentTrack ? ' active' : '');
+                    item.textContent = f;
+                    item.addEventListener('click', e => { e.stopPropagation(); selectDay(d, i); });
+                    list.appendChild(item);
+                });
+
+                if (files.length > 3) {
+                    const more = document.createElement('div');
+                    more.className = 'file-more';
+                    more.textContent = `⋯ +${files.length - 2} more`;
+                    more.addEventListener('click', e => { e.stopPropagation(); openDropdown(more, files, d); });
+                    list.appendChild(more);
+                }
+
+                cell.appendChild(list);
+                cell.addEventListener('click', () => selectDay(d, 0));
             }
+
+            grid.appendChild(cell);
         }
+    }
 
-        function getCurrentMonthKey() {
-            return `2026-${String(currentMonthIndex + 1).padStart(2, '0')}`;
-        }
+    // ── Dropdown ───────────────────────────────────────────────────────
+    function openDropdown(triggerEl, files, day) {
+        const dd = document.getElementById('file-dropdown');
+        dd.innerHTML = '';
 
-        function getDaysInMonth(monthIndex) {
-            return new Date(2026, monthIndex + 1, 0).getDate();
-        }
-
-        function getFirstDayOfMonth(monthIndex) {
-            return new Date(2026, monthIndex, 1).getDay();
-        }
-
-        function getFilesForDay(day) {
-            const monthKey = getCurrentMonthKey();
-            if (!calendarData[monthKey]) return [];
-            const dayData = calendarData[monthKey].find(d => d.day === day);
-            return dayData ? dayData.files : [];
-        }
-
-        function buildDaysWithFilesArray() {
-            allDaysWithFiles = [];
-            const monthKey = getCurrentMonthKey();
-            if (calendarData[monthKey]) {
-                allDaysWithFiles = calendarData[monthKey].map(d => d.day).sort((a, b) => a - b);
-            }
-        }
-
-        function renderCalendar() {
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
-
-            // Day headers
-            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            dayHeaders.forEach(day => {
-                const header = document.createElement('div');
-                header.className = 'calendar-day-header';
-                header.textContent = day;
-                calendar.appendChild(header);
+        files.forEach((f, i) => {
+            const item = document.createElement('div');
+            item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
+            item.textContent = f;
+            item.addEventListener('mousedown', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                selectDay(day, i);
+                closeDropdown();
             });
+            dd.appendChild(item);
+        });
 
-            const daysInMonth = getDaysInMonth(currentMonthIndex);
-            const firstDay = getFirstDayOfMonth(currentMonthIndex);
+        dd.style.display = 'block';
 
-            // Empty cells
-            for (let i = 0; i < firstDay; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.className = 'calendar-day empty';
-                calendar.appendChild(emptyDay);
-            }
+        const rect  = triggerEl.getBoundingClientRect();
+        const ddH   = dd.offsetHeight;
+        const below = window.innerHeight - rect.bottom;
 
-            // Days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'calendar-day';
+        dd.style.top  = (below >= ddH + 8 ? rect.bottom + 4 : rect.top - ddH - 4) + 'px';
+        dd.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 310)) + 'px';
+    }
 
-                const hasFiles = getFilesForDay(day).length > 0;
-                if (hasFiles) {
-                    dayCell.classList.add('has-files');
-                    const indicator = document.createElement('div');
-                    indicator.className = 'file-indicator';
-                    dayCell.appendChild(indicator);
-                }
+    function closeDropdown() {
+        document.getElementById('file-dropdown').style.display = 'none';
+    }
 
-                if (selectedDay === day) {
-                    dayCell.classList.add('selected');
-                }
+    // ── Image ──────────────────────────────────────────────────────────
+    function updateImage() {
+        const img      = document.getElementById('month-image');
+        const noImgEl  = document.getElementById('no-image-text');
+        const src      = `assets/images/${MONTHS[currentMonthIndex]}.webp`;
 
-                const dayNum = document.createElement('span');
-                dayNum.className = 'day-number';
-                dayNum.textContent = day;
-                dayCell.appendChild(dayNum);
+        img.onload  = () => { img.style.display = 'block'; noImgEl.style.display = 'none'; };
+        img.onerror = () => { img.style.display = 'none';  noImgEl.style.display = '';     noImgEl.textContent = MONTH_NAMES[currentMonthIndex]; };
+        img.src = src;
+    }
 
-                if (hasFiles) {
-                    dayCell.addEventListener('click', () => selectDay(day));
-                }
+    // ── Audio ──────────────────────────────────────────────────────────
+    function playFile(file) {
+        audioEl.src = `assets/audio/${file}`;
+        audioEl.muted = false;
+        audioEl.play().catch(() => {});
+        isPlaying = true;
+        updatePlayBtn();
+    }
 
-                calendar.appendChild(dayCell);
-            }
+    function togglePlay() {
+        if (!currentFiles.length) return;
+        if (isPlaying) {
+            audioEl.pause();
+            isPlaying = false;
+        } else {
+            audioEl.play().catch(() => {});
+            isPlaying = true;
         }
+        updatePlayBtn();
+    }
 
-        function selectDay(day) {
-            selectedDay = day;
-            currentFiles = getFilesForDay(day);
-            currentTrack = 0;
+    function updatePlayBtn() {
+        document.getElementById('play-pause-btn').innerHTML = isPlaying
+            ? '<svg class="play-icon" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+            : '<svg class="play-icon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>';
+    }
+
+    // ── Selection ──────────────────────────────────────────────────────
+    function selectDay(day, trackIndex) {
+        selectedDay  = day;
+        currentFiles = filesForDay(day);
+        currentTrack = typeof trackIndex === 'number'
+            ? Math.min(trackIndex, currentFiles.length - 1)
+            : 0;
+        renderCalendar();
+        updateFileInfo();
+        if (currentFiles.length) playFile(currentFiles[currentTrack]);
+    }
+
+    function updateFileInfo() {
+        const dateEl = document.getElementById('fileDate');
+        const nameEl = document.getElementById('fileName');
+        if (!currentFiles.length || selectedDay === null) {
+            dateEl.textContent = '';
+            nameEl.textContent = '—';
+            return;
+        }
+        dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${selectedDay}, ${YEAR}`;
+        nameEl.textContent = currentFiles[currentTrack];
+    }
+
+    // ── Day navigation ─────────────────────────────────────────────────
+    function nextDay() {
+        const days = daysWithFiles();
+        if (!days.length) { goToMonth((currentMonthIndex + 1) % 12, false); return; }
+
+        if (selectedDay === null) { selectDay(days[0]); return; }
+
+        const idx = days.indexOf(selectedDay);
+        if (idx === days.length - 1) {
+            goToMonth((currentMonthIndex + 1) % 12, false); // first day of next month
+        } else {
+            selectDay(days[Math.max(0, idx + 1)]);
+        }
+    }
+
+    function prevDay() {
+        const days = daysWithFiles();
+        if (!days.length) { goToMonth((currentMonthIndex - 1 + 12) % 12, true); return; }
+
+        if (selectedDay === null) { selectDay(days[days.length - 1]); return; }
+
+        const idx = days.indexOf(selectedDay);
+        if (idx <= 0) {
+            goToMonth((currentMonthIndex - 1 + 12) % 12, true); // last day of prev month
+        } else {
+            selectDay(days[idx - 1]);
+        }
+    }
+
+    // ── Month navigation ───────────────────────────────────────────────
+    function goToMonth(newIndex, selectLast) {
+        const target  = MONTHS[newIndex];
+        const current = window.location.pathname.replace(/^\//, '').replace(/\.html$/, '');
+
+        if (current !== target) {
+            if (selectLast) sessionStorage.setItem('calNav', 'last');
+            window.location.href = '/' + target;
+        } else {
+            // same page (shouldn't normally happen, but handle gracefully)
+            currentMonthIndex = newIndex;
+            const days = daysWithFiles();
+            if (days.length) selectDay(selectLast ? days[days.length - 1] : days[0]);
+            else { selectedDay = null; currentFiles = []; renderCalendar(); updateFileInfo(); }
+        }
+    }
+
+    // ── Month title ────────────────────────────────────────────────────
+    function updateMonthTitle() {
+        document.getElementById('monthTitle').textContent =
+            `${MONTH_NAMES[currentMonthIndex]} ${YEAR}`;
+    }
+
+    // ── Init ───────────────────────────────────────────────────────────
+    function initPage() {
+        updateMonthTitle();
+        updateImage();
+
+        const days     = daysWithFiles();
+        const selectLast = sessionStorage.getItem('calNav') === 'last';
+        sessionStorage.removeItem('calNav');
+
+        if (days.length) {
+            selectDay(selectLast ? days[days.length - 1] : days[0]);
+        } else {
+            selectedDay = null;
+            currentFiles = [];
             renderCalendar();
             updateFileInfo();
-            loadAndPlayFile();
         }
+    }
 
-        function updateFileInfo() {
-            if (!currentFiles || currentFiles.length === 0) {
-                document.getElementById('fileDate').textContent = '';
-                document.getElementById('fileName').textContent = 'Select a day with files';
-                return;
-            }
-
-            const dateStr = `${MONTH_NAMES[currentMonthIndex]} ${selectedDay}, 2026`;
-            document.getElementById('fileDate').textContent = dateStr;
-            document.getElementById('fileName').textContent = currentFiles[currentTrack];
+    async function loadCalendarData() {
+        try {
+            const res  = await fetch('/assets/data/calendar.json');
+            calendarData = await res.json();
+        } catch(e) {
+            console.error('Could not load calendar data', e);
         }
+        initPage();
+    }
 
-        function loadAndPlayFile() {
-            if (!currentFiles || currentFiles.length === 0) return;
+    // ── Event Listeners ────────────────────────────────────────────────
+    document.getElementById('prevMonthBtn').addEventListener('click', () => goToMonth((currentMonthIndex - 1 + 12) % 12, false));
+    document.getElementById('nextMonthBtn').addEventListener('click', () => goToMonth((currentMonthIndex + 1) % 12, false));
+    document.getElementById('previous-button').addEventListener('click', prevDay);
+    document.getElementById('next-button').addEventListener('click', nextDay);
+    document.getElementById('image-container').addEventListener('click', togglePlay);
 
-            const fileName = currentFiles[currentTrack];
-            audioPlayer.src = `assets/audio/${fileName}`;
-            audioPlayer.muted = false;
-            audioPlayer.play();
-            isPlaying = true;
-            updatePlayPauseButton();
+    audioEl.addEventListener('ended', nextDay);
+
+    window.addEventListener('keydown', e => {
+        if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
+        if (e.code === 'ArrowRight') { e.preventDefault(); nextDay(); }
+        if (e.code === 'ArrowLeft')  { e.preventDefault(); prevDay(); }
+    });
+
+    // close dropdown on outside click
+    document.addEventListener('click', e => {
+        if (!e.target.closest('#file-dropdown') && !e.target.closest('.file-more')) {
+            closeDropdown();
         }
+    });
 
-        function updatePlayPauseButton() {
-            const button = document.getElementById('play-pause-button');
-            if (isPlaying) {
-                button.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 19H5V5h14v14z"/></svg>';
-            } else {
-                button.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>';
-            }
-        }
-
-        // Arrow navigation between days with files
-        function navigateToNextDay() {
-            buildDaysWithFilesArray();
-            if (allDaysWithFiles.length === 0) return;
-
-            let nextDayIndex = selectedDay ? allDaysWithFiles.indexOf(selectedDay) + 1 : 0;
-
-            if (nextDayIndex >= allDaysWithFiles.length) {
-                // Move to next month
-                navigateToNextMonth();
-                return;
-            }
-
-            selectDay(allDaysWithFiles[nextDayIndex]);
-        }
-
-        function navigateToPreviousDay() {
-            buildDaysWithFilesArray();
-            if (allDaysWithFiles.length === 0) return;
-
-            let prevDayIndex = selectedDay ? allDaysWithFiles.indexOf(selectedDay) - 1 : allDaysWithFiles.length - 1;
-
-            if (prevDayIndex < 0) {
-                // Move to previous month
-                navigateToPreviousMonth();
-                return;
-            }
-
-            selectDay(allDaysWithFiles[prevDayIndex]);
-        }
-
-        function navigateToNextMonth() {
-            currentMonthIndex = (currentMonthIndex + 1) % 12;
-            
-            // If new month has no files, keep navigating
-            buildDaysWithFilesArray();
-            if (allDaysWithFiles.length === 0) {
-                navigateToNextMonth();
-                return;
-            }
-
-            selectedDay = null;
-            updateMonthDisplay();
-            renderCalendar();
-            selectDay(allDaysWithFiles[0]);
-            navigateToPageIfNeeded();
-        }
-
-        function navigateToPreviousMonth() {
-            currentMonthIndex = (currentMonthIndex - 1 + 12) % 12;
-            
-            // If new month has no files, keep navigating
-            buildDaysWithFilesArray();
-            if (allDaysWithFiles.length === 0) {
-                navigateToPreviousMonth();
-                return;
-            }
-
-            selectedDay = null;
-            updateMonthDisplay();
-            renderCalendar();
-            selectDay(allDaysWithFiles[allDaysWithFiles.length - 1]);
-            navigateToPageIfNeeded();
-        }
-
-        function navigateToPageIfNeeded() {
-            const monthName = MONTHS[currentMonthIndex];
-            if (monthName !== 'december' && monthName !== 'december') {
-                // For now, only december and december exist
-                return;
-            }
-            
-            if (window.location.pathname !== `/${monthName}` && window.location.pathname !== `/${monthName}.html`) {
-                window.location.href = `/${monthName}`;
-            }
-        }
-
-        function updateMonthDisplay() {
-            document.getElementById('monthTitle').textContent = `${MONTH_NAMES[currentMonthIndex]} 2026`;
-            
-            // Update image if available
-            const monthName = MONTHS[currentMonthIndex];
-            const imageSrc = MONTH_IMAGES[monthName] || 'assets/images/december.webp';
-            document.querySelector('.image-container img').src = imageSrc;
-        }
-
-        function initializeMonth() {
-            buildDaysWithFilesArray();
-            if (allDaysWithFiles.length > 0) {
-                selectDay(allDaysWithFiles[0]);
-            }
-        }
-
-        // Event Listeners
-        document.getElementById('prevMonthBtn').addEventListener('click', navigateToPreviousMonth);
-        document.getElementById('nextMonthBtn').addEventListener('click', navigateToNextMonth);
-
-        document.getElementById('previous-button').addEventListener('click', navigateToPreviousDay);
-        document.getElementById('next-button').addEventListener('click', navigateToNextDay);
-
-        document.getElementById('image-container').addEventListener('click', () => {
-            if (isPlaying) {
-                audioPlayer.pause();
-                isPlaying = false;
-            } else {
-                loadAndPlayFile();
-            }
-            updatePlayPauseButton();
+    // nav dropdown
+    (function() {
+        const toggle   = document.getElementById('navToggle');
+        const dropdown = document.getElementById('navDropdown');
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const open = dropdown.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', open);
         });
-
-        audioPlayer.addEventListener('ended', navigateToNextDay);
-
-        // Spacebar for play/pause
-        window.addEventListener('keydown', (event) => {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                if (isPlaying) {
-                    audioPlayer.pause();
-                    isPlaying = false;
-                } else {
-                    loadAndPlayFile();
-                }
-                updatePlayPauseButton();
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#siteNav')) {
+                dropdown.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
             }
         });
+    })();
 
-        // Arrow keys for navigation
-        window.addEventListener('keydown', (event) => {
-            if (event.code === 'ArrowRight') {
-                event.preventDefault();
-                navigateToNextDay();
-            } else if (event.code === 'ArrowLeft') {
-                event.preventDefault();
-                navigateToPreviousDay();
-            }
-        });
-
-        // Nav dropdown
-        (function() {
-            var toggle = document.getElementById('navToggle');
-            var dropdown = document.getElementById('navDropdown');
-            toggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                var isOpen = dropdown.classList.toggle('open');
-                toggle.setAttribute('aria-expanded', isOpen);
-            });
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('#siteNav')) {
-                    dropdown.classList.remove('open');
-                    toggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        })();
-
-        // Initialize
-        loadCalendarData();
+    // ── Boot ───────────────────────────────────────────────────────────
+    loadCalendarData();
     </script>
-
 </body>
 </html>
