@@ -35,7 +35,7 @@
         /* same width constraint as .calendar-grid-wrap */
         .player-inner {
             width: 100%;
-            max-width: calc(7 * (50vh - 102px) / 6 + 3.9rem);
+            max-width: calc(7 * (50vh - 102px) / 6 + 1.5rem);
             padding: 0 1.2rem;
             display: flex;
             flex-direction: column;
@@ -99,6 +99,7 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
+            position: relative;
         }
 
         .day-nav-btn {
@@ -111,10 +112,16 @@
             opacity: 0.6;
             transition: opacity 0.2s;
             padding: 0.5rem 0.4rem;
-            flex-shrink: 0;
             line-height: 1;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
         }
         .day-nav-btn:hover { opacity: 1; }
+
+        #previous-button { right: calc(100% + 0.3rem); }
+        #next-button    { left:  calc(100% + 0.3rem); }
 
         .image-container {
             flex: 1;
@@ -447,6 +454,8 @@
             .calendar-section { padding: 0.3rem 0.6rem 0.2rem; }
             .month-nav-bar h1 { font-size: 2vh; }
             .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; }
+            #previous-button { right: auto; left:  0.3rem; }
+            #next-button    { left:  auto; right: 0.3rem; }
             .file-name { font-size: 0.7rem; max-width: 55vw; }
             .calendar-grid-wrap  { max-width: 100%; }
             .day-headers         { gap: 0.18rem; }
@@ -685,7 +694,7 @@
         const src      = `assets/images/${MONTHS[currentMonthIndex]}.webp`;
 
         img.onload  = () => { img.style.display = 'block'; noImgEl.style.display = 'none'; };
-        img.onerror = () => { img.style.display = 'none';  noImgEl.style.display = '';     noImgEl.textContent = MONTH_NAMES[currentMonthIndex]; };
+        img.onerror = () => { img.style.display = 'none';  noImgEl.style.display = ''; };
         img.src = src;
     }
 
