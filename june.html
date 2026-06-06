@@ -28,14 +28,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0.4rem 0 0.3rem;
+            padding: calc(3vh + 0.3rem) 0 0.3rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         /* same width constraint as .calendar-grid-wrap */
         .player-inner {
             width: 100%;
-            max-width: calc(7 * (50vh - 102px) / 6 + 1.5rem);
+            max-width: calc(7 * (50vh - 102px) / 6 + 3.9rem);
             padding: 0 1.2rem;
             display: flex;
             flex-direction: column;
@@ -442,7 +442,7 @@
 
         /* ── Mobile ──────────────────────────────────────────────────── */
         @media (max-width: 768px) {
-            .player-section { padding: 0.3rem 0 0.2rem; }
+            .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; }
             .player-inner { padding: 0 0.6rem; }
             .calendar-section { padding: 0.3rem 0.6rem 0.2rem; }
             .month-nav-bar h1 { font-size: 2vh; }
@@ -465,6 +465,7 @@
     <nav class="site-nav" id="siteNav">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Menu">thisfindsyou</button>
         <div class="nav-dropdown" id="navDropdown">
+            <a href="/">home</a>
             <a href="/january" id="calNavLink">calendar</a>
             <a href="/portfolio">portfolio</a>
             <a href="/blog">blog</a>
@@ -539,6 +540,7 @@
     // ── Config ─────────────────────────────────────────────────────────
     const MONTHS = ['january','february','march','april','may','june',
                     'july','august','september','october','november','december'];
+    document.getElementById('calNavLink').href = '/' + MONTHS[new Date().getMonth()];
     const MONTH_NAMES = ['January','February','March','April','May','June',
                          'July','August','September','October','November','December'];
     const YEAR = new Date().getFullYear();
@@ -548,7 +550,6 @@
     let currentMonthIndex = Math.max(0, MONTHS.indexOf(slug));
 
     // ── Point calendar nav link to current real-world month ────────────
-    document.getElementById('calNavLink').href = '/' + MONTHS[new Date().getMonth()];
 
     // ── State ──────────────────────────────────────────────────────────
     let calendarData = {};

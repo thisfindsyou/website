@@ -230,7 +230,8 @@
     <nav class="site-nav" id="siteNav">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Menu">thisfindsyou</button>
         <div class="nav-dropdown" id="navDropdown">
-            <a href="/">calendar</a>
+            <a href="/">home</a>
+            <a href="/january" id="calNavLink">calendar</a>
             <a href="/portfolio">portfolio</a>
             <a href="/blog">blog</a>
             <a href="mailto:clovehitch@thisfindsyou.com">contact</a>
@@ -285,6 +286,11 @@
     </div>
 
     <script>
+        // Point calendar nav link to current real-world month
+        const MONTHS = ['january','february','march','april','may','june',
+                        'july','august','september','october','november','december'];
+        document.getElementById('calNavLink').href = '/' + MONTHS[new Date().getMonth()];
+
         // Nav dropdown toggle (mobile)
         (function() {
             var toggle = document.getElementById('navToggle');
