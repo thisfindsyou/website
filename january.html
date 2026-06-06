@@ -707,13 +707,13 @@
                 list.className = 'file-list';
 
                 if (files.length > 0) {
-                    // Count badge opens dropdown for 1+ files.
-                    const count = document.createElement('div');
-                    count.className = 'file-more';
-                    count.textContent = files.length;
-                    count.addEventListener('click', e => { e.stopPropagation(); openDropdown(count, files, d); });
-                    list.appendChild(count);
-                }
+                     // Count badge opens dropdown for 1+ files.
+                     const count = document.createElement('div');
+                     count.className = 'file-more';
+                     count.textContent = files.length === 1 ? '1 file' : `${files.length} files`;
+                     count.addEventListener('click', e => { e.stopPropagation(); openDropdown(count, files, d); });
+                     list.appendChild(count);
+                 }
 
                 if (blog) {
                     const blogLink = document.createElement('a');
