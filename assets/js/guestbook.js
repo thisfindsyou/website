@@ -18,21 +18,10 @@ function escapeHtml(s) {
   return d.innerHTML;
 }
 
-function entryHtml(headContent, msgContent, placeholder) {
-  var cls = placeholder ? ' class="entry-msg entry-placeholder"' : ' class="entry-msg"';
-  return '<div class="entry">'
-    + '<div class="entry-head">'
-    + '<span class="entry-name">' + headContent + '</span>'
-    + '<span class="entry-time">&nbsp;</span>'
-    + '</div>'
-    + '<div' + cls + '>' + msgContent + '</div>'
-    + '</div>';
-}
-
 function render(entries) {
   var el = document.getElementById('messages');
   if (!entries || !entries.length) {
-    el.innerHTML = entryHtml('&nbsp;', 'no entries yet — be the first', true);
+    el.innerHTML = '<div class="empty-state">no entries yet — be the first</div>';
     return;
   }
   el.innerHTML = entries.map(function(e) {
@@ -48,7 +37,7 @@ function render(entries) {
 
 function load() {
   var msgs = document.getElementById('messages');
-  msgs.innerHTML = entryHtml('&nbsp;', 'loading…', true);
+  msgs.innerHTML = '<div class="empty-state">loading…</div>';
 
   fetch(API + '/entries')
     .then(function(r) {
@@ -57,7 +46,7 @@ function load() {
     })
     .then(render)
     .catch(function() {
-      msgs.innerHTML = entryHtml('&nbsp;', 'no entries yet', true);
+      msgs.innerHTML = '<div class="empty-state">no entries yet</div>';
     });
 }
 
@@ -99,7 +88,23 @@ function submit() {
   });
 }
 
+function setEmptyStateHeight() {
+  var temp = document.createElement('div');
+  temp.className = 'entry';
+  temp.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none';
+  temp.innerHTML = '<div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">&nbsp;</div>';
+  document.body.appendChild(temp);
+  var h = temp.offsetHeight;
+  document.body.removeChild(temp);
+  var style = document.getElementById('emptyStateStyle') || document.createElement('style');
+  style.id = 'emptyStateStyle';
+  style.textContent = '.empty-state { min-height: ' + h + 'px; }';
+  document.head.appendChild(style);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+  setEmptyStateHeight();
+  window.addEventListener('resize', setEmptyStateHeight);
   load();
 
   document.getElementById('sendBtn').addEventListener('click', submit);
