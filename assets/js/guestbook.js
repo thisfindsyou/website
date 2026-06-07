@@ -50,6 +50,20 @@ function doSearch() {
   render(filtered);
 }
 
+function toggleSearch() {
+  var bar = document.getElementById('searchBar');
+  var btn = document.getElementById('searchBtn');
+  var input = document.getElementById('searchInput');
+  var isOpen = bar.classList.toggle('open');
+  btn.classList.toggle('active', isOpen);
+  if (isOpen) {
+    input.focus();
+  } else {
+    input.value = '';
+    render(allEntries);
+  }
+}
+
 function load() {
   var msgs = document.getElementById('messages');
   msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">loading…</div></div>';
@@ -87,7 +101,8 @@ function submit() {
   })
   .then(function(entries) {
     allEntries = entries;
-    document.getElementById('searchInput').value = '';
+    var bar = document.getElementById('searchBar');
+    if (bar.classList.contains('open')) toggleSearch();
     nameEl.value = '';
     msgEl.value = '';
     nameEl.focus();
@@ -108,7 +123,11 @@ function submit() {
 document.addEventListener('DOMContentLoaded', function() {
   load();
 
-  document.getElementById('searchInput').addEventListener('input', doSearch);
+  document.getElementById('searchInput').addEventListener('keyup', function(e) {
+    if (e.key === 'Escape') { toggleSearch(); return; }
+    doSearch();
+  });
+  document.getElementById('searchBtn').addEventListener('click', toggleSearch);
   document.getElementById('sendBtn').addEventListener('click', submit);
   document.getElementById('inputMsg').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') submit();
