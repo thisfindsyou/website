@@ -204,10 +204,9 @@ videoEl.addEventListener('play',  () => { isPlaying = true;  updatePlayBtn(); })
 videoEl.addEventListener('pause', () => { isPlaying = false; updatePlayBtn(); });
 videoEl.addEventListener('ended', smartNext);
 
-function playFile(file) {
+function playFile(file, autoplay = true) {
     const img     = document.getElementById('month-image');
     const noImg   = document.getElementById('no-image-text');
-    const overlay = document.getElementById('fullscreen-overlay');
 
     videoEl.style.display = 'none';
     videoEl.pause();
@@ -229,7 +228,9 @@ function playFile(file) {
         videoEl.style.display = 'block';
         document.getElementById('play-pause-btn').style.display = '';
         loadedFile = file;
-        videoEl.play().catch(err => console.warn('video play blocked:', err));
+        if (autoplay) {
+            videoEl.play().catch(err => console.warn('video play blocked:', err));
+        }
         return;
     }
 
@@ -240,8 +241,10 @@ function playFile(file) {
         audioEl.src = `assets/audio/${file}`;
         loadedFile = file;
     }
-    audioEl.muted = false;
-    audioEl.play().catch(err => console.warn('play blocked:', err));
+    if (autoplay) {
+        audioEl.muted = false;
+        audioEl.play().catch(err => console.warn('play blocked:', err));
+    }
 }
 
 function togglePlay() {
@@ -351,8 +354,8 @@ function selectDay(day, trackIndex, autoplay = true) {
     if (currentFiles.length) {
         if (isImageFile(currentFiles[currentTrack])) {
             playFile(currentFiles[currentTrack]);
-        } else if (autoplay) {
-            playFile(currentFiles[currentTrack]);
+        } else {
+            playFile(currentFiles[currentTrack], autoplay);
         }
     }
 }
