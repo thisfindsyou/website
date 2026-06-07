@@ -195,8 +195,8 @@ function updateImage() {
 }
 
 // ── Audio ──────────────────────────────────────────────────────────
-audioEl.addEventListener('play',  () => { isPlaying = true;  updatePlayBtn(); });
-audioEl.addEventListener('pause', () => { isPlaying = false; updatePlayBtn(); });
+audioEl.addEventListener('play',  () => { isPlaying = true;  updatePlayBtn(); if (isFullscreen) updateFullscreenPlayBtn(); });
+audioEl.addEventListener('pause', () => { isPlaying = false; updatePlayBtn(); if (isFullscreen) updateFullscreenPlayBtn(); });
 audioEl.addEventListener('ended', smartNext);
 
 // ── Video ──────────────────────────────────────────────────────────
@@ -291,7 +291,10 @@ function openFullscreen(src, type) {
     if (type === 'image') {
         fsImg.src = src;
         fsImg.style.display = '';
-        fsPlay.classList.remove('visible');
+        fsPlay.classList.add('visible');
+        fsPlay.innerHTML = audioEl.paused
+            ? '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+            : '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
     } else if (type === 'video') {
         const currentVideo = document.getElementById('video-player');
         const wasPlaying = !currentVideo.paused;
@@ -553,17 +556,28 @@ document.getElementById('image-container').addEventListener('click', function(e)
     }
 });
 
+function updateFullscreenPlayBtn() {
+    const fsPlay = document.getElementById('fullscreen-play-btn');
+    const fsVideo = document.getElementById('fullscreen-video');
+    const showPause = fsVideo.style.display !== 'none' && fsVideo.src
+        ? !fsVideo.paused
+        : !audioEl.paused;
+    fsPlay.innerHTML = showPause
+        ? '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+        : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+}
+
 document.getElementById('fullscreen-play-btn').addEventListener('click', function(e) {
     e.stopPropagation();
     const fsVideo = document.getElementById('fullscreen-video');
-    if (fsVideo.paused) {
-        fsVideo.play();
-        this.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+    if (fsVideo.style.display !== 'none' && fsVideo.src) {
+        if (fsVideo.paused) { fsVideo.play(); } else { fsVideo.pause(); }
     } else {
-        fsVideo.pause();
-        this.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+        if (audioEl.paused) { audioEl.play(); } else { audioEl.pause(); }
     }
 });
+document.getElementById('fullscreen-video').addEventListener('play',  updateFullscreenPlayBtn);
+document.getElementById('fullscreen-video').addEventListener('pause', updateFullscreenPlayBtn);
 
 document.getElementById('fullscreen-overlay').addEventListener('click', function(e) {
     if (e.target === this) closeFullscreen();

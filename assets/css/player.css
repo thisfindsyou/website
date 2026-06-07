@@ -433,23 +433,22 @@
 #fullscreen-close svg { display: block; width: 20px; height: 20px; }
 
 #fullscreen-play-btn {
-    position: fixed;
-    bottom: 40px;
+    position: absolute;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     background: none;
     border: none;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: rgba(255,255,255,0.6);
     cursor: pointer;
-    z-index: 100000;
-    line-height: 0;
-    padding: 10px;
+    z-index: 100002;
     transition: color 0.2s, opacity 0.2s;
-    opacity: 0;
-}
-#fullscreen-overlay.open:hover #fullscreen-play-btn,
-#fullscreen-overlay.open #fullscreen-play-btn.visible {
-    opacity: 1;
 }
 #fullscreen-play-btn:hover { color: white; }
 #fullscreen-play-btn svg {
