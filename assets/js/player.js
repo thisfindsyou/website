@@ -226,7 +226,7 @@ function playFile(file, autoplay = true) {
         noImg.style.display = 'none';
         videoEl.src = `assets/videos/${file}`;
         videoEl.style.display = 'block';
-        document.getElementById('play-pause-btn').style.display = '';
+        document.getElementById('play-pause-btn').style.display = 'flex';
         loadedFile = file;
         if (autoplay) {
             videoEl.play().catch(err => console.warn('video play blocked:', err));
@@ -234,7 +234,7 @@ function playFile(file, autoplay = true) {
         return;
     }
 
-    document.getElementById('play-pause-btn').style.display = '';
+    document.getElementById('play-pause-btn').style.display = 'flex';
     updateImage();
 
     if (file !== loadedFile) {
