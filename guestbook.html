@@ -163,13 +163,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .error-state {
-            padding: 2vh 0;
-            text-align: center;
-            color: #844;
-            font-size: 0.8rem;
-        }
-
         /* ── Input bar ── */
         .input-bar {
             display: flex;
@@ -334,11 +327,16 @@
         }
 
         function load() {
+            document.getElementById('messages').innerHTML = '<div class="empty-state">loading…</div>';
             fetch(API + '/entries')
-                .then(function(r) { return r.json(); })
+                .then(function(r) {
+                    if (!r.ok) throw new Error('status ' + r.status);
+                    return r.json();
+                })
                 .then(render)
-                .catch(function() {
-                    document.getElementById('messages').innerHTML = '<div class="error-state">could not load entries</div>';
+                .catch(function(e) {
+                    console.error('guestbook fetch failed:', e);
+                    document.getElementById('messages').innerHTML = '<div class="empty-state">could not load entries</div>';
                 });
         }
 
