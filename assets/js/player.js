@@ -344,8 +344,8 @@ function closeFullscreen() {
 }
 
 // ── Selection ──────────────────────────────────────────────────────
-function selectDay(day, trackIndex, autoplay = true) {
-    if (isFullscreen) closeFullscreen();
+function selectDay(day, trackIndex, autoplay = true, keepFullscreen = false) {
+    if (isFullscreen && !keepFullscreen) closeFullscreen();
 
     selectedDay  = day;
     currentFiles = filesForDay(day);
@@ -454,27 +454,27 @@ function smartPrev() {
 }
 
 // ── Day navigation ─────────────────────────────────────────────────
-function nextDay() {
+function nextDay(keepFullscreen = false) {
     const days = daysWithFiles();
     if (!days.length) { goToMonth((currentMonthIndex + 1) % 12, false); return; }
 
-    if (selectedDay === null) { selectDay(days[0]); return; }
+    if (selectedDay === null) { selectDay(days[0], undefined, true, keepFullscreen); return; }
 
     const idx = days.indexOf(selectedDay);
     if (idx === days.length - 1) {
         goToMonth((currentMonthIndex + 1) % 12, false);
     } else {
-        selectDay(days[Math.max(0, idx + 1)]);
+        selectDay(days[Math.max(0, idx + 1)], undefined, true, keepFullscreen);
     }
 }
 
-function prevDay() {
+function prevDay(keepFullscreen = false) {
     const days = daysWithFiles();
     if (!days.length) { goToMonth((currentMonthIndex - 1 + 12) % 12, true); return; }
 
     if (selectedDay === null) {
         const d = days[days.length - 1];
-        selectDay(d, filesForDay(d).length - 1);
+        selectDay(d, filesForDay(d).length - 1, true, keepFullscreen);
         return;
     }
 
@@ -483,7 +483,7 @@ function prevDay() {
         goToMonth((currentMonthIndex - 1 + 12) % 12, true);
     } else {
         const d = days[idx - 1];
-        selectDay(d, filesForDay(d).length - 1);
+        selectDay(d, filesForDay(d).length - 1, true, keepFullscreen);
     }
 }
 
@@ -614,7 +614,7 @@ window.addEventListener('keydown', e => {
                 const days = daysWithFiles();
                 const idx = days.indexOf(selectedDay);
                 if (idx >= 0 && idx < days.length - 1) {
-                    nextDay();
+                    nextDay(true);
                     openFullscreenForCurrentFile();
                 } else {
                     closeFullscreen();
@@ -631,7 +631,7 @@ window.addEventListener('keydown', e => {
                 const days = daysWithFiles();
                 const idx = days.indexOf(selectedDay);
                 if (idx > 0) {
-                    prevDay();
+                    prevDay(true);
                     openFullscreenForCurrentFile();
                 } else {
                     closeFullscreen();
