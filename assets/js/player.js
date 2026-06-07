@@ -250,6 +250,7 @@ function togglePlay() {
 
     if (isVideoFile(file)) {
         if (videoEl.paused) {
+            videoEl.muted = false;
             videoEl.play();
         } else {
             videoEl.pause();
@@ -533,6 +534,7 @@ document.getElementById('image-container').addEventListener('click', function(e)
         if (imgEl.src) openFullscreen(imgEl.src, 'image');
     } else if (isVideoFile(file)) {
         if (videoEl.paused) {
+            videoEl.muted = false;
             videoEl.play();
         } else {
             openFullscreen(videoEl.currentSrc || videoEl.src, 'video');

@@ -19,15 +19,22 @@ count=0
 for f in "$SRC"/*.{MOV,mov,MP4,mp4,webm}; do
     [ -f "$f" ] || continue
     basename=$(basename "$f")
-    newname="${PREFIX}-${basename}"
-    cp "$f" "$DST/$newname"
-    echo "Copied: $basename -> $newname"
+    name_noext="${basename%.*}"
+    newname="${PREFIX}-${name_noext}.mp4"
+    
+    if [[ "$basename" == *.MOV ]] || [[ "$basename" == *.mov ]]; then
+        echo "Converting: $basename -> $newname"
+        ffmpeg -i "$f" -c:v libx264 -preset medium -crf 23 -c:a aac -movflags +faststart "$DST/$newname" -hide_banner -loglevel error
+    else
+        cp "$f" "$DST/$newname"
+        echo "Copied: $basename -> $newname"
+    fi
     count=$((count + 1))
 done
 
 if [ "$count" -eq 0 ]; then
     echo "No video files found in $SRC"
 else
-    echo "Done. Copied $count file(s) to $DST/"
-    echo "Next: add an entry to assets/data/calendar.json"
+    echo "Done. $count file(s) in $DST/"
+    echo "Next: add entry to assets/data/calendar.json"
 fi
