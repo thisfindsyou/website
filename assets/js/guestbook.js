@@ -46,12 +46,7 @@ function load() {
     })
     .then(render)
     .catch(function() {
-      fetch('assets/data/guestbook.json')
-        .then(function(r) { return r.json(); })
-        .then(render)
-        .catch(function() {
-          msgs.innerHTML = '<div class="empty-state">no entries yet</div>';
-        });
+      msgs.innerHTML = '<div class="empty-state">no entries yet</div>';
     });
 }
 
