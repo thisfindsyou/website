@@ -411,13 +411,17 @@
     position: absolute;
     top: 8px;
     left: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     color: rgba(255,255,255,0.5);
     font-size: 30px;
     cursor: pointer;
     z-index: 100000;
-    line-height: 1;
     font-family: 'Old Standard TT', serif;
     transition: color 0.2s;
 }
