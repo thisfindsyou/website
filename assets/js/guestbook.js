@@ -1,4 +1,5 @@
 var API = 'https://guestbook-api.clovehitch.workers.dev';
+var allEntries = [];
 
 function fmtDate(ts) {
   var d = new Date(ts);
@@ -24,7 +25,9 @@ function escapeHtml(s) {
 function render(entries) {
   var el = document.getElementById('messages');
   if (!entries || !entries.length) {
-    el.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet — be the first</div></div>';
+    var searchEl = document.getElementById('searchInput');
+    var isSearch = searchEl && searchEl.value.trim();
+    el.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">' + (isSearch ? 'no matching entries' : 'no entries yet — be the first') + '</div></div>';
     return;
   }
   el.innerHTML = entries.map(function(e) {
@@ -38,6 +41,15 @@ function render(entries) {
   }).join('');
 }
 
+function doSearch() {
+  var q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q) { render(allEntries); return; }
+  var filtered = allEntries.filter(function(e) {
+    return e.name.toLowerCase().indexOf(q) !== -1 || e.message.toLowerCase().indexOf(q) !== -1;
+  });
+  render(filtered);
+}
+
 function load() {
   var msgs = document.getElementById('messages');
   msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">loading…</div></div>';
@@ -47,7 +59,7 @@ function load() {
       if (!r.ok) throw new Error('status ' + r.status);
       return r.json();
     })
-    .then(render)
+    .then(function(entries) { allEntries = entries; render(entries); })
     .catch(function() {
       msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet</div></div>';
     });
@@ -74,6 +86,8 @@ function submit() {
     return r.json();
   })
   .then(function(entries) {
+    allEntries = entries;
+    document.getElementById('searchInput').value = '';
     nameEl.value = '';
     msgEl.value = '';
     nameEl.focus();
@@ -94,6 +108,7 @@ function submit() {
 document.addEventListener('DOMContentLoaded', function() {
   load();
 
+  document.getElementById('searchInput').addEventListener('input', doSearch);
   document.getElementById('sendBtn').addEventListener('click', submit);
   document.getElementById('inputMsg').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') submit();

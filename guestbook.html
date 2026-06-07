@@ -211,6 +211,28 @@
         .send-btn:disabled { opacity: 0.3; cursor: default; }
         .send-btn.sending { opacity: 0.5; }
 
+        /* ── Search ── */
+        .search-bar {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .search-input {
+            font-family: 'Old Standard TT', serif;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 0.4rem 0.7rem;
+            color: white;
+            font-size: 0.75rem;
+            outline: none;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus { border-color: #557; }
+        .search-input::placeholder { color: #444; }
+
         /* ── Social footer ── */
         .social-footer {
             position: fixed;
@@ -278,6 +300,10 @@
             <input class="input-name" id="inputName" type="text" placeholder="name" maxlength="100" autocomplete="off">
             <input class="input-msg" id="inputMsg" type="text" placeholder="message…" maxlength="2000" autocomplete="off">
             <button class="send-btn" id="sendBtn">send</button>
+        </div>
+
+        <div class="search-bar">
+            <input class="search-input" id="searchInput" type="text" placeholder="search entries…" autocomplete="off">
         </div>
 
         <div class="messages" id="messages"></div>
