@@ -611,8 +611,15 @@ window.addEventListener('keydown', e => {
                 nextFile();
                 openFullscreenForCurrentFile();
             } else {
-                closeFullscreen();
-                setTimeout(smartNext, 400);
+                const days = daysWithFiles();
+                const idx = days.indexOf(selectedDay);
+                if (idx >= 0 && idx < days.length - 1) {
+                    nextDay();
+                    openFullscreenForCurrentFile();
+                } else {
+                    closeFullscreen();
+                    setTimeout(nextDay, 400);
+                }
             }
         }
         if (e.code === 'ArrowLeft') {
@@ -621,8 +628,15 @@ window.addEventListener('keydown', e => {
                 prevFile();
                 openFullscreenForCurrentFile();
             } else {
-                closeFullscreen();
-                setTimeout(smartPrev, 400);
+                const days = daysWithFiles();
+                const idx = days.indexOf(selectedDay);
+                if (idx > 0) {
+                    prevDay();
+                    openFullscreenForCurrentFile();
+                } else {
+                    closeFullscreen();
+                    setTimeout(prevDay, 400);
+                }
             }
         }
         return;
