@@ -18,10 +18,21 @@ function escapeHtml(s) {
   return d.innerHTML;
 }
 
+function entryHtml(headContent, msgContent, placeholder) {
+  var cls = placeholder ? ' class="entry-msg entry-placeholder"' : ' class="entry-msg"';
+  return '<div class="entry">'
+    + '<div class="entry-head">'
+    + '<span class="entry-name">' + headContent + '</span>'
+    + '<span class="entry-time">&nbsp;</span>'
+    + '</div>'
+    + '<div' + cls + '>' + msgContent + '</div>'
+    + '</div>';
+}
+
 function render(entries) {
   var el = document.getElementById('messages');
   if (!entries || !entries.length) {
-    el.innerHTML = '<div class="empty-state">no entries yet — be the first</div>';
+    el.innerHTML = entryHtml('&nbsp;', 'no entries yet — be the first', true);
     return;
   }
   el.innerHTML = entries.map(function(e) {
@@ -37,7 +48,7 @@ function render(entries) {
 
 function load() {
   var msgs = document.getElementById('messages');
-  msgs.innerHTML = '<div class="empty-state">loading…</div>';
+  msgs.innerHTML = entryHtml('&nbsp;', 'loading…', true);
 
   fetch(API + '/entries')
     .then(function(r) {
@@ -46,7 +57,7 @@ function load() {
     })
     .then(render)
     .catch(function() {
-      msgs.innerHTML = '<div class="empty-state">no entries yet</div>';
+      msgs.innerHTML = entryHtml('&nbsp;', 'no entries yet', true);
     });
 }
 
