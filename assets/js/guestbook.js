@@ -21,7 +21,7 @@ function escapeHtml(s) {
 function render(entries) {
   var el = document.getElementById('messages');
   if (!entries || !entries.length) {
-    el.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet — be the first</div></div>';
+    el.innerHTML = '<div class="entry entry--empty"><div class="entry-head"></div><div class="entry-msg">no entries yet — be the first</div></div>';
     return;
   }
   el.innerHTML = entries.map(function(e) {
@@ -37,7 +37,7 @@ function render(entries) {
 
 function load() {
   var msgs = document.getElementById('messages');
-  msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">loading…</div></div>';
+  msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"></div><div class="entry-msg">loading…</div></div>';
 
   fetch(API + '/entries')
     .then(function(r) {
@@ -46,7 +46,7 @@ function load() {
     })
     .then(render)
     .catch(function() {
-      msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet</div></div>';
+      msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"></div><div class="entry-msg">no entries yet</div></div>';
     });
 }
 
