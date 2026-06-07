@@ -590,8 +590,8 @@ window.addEventListener('keydown', e => {
         return;
     }
     if (isFullscreen) {
-        if (e.code === 'ArrowRight') { e.preventDefault(); closeFullscreen(); smartNext(); }
-        if (e.code === 'ArrowLeft')  { e.preventDefault(); closeFullscreen(); smartPrev(); }
+        if (e.code === 'ArrowRight') { e.preventDefault(); closeFullscreen(); setTimeout(smartNext, 200); }
+        if (e.code === 'ArrowLeft')  { e.preventDefault(); closeFullscreen(); setTimeout(smartPrev, 200); }
         return;
     }
     if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
