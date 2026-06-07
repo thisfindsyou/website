@@ -327,16 +327,22 @@
         }
 
         function load() {
-            document.getElementById('messages').innerHTML = '<div class="empty-state">loading…</div>';
+            var msgs = document.getElementById('messages');
+            msgs.innerHTML = '<div class="empty-state">loading…</div>';
+
             fetch('assets/data/guestbook.json')
+                .then(function(r) { return r.json(); })
+                .then(render)
+                .catch(function() {});
+
+            fetch(API + '/entries')
                 .then(function(r) {
                     if (!r.ok) throw new Error('status ' + r.status);
                     return r.json();
                 })
                 .then(render)
                 .catch(function(e) {
-                    console.error('guestbook load failed:', e);
-                    document.getElementById('messages').innerHTML = '<div class="empty-state">could not load entries</div>';
+                    console.error('guestbook live fetch failed:', e);
                 });
         }
 
