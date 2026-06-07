@@ -419,13 +419,12 @@
     background: none;
     border: none;
     color: rgba(255,255,255,0.5);
-    font-size: 30px;
     cursor: pointer;
     z-index: 100000;
-    font-family: 'Old Standard TT', serif;
     transition: color 0.2s;
 }
 #fullscreen-close:hover { color: white; }
+#fullscreen-close svg { width: 20px; height: 20px; }
 
 #fullscreen-play-btn {
     position: fixed;
