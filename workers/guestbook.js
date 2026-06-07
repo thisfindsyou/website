@@ -49,9 +49,10 @@ async function handleRequest(request) {
         message,
         timestamp: Date.now(),
       });
+      entries.sort((a, b) => b.timestamp - a.timestamp);
       await KV.put('entries', JSON.stringify(entries));
 
-      return new Response(JSON.stringify({ ok: true }), {
+      return new Response(JSON.stringify(entries), {
         headers: { 'Content-Type': 'application/json', ...corsHeaders },
       });
     }

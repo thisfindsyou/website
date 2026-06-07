@@ -328,14 +328,14 @@
 
         function load() {
             document.getElementById('messages').innerHTML = '<div class="empty-state">loading…</div>';
-            fetch(API + '/entries')
+            fetch('assets/data/guestbook.json')
                 .then(function(r) {
                     if (!r.ok) throw new Error('status ' + r.status);
                     return r.json();
                 })
                 .then(render)
                 .catch(function(e) {
-                    console.error('guestbook fetch failed:', e);
+                    console.error('guestbook load failed:', e);
                     document.getElementById('messages').innerHTML = '<div class="empty-state">could not load entries</div>';
                 });
         }
@@ -358,10 +358,13 @@
             })
             .then(function(r) {
                 if (!r.ok) throw new Error('send failed');
+                return r.json();
+            })
+            .then(function(entries) {
                 nameEl.value = '';
                 msgEl.value = '';
                 nameEl.focus();
-                load();
+                render(entries);
             })
             .catch(function() {
                 btn.textContent = 'error';
