@@ -647,6 +647,15 @@ window.addEventListener('keydown', e => {
                 }
             }
         }
+        if (e.code === 'Space') {
+            e.preventDefault();
+            const fsVideo = document.getElementById('fullscreen-video');
+            if (fsVideo.style.display !== 'none' && fsVideo.src) {
+                if (fsVideo.paused) { fsVideo.play(); } else { fsVideo.pause(); }
+            } else {
+                if (audioEl.paused) { audioEl.play(); } else { audioEl.pause(); }
+            }
+        }
         return;
     }
     if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
