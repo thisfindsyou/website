@@ -548,7 +548,8 @@ document.getElementById('image-container').addEventListener('click', function(e)
             openFullscreen(videoEl.currentSrc || videoEl.src, 'video');
         }
     } else {
-        togglePlay();
+        const imgEl = document.getElementById('month-image');
+        if (imgEl.src) openFullscreen(imgEl.src, 'image');
     }
 });
 
