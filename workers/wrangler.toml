@@ -1,7 +1,0 @@
-name = "guestbook-api"
-main = "guestbook.js"
-compatibility_date = "2024-12-01"
-
-[[kv_namespaces]]
-binding = "GUESTBOOK"
-id = ""  # Create at dash.cloudflare.com → KV → Create Namespace, paste ID here

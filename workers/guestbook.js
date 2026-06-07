@@ -13,7 +13,7 @@ export default {
 
     if (url.pathname === '/entries') {
       if (request.method === 'GET') {
-        const raw = await env.GUESTBOOK.get('entries');
+        const raw = await env.KV.get('entries');
         const entries = raw ? JSON.parse(raw) : [];
         entries.sort((a, b) => b.timestamp - a.timestamp);
         return new Response(JSON.stringify(entries), {
@@ -38,7 +38,7 @@ export default {
           });
         }
 
-        const raw = await env.GUESTBOOK.get('entries');
+        const raw = await env.KV.get('entries');
         const entries = raw ? JSON.parse(raw) : [];
         entries.push({
           id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -46,7 +46,7 @@ export default {
           message,
           timestamp: Date.now(),
         });
-        await env.GUESTBOOK.put('entries', JSON.stringify(entries));
+        await env.KV.put('entries', JSON.stringify(entries));
 
         return new Response(JSON.stringify({ ok: true }), {
           headers: { 'Content-Type': 'application/json', ...corsHeaders },

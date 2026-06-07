@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "guestbook-api",
+  "main": "workers/guestbook.js",
+  "compatibility_date": "2025-02-04",
+
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "e5f61505bb8a4e659169d3310c368e5e",
+      "preview_id": "e5f61505bb8a4e659169d3310c368e5e"
+    }
+  ]
+}
