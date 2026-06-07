@@ -486,14 +486,13 @@
     .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
     .player-inner { padding: 0; max-width: none; }
     .calendar-section {
-        flex: 1;
-        min-height: 0;
+        flex: none;
         padding: 0.3rem 0.6rem calc(0.2rem + 4px);
         overflow-y: auto;
     }
     .calendar-grid-wrap  { max-width: none; }
     .month-nav-bar h1 { font-size: 2vh; }
-    .player-row { align-items: center; justify-content: center; }
+    .player-row { align-items: center; justify-content: center; container-type: normal; }
     .day-nav-btn { font-size: 1.1rem; padding: 0.5rem 0.4rem; position: absolute; top: 50%; transform: translateY(-50%); flex: none; }
     #previous-button { right: auto; left: 0; }
     #next-button { left: auto; right: 0; }
