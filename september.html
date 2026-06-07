@@ -7,542 +7,139 @@
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
     <title>thisfindsyou</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'Old Standard TT', serif;
-            background-color: #111;
-            color: white;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            padding-top: 46px;
-            padding-bottom: 50px;
-        }
+body {
+    font-family: 'Old Standard TT', serif;
+    background-color: #111;
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-top: 46px;
+    padding-bottom: 50px;
+}
 
-        /* ── Player section (top 50%) ─────────────────────────────── */
-        .player-section {
-            flex: 1;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: calc(3vh + 0.3rem) 0 0.3rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        }
+/* ── Site nav ── */
+.site-nav {
+    position: fixed;
+    top: calc(20px - 0.3rem);
+    left: calc(20px - 0.5rem);
+    z-index: 200;
+    padding: 0.3rem 0.8rem 0.3rem 0.5rem;
+}
 
-        /* same width constraint as .calendar-grid-wrap */
-        .player-inner {
-            width: 100%;
-            max-width: calc(7 * (50vh - 102px - 1.25rem) / 6 + 1.5rem);
-            padding: 0 1.2rem;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-height: 0;
-        }
+.nav-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-family: 'Old Standard TT', serif;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.2s;
+}
 
-        .month-navigation {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.2rem;
-            flex-shrink: 0;
-            padding-bottom: 0.3rem;
-        }
+.site-nav:has(.nav-dropdown.open) .nav-toggle { opacity: 1; }
+.site-nav:has(.nav-dropdown.open) {
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+}
+.nav-dropdown.open { display: flex; margin-top: 0.1rem; }
 
-        .month-nav-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-family: 'Old Standard TT', serif;
-            font-size: 1rem;
-            cursor: pointer;
-            opacity: 0.45;
-            transition: opacity 0.2s;
-            padding: 0.2rem 0.6rem;
-            line-height: 1;
-        }
-        .month-nav-btn:hover { opacity: 1; }
+@media (hover: hover) {
+    .site-nav:hover .nav-toggle { opacity: 1; }
+    .site-nav:hover {
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+    }
+    .site-nav:hover .nav-dropdown { display: flex; margin-top: 0.1rem; }
+}
 
-        /* fixed month nav bar: ← title → */
-        .month-nav-bar {
-            position: fixed;
-            top: 44px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            white-space: nowrap;
-        }
+.nav-dropdown {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+}
 
-        .month-nav-bar h1 {
-            font-family: 'Old Standard TT', serif;
-            font-size: 2.5vh;
-            font-weight: normal;
-            letter-spacing: 1px;
-            margin: 0;
-        }
+.nav-dropdown a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-family: 'Old Standard TT', serif;
+    font-size: 13px;
+    transition: color 0.2s;
+    white-space: nowrap;
+    line-height: 1.7;
+    position: relative;
+    padding-left: 16px;
+}
+.nav-dropdown a::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    width: 10px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+.nav-dropdown a::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    border-left: 1px solid rgba(255,255,255,0.2);
+}
+.nav-dropdown a:last-child::after { height: 50%; }
+.nav-dropdown a:hover { color: white; }
 
-        .month-nav-bar .month-nav-btn {
-            font-size: 1.8vh;
-            padding: 0 0.3rem;
-        }
+/* ── Social footer ── */
+.social-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(17, 17, 17, 0.97);
+    border-top: 1px solid #222;
+    padding: 1.2vh 2vw;
+    display: flex;
+    justify-content: space-evenly;
+    z-index: 50;
+    backdrop-filter: blur(10px);
+}
 
-        /* player row: prev arrow | image | next arrow */
-        .player-row {
-            flex: 1;
-            min-height: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            position: relative;
-            container-type: size; /* enables cqw/cqh on children */
-        }
+.social-link {
+    color: #666;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
 
-        .day-nav-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-family: 'Old Standard TT', serif;
-            font-size: 1.3rem;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-            padding: 0.5rem 0.4rem;
-            line-height: 1;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1;
-        }
-        .day-nav-btn:hover { opacity: 1; }
+.social-link svg {
+    width: 22px;
+    height: 22px;
+    fill: #666;
+    transition: fill 0.3s ease;
+}
+@media (hover: hover) {
+    .social-link.soundcloud:hover svg { fill: #FF5500; }
+    .social-link.bandcamp:hover svg   { fill: #0087BE; }
+    .social-link.instagram:hover svg  { fill: #E1306C; }
+}
+.social-link.soundcloud:active svg { fill: #FF5500; }
+.social-link.bandcamp:active svg   { fill: #0087BE; }
+.social-link.instagram:active svg  { fill: #E1306C; }
 
-        #previous-button { right: calc(100% + 0.3rem); }
-        #next-button    { left:  calc(100% + 0.3rem); }
-
-        .image-container {
-            aspect-ratio: 1;
-            /* Square that fits within whichever is smaller: container width or height.
-               Prevents clipping when the window is short and image would exceed content width. */
-            width: min(100cqw, 100cqh);
-            height: auto;
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-            background-color: #0a0a0a;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .no-image-text {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.18);
-            font-style: italic;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-            pointer-events: none;
-        }
-
-        .play-pause-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            line-height: 0;
-        }
-        .image-container:hover .play-pause-btn { opacity: 0.85; pointer-events: auto; }
-        .play-icon { width: 38px; height: 38px; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6)); }
-
-        /* file info strip */
-        .file-info {
-            flex-shrink: 0;
-            padding-top: 0.3rem;
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 0.6rem;
-            min-height: 1.6rem;
-        }
-
-        .file-date {
-            opacity: 0.4;
-            font-size: 0.65rem;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .file-name {
-            font-size: 0.8rem;
-            font-weight: bold;
-            letter-spacing: 0.2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 60vw;
-        }
-        .file-name a {
-            color: white;
-            text-decoration: none;
-            opacity: 1;
-            vertical-align: baseline;
-        }
-        .file-name a:hover { text-decoration: underline; }
-        .file-blog-wrap {
-            white-space: nowrap;
-            vertical-align: baseline;
-            line-height: inherit;
-        }
-        .file-blog-wrap a {
-            font-size: 0.8rem;
-            font-weight: bold;
-            letter-spacing: 0.2px;
-            color: white;
-            text-decoration: none;
-            opacity: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 60vw;
-            vertical-align: baseline;
-        }
-        .file-blog-wrap a:hover { text-decoration: underline; }
-
-        .blog-entry {
-            font-size: 0.57rem;
-            font-style: italic;
-            opacity: 0.55;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: inherit;
-            text-decoration: none;
-            line-height: 1.3;
-            display: block;
-        }
-        .blog-entry:hover { opacity: 1; text-decoration: underline; }
-        .cal-cell.selected .blog-entry { opacity: 0.6; color: #000; }
-        .cal-cell.selected .blog-entry:hover { opacity: 1; }
-
-
-        /* ── Calendar section (bottom 50%) ───────────────────────── */
-        .calendar-section {
-            flex: 1;
-            min-height: 0;
-            overflow: hidden;
-            padding: 0.4rem 1.2rem calc(0.3rem + 4px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        /* grid wrapper — width-constrained so 6 rows of square cells
-           always fit in the available height without scrolling.
-           Formula: 7 cells × cell_size + 6 gaps
-           where cell_size = (50vh − 102px − 5×gap) / 6            */
-        .calendar-grid-wrap {
-            width: 100%;
-            max-width: calc(7 * (50vh - 102px - 1.25rem) / 6 + 1.5rem);
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .day-headers {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.25rem;
-            flex-shrink: 0;
-        }
-
-        .day-header {
-            text-align: center;
-            font-size: 0.6rem;
-            opacity: 0.3;
-            letter-spacing: 1px;
-            padding: 0.1rem 0;
-        }
-
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.25rem;
-            align-content: start;
-        }
-
-        .cal-cell {
-            aspect-ratio: 1;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 0.28rem 0.3rem;
-            display: flex;
-            flex-direction: column;
-            background: transparent;
-            cursor: default;
-            position: relative;
-            transition: border-color 0.15s, background-color 0.15s;
-        }
-
-        .cal-cell.has-files {
-            cursor: pointer;
-            border-color: rgba(255, 255, 255, 0.28);
-        }
-        .cal-cell.has-files:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        .cal-cell.selected {
-            background: white;
-            color: #000;
-            border-color: white;
-        }
-        .cal-cell.selected:hover { background: rgba(255, 255, 255, 0.92); }
-        .cal-cell.empty {
-            opacity: 0.12;
-            border-color: rgba(255, 255, 255, 0.08);
-            cursor: default;
-        }
-
-        .day-num {
-            font-weight: bold;
-            font-size: 0.72rem;
-            line-height: 1;
-            margin-bottom: 0.05rem;
-            flex-shrink: 0;
-        }
-
-        .file-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            overflow: hidden;
-        }
-
-        .file-entry {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 0.57rem;
-            opacity: 0.7;
-            cursor: pointer;
-            line-height: 1.15;
-        }
-        .file-entry:hover { opacity: 1; text-decoration: underline; }
-        .cal-cell.selected .file-entry { opacity: 0.65; color: #000; }
-        .cal-cell.selected .file-entry:hover { opacity: 1; }
-        .cal-cell.selected .file-entry.active { opacity: 1; font-weight: bold; }
-        .file-entry.active { opacity: 1; font-weight: bold; }
-
-        .file-more {
-            font-size: 0.48rem;
-            opacity: 0.5;
-            cursor: pointer;
-            font-style: italic;
-            line-height: 1.15;
-            white-space: nowrap;
-        }
-        .file-more:hover { opacity: 0.9; }
-        .cal-cell.selected .file-more { color: #000; opacity: 0.5; }
-        .cal-cell.selected .file-more:hover { opacity: 0.9; }
-
-        /* ── File Dropdown ──────────────────────────────────────────── */
-        #file-dropdown {
-            position: fixed;
-            display: none;
-            z-index: 1000;
-            background: rgba(12, 12, 12, 0.97);
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            border-radius: 3px;
-            padding: 0.25rem 0;
-            min-width: 180px;
-            max-width: 300px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
-        }
-
-        .dd-item {
-            padding: 0.32rem 0.7rem;
-            font-size: 0.62rem;
-            font-family: 'Old Standard TT', serif;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.6);
-            transition: background 0.12s, color 0.12s;
-        }
-        .dd-item:hover { background: rgba(255,255,255,0.1); color: white; }
-        .dd-item.playing { color: white; font-weight: bold; }
-
-        /* ── Site nav ────────────────────────────────────────────────── */
-        .site-nav {
-            position: fixed;
-            top: calc(20px - 0.3rem);
-            left: calc(20px - 0.5rem);
-            z-index: 200;
-            padding: 0.3rem 0.8rem 0.3rem 0.5rem;
-        }
-
-        .nav-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-family: 'Old Standard TT', serif;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            opacity: 0.6;
-            cursor: pointer;
-            padding: 0;
-            transition: opacity 0.2s;
-        }
-
-        .site-nav:has(.nav-dropdown.open) .nav-toggle { opacity: 1; }
-        .site-nav:has(.nav-dropdown.open) {
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
-        }
-        .nav-dropdown.open { display: flex; margin-top: 0.1rem; }
-
-        @media (hover: hover) {
-            .site-nav:hover .nav-toggle { opacity: 1; }
-            .site-nav:hover {
-                background: rgba(0, 0, 0, 0.95);
-                backdrop-filter: blur(10px);
-            }
-            .site-nav:hover .nav-dropdown { display: flex; margin-top: 0.1rem; }
-        }
-
-        .nav-dropdown {
-            display: none;
-            flex-direction: column;
-            gap: 0;
-            position: relative;
-        }
-
-        .nav-dropdown a {
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            font-family: 'Old Standard TT', serif;
-            font-size: 13px;
-            transition: color 0.2s;
-            white-space: nowrap;
-            line-height: 1.7;
-            position: relative;
-            padding-left: 16px;
-        }
-        .nav-dropdown a::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 50%;
-            width: 10px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-        .nav-dropdown a::after {
-            content: '';
-            position: absolute;
-            left: 0; top: 0;
-            height: 100%;
-            border-left: 1px solid rgba(255,255,255,0.2);
-        }
-        .nav-dropdown a:last-child::after { height: 50%; }
-        .nav-dropdown a:hover { color: white; }
-
-        /* ── Social footer ───────────────────────────────────────────── */
-        .social-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(17, 17, 17, 0.97);
-            border-top: 1px solid #222;
-            padding: 1.2vh 2vw;
-            display: flex;
-            justify-content: space-evenly;
-            z-index: 50;
-            backdrop-filter: blur(10px);
-        }
-
-        .social-link {
-            color: #666;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: color 0.3s ease;
-        }
-
-        .social-link svg {
-            width: 22px;
-            height: 22px;
-            fill: #666;
-            transition: fill 0.3s ease;
-        }
-        @media (hover: hover) {
-            .social-link.soundcloud:hover svg { fill: #FF5500; }
-            .social-link.bandcamp:hover svg   { fill: #0087BE; }
-            .social-link.instagram:hover svg  { fill: #E1306C; }
-        }
-        .social-link.soundcloud:active svg { fill: #FF5500; }
-        .social-link.bandcamp:active svg   { fill: #0087BE; }
-        .social-link.instagram:active svg  { fill: #E1306C; }
-
-        /* ── Mobile ──────────────────────────────────────────────────── */
-        @media (max-width: 768px) {
-            :root { --footer-h: calc(2.4vh + 25px); }
-            html { height: -webkit-fill-available; }
-            body { height: 100vh; height: -webkit-fill-available; height: 100svh; padding-bottom: var(--footer-h); }
-            .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
-            .player-inner { padding: 0; }
-            /* Calendar: fixed 6-row height derived from screen width; player fills the rest.
-               Formula: 6 × (cell_size + gap) − gap + overhead
-               where cell_size = (100vw − 2×0.6rem − 6×0.18rem) / 7
-               simplifies to: 6 × (100vw − 1.02rem) / 7 + 1.29rem + 4px
-               max-height cap guards against short/square devices. */
-            .calendar-section {
-                flex: none;
-                height: calc(6 * (100vw - 1.02rem) / 7 + 1.29rem + 4px);
-                max-height: calc((100svh - 46px - var(--footer-h)) * 2 / 3);
-                padding: 0.3rem 0.6rem calc(0.2rem + 4px);
-            }
-            /* max-width formula: only constrains when max-height cap is active */
-            .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
-            .month-nav-bar h1 { font-size: 2vh; }
-            .player-row { align-items: stretch; justify-content: flex-start; }
-            .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
-            #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
-            #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
-            .image-container { width: auto; height: 100%; flex-shrink: 0; }
-            .file-name { font-size: 0.7rem; max-width: 55vw; }
-            .day-headers         { gap: 0.18rem; }
-            .day-header          { font-size: 0.52rem; }
-            .calendar            { gap: 0.18rem; }
-            .cal-cell            { padding: 0.18rem 0.2rem; }
-            .day-num { font-size: 0.62rem; }
-            .file-entry { font-size: 0.5rem; }
-            .file-more { font-size: 0.48rem; }
-        }
-    </style>
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    :root { --footer-h: calc(2.4vh + 25px); }
+    html { height: -webkit-fill-available; }
+    body { height: 100vh; height: -webkit-fill-available; height: 100svh; padding-bottom: var(--footer-h); }
+}
+</style>
+    <link href="assets/css/player.css" rel="stylesheet">
 </head>
 <body>
 
@@ -572,6 +169,7 @@
                 <button class="day-nav-btn" id="previous-button" aria-label="Previous day">←</button>
                 <div class="image-container" id="image-container">
                     <img id="month-image" src="" alt="" style="display:none">
+                    <video id="video-player" playsinline style="display:none"></video>
                     <span id="no-image-text" class="no-image-text"></span>
                     <button id="play-pause-btn" class="play-pause-btn" aria-label="Play/Pause">
                         <svg class="play-icon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
@@ -609,6 +207,16 @@
 
     <audio id="audio-player"></audio>
 
+        <!-- ── Fullscreen overlay ────────────────────────────────────────── -->
+    <div id="fullscreen-overlay">
+        <div class="fullscreen-content">
+            <img id="fullscreen-image" src="" alt="" style="display:none">
+            <video id="fullscreen-video" playsinline style="display:none"></video>
+        </div>
+        <button id="fullscreen-close" aria-label="Close fullscreen">✕</button>
+        <button id="fullscreen-play-btn" aria-label="Play/Pause"></button>
+    </div>
+
     <!-- ── Social footer ─────────────────────────────────────────────── -->
     <div class="social-footer">
         <a href="https://soundcloud.com/thisfindsyou" target="_blank" class="social-link soundcloud" aria-label="SoundCloud">
@@ -622,475 +230,6 @@
         </a>
     </div>
 
-    <script>
-    // ── Config ─────────────────────────────────────────────────────────
-    const MONTHS = ['january','february','march','april','may','june',
-                    'july','august','september','october','november','december'];
-    document.getElementById('calNavLink').href = '/' + MONTHS[new Date().getMonth()];
-    const MONTH_NAMES = ['January','February','March','April','May','June',
-                         'July','August','September','October','November','December'];
-    const YEAR = new Date().getFullYear();
-
-    // ── Detect month from URL ──────────────────────────────────────────
-    const slug = window.location.pathname.replace(/^\//, '').replace(/\.html$/, '');
-    let currentMonthIndex = Math.max(0, MONTHS.indexOf(slug));
-
-    // ── Point calendar nav link to current real-world month ────────────
-
-    // ── State ──────────────────────────────────────────────────────────
-    let calendarData = {};
-    let selectedDay  = null;
-    let currentFiles = [];
-    let currentTrack = 0;
-    let isPlaying    = false;
-    let loadedFile   = null; // tracks which file is currently in the audio element
-
-    const audioEl = document.getElementById('audio-player');
-
-    // ── Display helpers ────────────────────────────────────────────────
-    // Strip YYYY-MM-DD- prefix from stored filenames for display
-    function displayName(f) {
-        return f.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-    }
-
-    function isImageFile(f) {
-        return /\.(jpg|jpeg|png|gif|webp)$/i.test(f);
-    }
-
-    function ordinal(n) {
-        const s = ['th','st','nd','rd'];
-        const v = n % 100;
-        return n + (s[(v - 20) % 10] || s[v] || s[0]);
-    }
-
-    function fileLabel(day, f) {
-        const data = calendarData[monthKey()];
-        if (!data) return displayName(f);
-        const entry = data.find(d => d.day === day);
-        return (entry && entry.labels && entry.labels[f]) || displayName(f);
-    }
-
-    function blogForDay(day) {
-        const data = calendarData[monthKey()];
-        if (!data) return null;
-        const entry = data.find(d => d.day === day);
-        return (entry && entry.blog) ? entry.blog : null;
-    }
-
-    function blogDisplayName(url) {
-        return url.split('/').pop().replace(/^\d{4}-\d{2}-\d{2}-/, '') + '.txt';
-    }
-
-    // ── Data helpers ───────────────────────────────────────────────────
-    function monthKey() {
-        return `${YEAR}-${String(currentMonthIndex + 1).padStart(2, '0')}`;
-    }
-
-    function daysInMonth(m) { return new Date(YEAR, m + 1, 0).getDate(); }
-    function firstDayOf(m)  { return new Date(YEAR, m, 1).getDay(); }
-
-    function filesForDay(day) {
-        const data = calendarData[monthKey()];
-        if (!data) return [];
-        const entry = data.find(d => d.day === day);
-        return entry ? (entry.files || []) : [];
-    }
-
-    function daysWithFiles() {
-        const data = calendarData[monthKey()];
-        if (!data) return [];
-        return data.map(d => d.day).sort((a, b) => a - b);
-    }
-
-    // ── Calendar render ────────────────────────────────────────────────
-    function renderCalendar() {
-        const grid   = document.getElementById('calendar');
-        grid.innerHTML = '';
-
-        const days   = daysInMonth(currentMonthIndex);
-        const offset = (firstDayOf(currentMonthIndex) + 6) % 7; // Mon=0 … Sun=6
-        const rowCount = Math.ceil((offset + days) / 7);
-        document.documentElement.style.setProperty('--cal-rows', rowCount);
-
-        // blank cells before month start
-        for (let i = 0; i < offset; i++) {
-            const el = document.createElement('div');
-            el.className = 'cal-cell empty';
-            grid.appendChild(el);
-        }
-
-         for (let d = 1; d <= days; d++) {
-             const files = filesForDay(d);
-             const blog  = blogForDay(d);
-             const cell  = document.createElement('div');
-             cell.className = 'cal-cell' + (files.length || blog ? ' has-files' : '');
-             if (d === selectedDay) cell.classList.add('selected');
-
-             // day number
-             const num = document.createElement('div');
-             num.className = 'day-num';
-             num.textContent = d;
-             cell.appendChild(num);
-
-             if (files.length > 0 || blog) {
-                 const list = document.createElement('div');
-                 list.className = 'file-list';
-
-                 // Combine files and blog into a single list for the dropdown
-                 const allItems = [...files];
-                 if (blog) allItems.push(blog);
-                 const totalCount = allItems.length;
-
-                 // Count badge includes both files and blog post
-                 const count = document.createElement('div');
-                 count.className = 'file-more';
-                 count.textContent = totalCount === 1 ? '1 file' : `${totalCount} files`;
-                 count.addEventListener('click', e => { e.stopPropagation(); openDropdown(count, files, blog, d); });
-                 list.appendChild(count);
-
-                 cell.appendChild(list);
-                 cell.addEventListener('click', () => selectDay(d, 0));
-             }
-
-             grid.appendChild(cell);
-         }
-    }
-
-     // ── Dropdown ───────────────────────────────────────────────────────
-     function openDropdown(triggerEl, files, blog, day) {
-         const dd = document.getElementById('file-dropdown');
-         dd.innerHTML = '';
-
-         // Add audio files to dropdown
-         files.forEach((f, i) => {
-             const item = document.createElement('div');
-             item.className = 'dd-item' + (day === selectedDay && i === currentTrack ? ' playing' : '');
-             item.textContent = displayName(f);
-             item.title = displayName(f);
-             item.addEventListener('mousedown', e => {
-                 e.preventDefault();
-                 e.stopPropagation();
-                 selectDay(day, i);
-                 closeDropdown();
-             });
-             dd.appendChild(item);
-         });
-
-         // Add blog post to dropdown if it exists
-         if (blog) {
-             const blogItem = document.createElement('div');
-             blogItem.className = 'dd-item';
-             blogItem.textContent = blogDisplayName(blog);
-             blogItem.title = blogDisplayName(blog);
-             blogItem.addEventListener('mousedown', e => {
-                 e.preventDefault();
-                 e.stopPropagation();
-                 window.location.href = blog + '?from=' + MONTHS[currentMonthIndex];
-             });
-             dd.appendChild(blogItem);
-         }
-
-         dd.style.display = 'block';
-
-         const rect  = triggerEl.getBoundingClientRect();
-         const ddH   = dd.offsetHeight;
-         const below = window.innerHeight - rect.bottom;
-
-         dd.style.top  = (below >= ddH + 8 ? rect.bottom + 4 : rect.top - ddH - 4) + 'px';
-
-         // Position dropdown left or right based on trigger position
-         if (rect.left > window.innerWidth / 2) {
-             // Right side: expand leftward
-             dd.style.right = Math.max(8, window.innerWidth - rect.right) + 'px';
-             dd.style.left = 'auto';
-         } else {
-             // Left side: expand rightward
-             dd.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 310)) + 'px';
-             dd.style.right = 'auto';
-         }
-     }
-
-    function closeDropdown() {
-        document.getElementById('file-dropdown').style.display = 'none';
-    }
-
-    // ── Image ──────────────────────────────────────────────────────────
-    function updateImage() {
-        const img      = document.getElementById('month-image');
-        const noImgEl  = document.getElementById('no-image-text');
-        const src      = `assets/images/${MONTHS[currentMonthIndex]}.webp`;
-
-        img.onload  = () => { img.style.display = 'block'; noImgEl.style.display = 'none'; };
-        img.onerror = () => { img.style.display = 'none';  noImgEl.style.display = ''; };
-        img.src = src;
-    }
-
-    // ── Audio ──────────────────────────────────────────────────────────
-    // Use browser events as single source of truth for isPlaying state.
-    // Never manually set isPlaying = true/false — let the events do it.
-    audioEl.addEventListener('play',  () => { isPlaying = true;  updatePlayBtn(); });
-    audioEl.addEventListener('pause', () => { isPlaying = false; updatePlayBtn(); });
-
-    function playFile(file) {
-        if (isImageFile(file)) {
-            const img    = document.getElementById('month-image');
-            const noImg  = document.getElementById('no-image-text');
-            const webp   = file.replace(/\.\w+$/, '.webp');
-            img.onload   = () => { img.style.display = 'block'; noImg.style.display = 'none'; };
-            img.onerror  = () => { img.style.display = 'none';  noImg.style.display = ''; };
-            img.src      = `assets/images/${webp}`;
-            document.getElementById('play-pause-btn').style.display = 'none';
-            loadedFile = file;
-            return;
-        }
-
-        document.getElementById('play-pause-btn').style.display = '';
-        updateImage();
-
-        if (file !== loadedFile) {
-            audioEl.src = `assets/audio/${file}`;
-            loadedFile = file;
-        }
-        audioEl.muted = false;
-        audioEl.play().catch(err => console.warn('play blocked:', err));
-    }
-
-    function togglePlay() {
-        if (!currentFiles.length) return;
-        if (isPlaying) {
-            audioEl.pause();
-        } else {
-            playFile(currentFiles[currentTrack]);
-        }
-    }
-
-    function updatePlayBtn() {
-        document.getElementById('play-pause-btn').innerHTML = isPlaying
-            ? '<svg class="play-icon" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
-            : '<svg class="play-icon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>';
-    }
-
-    // ── Selection ──────────────────────────────────────────────────────
-    // autoplay=false on init so browser autoplay policy isn't triggered
-    function selectDay(day, trackIndex, autoplay = true) {
-        selectedDay  = day;
-        currentFiles = filesForDay(day);
-        currentTrack = typeof trackIndex === 'number'
-            ? Math.min(trackIndex, currentFiles.length - 1)
-            : 0;
-        renderCalendar();
-        updateFileInfo();
-        if (currentFiles.length) {
-            if (isImageFile(currentFiles[currentTrack])) {
-                playFile(currentFiles[currentTrack]);
-            } else if (autoplay) {
-                playFile(currentFiles[currentTrack]);
-            }
-        }
-    }
-
-    function updateFileInfo() {
-         const dateEl   = document.getElementById('fileDate');
-         const nameEl   = document.getElementById('fileName');
-         const blogWrap = document.getElementById('fileBlogWrap');
-         const blogEl   = document.getElementById('fileBlog');
-         const blog     = selectedDay !== null ? blogForDay(selectedDay) : null;
-
-         if (selectedDay === null) {
-             dateEl.textContent = '';
-             nameEl.textContent = '';
-             blogWrap.style.display = 'none';
-             return;
-         }
-
-         dateEl.textContent = `${MONTH_NAMES[currentMonthIndex]} ${ordinal(selectedDay)}, ${YEAR}`;
-
-         if (currentFiles.length) {
-             const label = fileLabel(selectedDay, currentFiles[currentTrack]);
-             nameEl.textContent = label;
-             nameEl.title = label;
-         } else {
-             nameEl.textContent = '';
-             nameEl.title = '';
-         }
-
-         if (blog) {
-             if (!currentFiles.length) {
-                 nameEl.innerHTML = '<a href="' + blog + '?from=' + MONTHS[currentMonthIndex] + '" target="_blank" rel="noopener noreferrer">' + blogDisplayName(blog) + '</a>';
-                 blogWrap.style.display = 'none';
-             } else {
-                 blogEl.textContent = blogDisplayName(blog);
-                 blogEl.href = blog + '?from=' + MONTHS[currentMonthIndex];
-                 blogWrap.style.display = '';
-             }
-         } else {
-             blogWrap.style.display = 'none';
-         }
-     }
-
-    // ── File navigation (within a day) ────────────────────────────────
-    function nextFile() {
-        if (!currentFiles.length) return;
-        currentTrack = (currentTrack + 1) % currentFiles.length;
-        updateFileInfo();
-        renderCalendar();
-        playFile(currentFiles[currentTrack]);
-    }
-
-    function prevFile() {
-        if (!currentFiles.length) return;
-        currentTrack = (currentTrack - 1 + currentFiles.length) % currentFiles.length;
-        updateFileInfo();
-        renderCalendar();
-        playFile(currentFiles[currentTrack]);
-    }
-
-    // ── Smart navigation: next/prev file on day, else next/prev day ───
-    function smartNext() {
-        if (currentFiles.length && currentTrack < currentFiles.length - 1) {
-            nextFile();
-        } else {
-            nextDay();
-        }
-    }
-
-    function smartPrev() {
-        if (currentFiles.length && currentTrack > 0) {
-            prevFile();
-        } else {
-            prevDay();
-        }
-    }
-
-    // ── Day navigation (cross-day, called by smart fns) ────────────────
-    function nextDay() {
-        const days = daysWithFiles();
-        if (!days.length) { goToMonth((currentMonthIndex + 1) % 12, false); return; }
-
-        if (selectedDay === null) { selectDay(days[0]); return; }
-
-        const idx = days.indexOf(selectedDay);
-        if (idx === days.length - 1) {
-            goToMonth((currentMonthIndex + 1) % 12, false); // first day of next month
-        } else {
-            selectDay(days[Math.max(0, idx + 1)]);
-        }
-    }
-
-    function prevDay() {
-        const days = daysWithFiles();
-        if (!days.length) { goToMonth((currentMonthIndex - 1 + 12) % 12, true); return; }
-
-        if (selectedDay === null) {
-            const d = days[days.length - 1];
-            selectDay(d, filesForDay(d).length - 1); // last file of last day
-            return;
-        }
-
-        const idx = days.indexOf(selectedDay);
-        if (idx <= 0) {
-            goToMonth((currentMonthIndex - 1 + 12) % 12, true); // last file of last day of prev month
-        } else {
-            const d = days[idx - 1];
-            selectDay(d, filesForDay(d).length - 1); // last file of previous day
-        }
-    }
-
-    // ── Month navigation ───────────────────────────────────────────────
-    function goToMonth(newIndex, selectLast) {
-        const target  = MONTHS[newIndex];
-        const current = window.location.pathname.replace(/^\//, '').replace(/\.html$/, '');
-
-        if (current !== target) {
-            if (selectLast) sessionStorage.setItem('calNav', 'last');
-            window.location.href = '/' + target;
-        } else {
-            // same page (shouldn't normally happen, but handle gracefully)
-            currentMonthIndex = newIndex;
-            const days = daysWithFiles();
-            if (days.length) selectDay(selectLast ? days[days.length - 1] : days[0]);
-            else { selectedDay = null; currentFiles = []; renderCalendar(); updateFileInfo(); }
-        }
-    }
-
-    // ── Month title ────────────────────────────────────────────────────
-    function updateMonthTitle() {
-        document.getElementById('monthTitle').textContent =
-            `${MONTH_NAMES[currentMonthIndex]} ${YEAR}`;
-    }
-
-    // ── Init ───────────────────────────────────────────────────────────
-    function initPage() {
-        updateMonthTitle();
-        updateImage();
-
-        const days     = daysWithFiles();
-        const selectLast = sessionStorage.getItem('calNav') === 'last';
-        sessionStorage.removeItem('calNav');
-
-        if (days.length) {
-            const d = selectLast ? days[days.length - 1] : days[0];
-            const track = selectLast ? filesForDay(d).length - 1 : 0;
-            selectDay(d, track, false);
-        } else {
-            selectedDay = null;
-            currentFiles = [];
-            renderCalendar();
-            updateFileInfo();
-        }
-    }
-
-    async function loadCalendarData() {
-        try {
-            const res  = await fetch('/assets/data/calendar.json?v=' + Date.now());
-            calendarData = await res.json();
-        } catch(e) {
-            console.error('Could not load calendar data', e);
-        }
-        initPage();
-    }
-
-    // ── Event Listeners ────────────────────────────────────────────────
-    document.getElementById('prevMonthBtn').addEventListener('click', () => goToMonth((currentMonthIndex - 1 + 12) % 12, false));
-    document.getElementById('nextMonthBtn').addEventListener('click', () => goToMonth((currentMonthIndex + 1) % 12, false));
-    document.getElementById('previous-button').addEventListener('click', smartPrev);
-    document.getElementById('next-button').addEventListener('click', smartNext);
-    document.getElementById('image-container').addEventListener('click', togglePlay);
-
-    audioEl.addEventListener('ended', smartNext);
-
-    window.addEventListener('keydown', e => {
-        if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
-        if (e.code === 'ArrowRight') { e.preventDefault(); smartNext(); }
-        if (e.code === 'ArrowLeft')  { e.preventDefault(); smartPrev(); }
-    });
-
-    // close dropdown on outside click
-    document.addEventListener('click', e => {
-        if (!e.target.closest('#file-dropdown') && !e.target.closest('.file-more')) {
-            closeDropdown();
-        }
-    });
-
-    // nav dropdown
-    (function() {
-        const toggle   = document.getElementById('navToggle');
-        const dropdown = document.getElementById('navDropdown');
-        toggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const open = dropdown.classList.toggle('open');
-            toggle.setAttribute('aria-expanded', open);
-        });
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('#siteNav')) {
-                dropdown.classList.remove('open');
-                toggle.setAttribute('aria-expanded', 'false');
-            }
-        });
-    })();
-
-    // ── Boot ───────────────────────────────────────────────────────────
-    loadCalendarData();
-    </script>
+    <script src="assets/js/player.js"></script>
 </body>
 </html>

@@ -18,7 +18,9 @@
     { "day": 16, "files": ["2026-05-16-portraitureVA2.jpg"], "labels": {"2026-05-16-portraitureVA2.jpg": "Portraiture VA2 Release"} },
     { "day": 24, "blog": "/blog/2026-05-24-unencumbered" }
   ],
-  "2026-06": [],
+  "2026-06": [
+    { "day": 7, "files": ["2026-06-07-IMG_1523.MOV"], "labels": {"2026-06-07-IMG_1523.MOV": "Paddy's Video"} }
+  ],
   "2026-07": [],
   "2026-08": [],
   "2026-09": [],
