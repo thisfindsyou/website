@@ -207,7 +207,9 @@ videoEl.addEventListener('ended', smartNext);
 function playFile(file, autoplay = true) {
     const img     = document.getElementById('month-image');
     const noImg   = document.getElementById('no-image-text');
+    const ppBtn   = document.getElementById('play-pause-btn');
 
+    ppBtn.style.display = 'none';
     videoEl.style.display = 'none';
     videoEl.pause();
 
@@ -291,10 +293,16 @@ function openFullscreen(src, type) {
     if (type === 'image') {
         fsImg.src = src;
         fsImg.style.display = '';
-        fsPlay.classList.add('visible');
-        fsPlay.innerHTML = audioEl.paused
-            ? '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
-            : '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+        const file = currentFiles[currentTrack];
+        const isAudio = file && !isImageFile(file) && !isVideoFile(file);
+        if (isAudio) {
+            fsPlay.classList.add('visible');
+            fsPlay.innerHTML = audioEl.paused
+                ? '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+                : '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+        } else {
+            fsPlay.classList.remove('visible');
+        }
     } else if (type === 'video') {
         const currentVideo = document.getElementById('video-player');
         const wasPlaying = !currentVideo.paused;

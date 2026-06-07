@@ -442,7 +442,7 @@
     padding: 0;
     width: 48px;
     height: 48px;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     color: rgba(255,255,255,0.6);
@@ -450,6 +450,7 @@
     z-index: 100002;
     transition: color 0.2s, opacity 0.2s;
 }
+#fullscreen-play-btn.visible { display: flex; }
 #fullscreen-play-btn:hover { color: white; }
 #fullscreen-play-btn svg {
     width: 32px;
