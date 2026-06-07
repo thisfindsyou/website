@@ -529,7 +529,9 @@ document.getElementById('next-button').addEventListener('click', smartNext);
 document.getElementById('fullscreen-close').addEventListener('click', closeFullscreen);
 
 document.getElementById('play-pause-btn').addEventListener('click', function(e) {
-    e.stopPropagation();
+    const file = currentFiles[currentTrack];
+    const isAudio = file && !isImageFile(file) && !isVideoFile(file);
+    if (!isAudio) e.stopPropagation();
     togglePlay();
 });
 
@@ -548,13 +550,9 @@ document.getElementById('image-container').addEventListener('click', function(e)
             openFullscreen(videoEl.currentSrc || videoEl.src, 'video');
         }
     } else {
-        togglePlay();
+        const imgEl = document.getElementById('month-image');
+        if (imgEl.src) openFullscreen(imgEl.src, 'image');
     }
-});
-
-document.getElementById('month-image').addEventListener('click', function(e) {
-    e.stopPropagation();
-    if (this.src) openFullscreen(this.src, 'image');
 });
 
 document.getElementById('fullscreen-play-btn').addEventListener('click', function(e) {
