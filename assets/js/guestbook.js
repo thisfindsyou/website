@@ -1,5 +1,6 @@
 var API = 'https://guestbook-api.clovehitch.workers.dev';
 var allEntries = [];
+var fuse;
 
 function fmtDate(ts) {
   var d = new Date(ts);
@@ -23,7 +24,7 @@ function escapeHtml(s) {
 }
 
 function render(entries) {
-  var el = document.getElementById('messages');
+  var el = document.getElementById('messagesContent');
   if (!entries || !entries.length) {
     var searchEl = document.getElementById('searchInput');
     var isSearch = searchEl && searchEl.value.trim();
@@ -41,21 +42,22 @@ function render(entries) {
   }).join('');
 }
 
+function initFuse() {
+  fuse = new Fuse(allEntries, { keys: ['name', 'message'], threshold: 0.4 });
+}
+
 function doSearch() {
   var q = document.getElementById('searchInput').value.trim().toLowerCase();
   if (!q) { render(allEntries); return; }
-  var filtered = allEntries.filter(function(e) {
-    return e.name.toLowerCase().indexOf(q) !== -1 || e.message.toLowerCase().indexOf(q) !== -1;
-  });
-  render(filtered);
+  render(fuse.search(q).map(function(r) { return r.item; }));
 }
 
 function toggleSearch() {
   var bar = document.getElementById('searchBar');
-  var btn = document.getElementById('searchBtn');
+  var trigger = document.getElementById('searchTrigger');
   var input = document.getElementById('searchInput');
   var isOpen = bar.classList.toggle('open');
-  btn.classList.toggle('active', isOpen);
+  trigger.classList.toggle('active', isOpen);
   if (isOpen) {
     input.focus();
   } else {
@@ -65,17 +67,17 @@ function toggleSearch() {
 }
 
 function load() {
-  var msgs = document.getElementById('messages');
-  msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">loading…</div></div>';
+  var el = document.getElementById('messagesContent');
+  el.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">loading…</div></div>';
 
   fetch(API + '/entries')
     .then(function(r) {
       if (!r.ok) throw new Error('status ' + r.status);
       return r.json();
     })
-    .then(function(entries) { allEntries = entries; render(entries); })
+    .then(function(entries) { allEntries = entries; initFuse(); render(entries); })
     .catch(function() {
-      msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet</div></div>';
+      el.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet</div></div>';
     });
 }
 
@@ -101,6 +103,7 @@ function submit() {
   })
   .then(function(entries) {
     allEntries = entries;
+    initFuse();
     var bar = document.getElementById('searchBar');
     if (bar.classList.contains('open')) toggleSearch();
     nameEl.value = '';
@@ -127,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Escape') { toggleSearch(); return; }
     doSearch();
   });
-  document.getElementById('searchBtn').addEventListener('click', toggleSearch);
+  document.getElementById('searchTrigger').addEventListener('click', toggleSearch);
   document.getElementById('sendBtn').addEventListener('click', submit);
   document.getElementById('inputMsg').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') submit();
