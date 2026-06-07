@@ -7,7 +7,7 @@ async function handleRequest(request) {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
   };
 
   if (request.method === 'OPTIONS') {
@@ -58,6 +58,12 @@ async function handleRequest(request) {
     }
 
     if (request.method === 'DELETE') {
+      if (request.headers.get('X-Admin-Key') !== ADMIN_KEY) {
+        return new Response(JSON.stringify({ error: 'unauthorized' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
       const body = await request.json();
       const id = body && body.id;
       if (!id) {
