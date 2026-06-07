@@ -6,7 +6,7 @@ async function handleRequest(request) {
   const url = new URL(request.url);
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
 
@@ -52,6 +52,24 @@ async function handleRequest(request) {
       entries.sort((a, b) => b.timestamp - a.timestamp);
       await KV.put('entries', JSON.stringify(entries));
 
+      return new Response(JSON.stringify(entries), {
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
+    }
+
+    if (request.method === 'DELETE') {
+      const body = await request.json();
+      const id = body && body.id;
+      if (!id) {
+        return new Response(JSON.stringify({ error: 'id is required' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
+      const raw = await KV.get('entries');
+      let entries = raw ? JSON.parse(raw) : [];
+      entries = entries.filter(function(e) { return e.id !== id; });
+      await KV.put('entries', JSON.stringify(entries));
       return new Response(JSON.stringify(entries), {
         headers: { 'Content-Type': 'application/json', ...corsHeaders },
       });
