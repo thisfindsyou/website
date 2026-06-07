@@ -419,6 +419,21 @@ function prevFile() {
     playFile(currentFiles[currentTrack]);
 }
 
+function openFullscreenForCurrentFile() {
+    const file = currentFiles[currentTrack];
+    if (isImageFile(file)) {
+        const imgEl = document.getElementById('month-image');
+        if (imgEl.src) openFullscreen(imgEl.src, 'image');
+    } else if (isVideoFile(file)) {
+        const videoEl = document.getElementById('video-player');
+        const src = videoEl.currentSrc || videoEl.src;
+        if (src) openFullscreen(src, 'video');
+    } else {
+        const imgEl = document.getElementById('month-image');
+        if (imgEl.src) openFullscreen(imgEl.src, 'image');
+    }
+}
+
 // ── Smart navigation ───────────────────────────────────────────────
 function smartNext() {
     if (isFullscreen) closeFullscreen();
@@ -590,8 +605,26 @@ window.addEventListener('keydown', e => {
         return;
     }
     if (isFullscreen) {
-        if (e.code === 'ArrowRight') { e.preventDefault(); closeFullscreen(); setTimeout(smartNext, 200); }
-        if (e.code === 'ArrowLeft')  { e.preventDefault(); closeFullscreen(); setTimeout(smartPrev, 200); }
+        if (e.code === 'ArrowRight') {
+            e.preventDefault();
+            if (currentFiles.length && currentTrack < currentFiles.length - 1) {
+                nextFile();
+                openFullscreenForCurrentFile();
+            } else {
+                closeFullscreen();
+                setTimeout(smartNext, 400);
+            }
+        }
+        if (e.code === 'ArrowLeft') {
+            e.preventDefault();
+            if (currentFiles.length && currentTrack > 0) {
+                prevFile();
+                openFullscreenForCurrentFile();
+            } else {
+                closeFullscreen();
+                setTimeout(smartPrev, 400);
+            }
+        }
         return;
     }
     if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
