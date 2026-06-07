@@ -528,6 +528,11 @@ document.getElementById('previous-button').addEventListener('click', smartPrev);
 document.getElementById('next-button').addEventListener('click', smartNext);
 document.getElementById('fullscreen-close').addEventListener('click', closeFullscreen);
 
+document.getElementById('play-pause-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    togglePlay();
+});
+
 document.getElementById('image-container').addEventListener('click', function(e) {
     if (!currentFiles.length) return;
     const file = currentFiles[currentTrack];
