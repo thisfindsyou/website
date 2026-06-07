@@ -493,11 +493,11 @@
     }
     .calendar-grid-wrap  { max-width: none; }
     .month-nav-bar h1 { font-size: 2vh; }
-    .player-row { align-items: stretch; justify-content: flex-start; }
-    .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
-    #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
-    #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
-    .image-container { width: auto; height: 100%; }
+    .player-row { align-items: center; justify-content: center; }
+    .day-nav-btn { font-size: 1.1rem; padding: 0.5rem 0.4rem; position: absolute; top: 50%; transform: translateY(-50%); flex: none; }
+    #previous-button { right: auto; left: 0; }
+    #next-button { left: auto; right: 0; }
+    .image-container { width: auto; height: 100%; max-width: 100%; }
     .file-name { font-size: 0.7rem; max-width: 55vw; }
     .day-headers         { gap: 0.18rem; }
     .day-header          { font-size: 0.52rem; }
