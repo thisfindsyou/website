@@ -529,9 +529,7 @@ document.getElementById('next-button').addEventListener('click', smartNext);
 document.getElementById('fullscreen-close').addEventListener('click', closeFullscreen);
 
 document.getElementById('play-pause-btn').addEventListener('click', function(e) {
-    const file = currentFiles[currentTrack];
-    const isAudio = file && !isImageFile(file) && !isVideoFile(file);
-    if (!isAudio) e.stopPropagation();
+    e.stopPropagation();
     togglePlay();
 });
 
