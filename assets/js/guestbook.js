@@ -21,7 +21,7 @@ function escapeHtml(s) {
 function render(entries) {
   var el = document.getElementById('messages');
   if (!entries || !entries.length) {
-    el.innerHTML = '<div class="empty-state">no entries yet — be the first</div>';
+    el.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet — be the first</div></div>';
     return;
   }
   el.innerHTML = entries.map(function(e) {
@@ -37,7 +37,7 @@ function render(entries) {
 
 function load() {
   var msgs = document.getElementById('messages');
-  msgs.innerHTML = '<div class="empty-state">loading…</div>';
+  msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">loading…</div></div>';
 
   fetch(API + '/entries')
     .then(function(r) {
@@ -46,7 +46,7 @@ function load() {
     })
     .then(render)
     .catch(function() {
-      msgs.innerHTML = '<div class="empty-state">no entries yet</div>';
+      msgs.innerHTML = '<div class="entry entry--empty"><div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">no entries yet</div></div>';
     });
 }
 
@@ -88,23 +88,7 @@ function submit() {
   });
 }
 
-function setEmptyStateHeight() {
-  var temp = document.createElement('div');
-  temp.className = 'entry';
-  temp.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none';
-  temp.innerHTML = '<div class="entry-head"><span class="entry-name">&nbsp;</span><span class="entry-time">&nbsp;</span></div><div class="entry-msg">&nbsp;</div>';
-  document.body.appendChild(temp);
-  var h = temp.offsetHeight;
-  document.body.removeChild(temp);
-  var style = document.getElementById('emptyStateStyle') || document.createElement('style');
-  style.id = 'emptyStateStyle';
-  style.textContent = '.empty-state { min-height: ' + h + 'px; }';
-  document.head.appendChild(style);
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-  setEmptyStateHeight();
-  window.addEventListener('resize', setEmptyStateHeight);
   load();
 
   document.getElementById('sendBtn').addEventListener('click', submit);
