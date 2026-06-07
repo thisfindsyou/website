@@ -157,11 +157,20 @@
             word-wrap: break-word;
         }
 
+        .entry--empty {
+            position: relative;
+        }
+
         .entry--empty .entry-head {
             visibility: hidden;
         }
 
         .entry--empty .entry-msg {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
             text-align: center;
             font-style: italic;
             color: #444;
