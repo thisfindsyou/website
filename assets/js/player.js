@@ -689,15 +689,27 @@ document.addEventListener('click', e => {
 
 // ── Mobile image square fix ────────────────────────────────────────
 // Instagram's WebKit doesn't always resolve aspect-ratio: 1 when
-// width uses calc().  Explicitly set height = width on resize/init.
+// width uses calc().  Explicitly set both dimensions from the flex
+// container's available space.
 function fixImageSquare() {
-    if (window.innerWidth > 768) return;
     const c = document.getElementById('image-container');
     if (!c) return;
-    c.style.height = c.getBoundingClientRect().width + 'px';
+    if (window.innerWidth > 768) {
+        c.style.removeProperty('width');
+        c.style.removeProperty('height');
+        return;
+    }
+    const row = c.parentElement;
+    if (!row) return;
+    const rowW = row.getBoundingClientRect().width;
+    const rowH = row.getBoundingClientRect().height;
+    const size = Math.min(rowW - 80, rowH);
+    if (size > 0) {
+        c.style.width  = size + 'px';
+        c.style.height = size + 'px';
+    }
 }
 window.addEventListener('resize', () => requestAnimationFrame(fixImageSquare));
-fixImageSquare();
 
 // ── Boot ───────────────────────────────────────────────────────────
 loadCalendarData();
