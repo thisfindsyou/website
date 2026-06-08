@@ -689,27 +689,22 @@ document.addEventListener('click', e => {
 })();
 
 // ── Mobile image square fix ────────────────────────────────────────
-// Instagram's WebKit doesn't always resolve aspect-ratio: 1 when
-// width uses calc().  Explicitly set both dimensions from the flex
-// container's available space.
+// Instagram's WebKit ignores aspect-ratio: 1 when width uses calc().
+// Set height = current computed width explicitly, overriding both the
+// base CSS aspect-ratio and the auto height.
 function fixImageSquare() {
     const c = document.getElementById('image-container');
     if (!c) return;
     if (window.innerWidth > 768) {
-        c.style.removeProperty('width');
         c.style.removeProperty('height');
         return;
     }
-    const row = c.parentElement;
-    if (!row) return;
-    const rowW = row.getBoundingClientRect().width;
-    const rowH = row.getBoundingClientRect().height;
-    const size = Math.min(rowW - 80, rowH);
-    if (size > 0) {
-        c.style.width  = size + 'px';
-        c.style.height = size + 'px';
-    }
+    const w = c.offsetWidth;
+    if (w < 10) return;
+    c.style.aspectRatio = 'unset';
+    c.style.setProperty('height', w + 'px', 'important');
 }
+fixImageSquare();
 window.addEventListener('resize', () => requestAnimationFrame(fixImageSquare));
 
 // ── Boot ───────────────────────────────────────────────────────────
