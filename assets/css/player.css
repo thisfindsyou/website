@@ -481,6 +481,14 @@
     }
 }
 
+/* ── Nav font size ────────────────────────────────────────────── */
+/* Desktop and mobile: 16 px prevents iOS auto-zoom on tap targets.
+   player.css loads after the per-page <style> so this wins on month pages. */
+.nav-toggle,
+.nav-dropdown a {
+    font-size: 16px;
+}
+
 /* ── Nav dropdown background ──────────────────────────────────── */
 /* Override per-page rgba(0,0,0,0.95) on month pages to match the
    rgba(17,17,17,0.95) used on every other page. */
