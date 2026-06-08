@@ -518,7 +518,7 @@
        it can never overflow horizontally.  aspect-ratio: 1 on the base rule
        keeps it square.  Buttons get flex: 0 0 auto so they take their natural
        width and don't compete with the image for space. */
-    .player-row { align-items: center; justify-content: center; gap: 0; container-type: normal; }
+    .player-row { align-items: center; justify-content: center; gap: 0; container-type: normal; overflow: hidden; }
     .day-nav-btn { font-size: 16px; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; min-width: 2.5rem; }
     #previous-button { right: auto; }
     #next-button { left: auto; }
