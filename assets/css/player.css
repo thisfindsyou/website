@@ -499,14 +499,15 @@
     /* Center the image in the full-width row; absolute-position the arrows so
        they don't participate in flex sizing and can't push the image off-center.
        Also remove gap and container-type which aren't needed on mobile. */
-    .player-row { align-items: center; justify-content: center; gap: 0; }
+    /* stretch makes the image fill the row height; width: auto + aspect-ratio: 1
+       (set in the base rule) then makes it square — no container queries needed,
+       so this works in Instagram's WKWebView.  Buttons are absolute so they
+       don't affect the flex layout or push the image off-centre. */
+    .player-row { align-items: stretch; justify-content: center; gap: 0; container-type: normal; }
     .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.5rem; position: absolute; top: 50%; transform: translateY(-50%); flex: unset; display: block; }
     #previous-button { left: 0; right: auto; }
     #next-button { right: 0; left: auto; }
-    /* min() picks the smaller of (row-width minus button space) or (row-height),
-       so the image is always a square that fits in both dimensions.
-       container-type: size on .player-row (base style) makes cqw/cqh available. */
-    .image-container { width: min(calc(100cqw - 5rem), 100cqh); height: auto; flex-shrink: 0; }
+    .image-container { width: auto; height: 100%; flex-shrink: 0; }
     .file-name { font-size: 0.7rem; max-width: 55vw; }
     .day-headers         { gap: 0.18rem; }
     .day-header          { font-size: 0.52rem; }
