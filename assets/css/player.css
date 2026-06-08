@@ -514,16 +514,15 @@
     /* Center the image in the full-width row; absolute-position the arrows so
        they don't participate in flex sizing and can't push the image off-center.
        Also remove gap and container-type which aren't needed on mobile. */
-    /* Keep buttons as static flex items (flex: 1 each) so all three children
-       stretch together — this is what makes height: 100% resolve correctly on
-       the image in Instagram's WebView.  The original bug was flex-start + a
-       0.6 rem gap pushing the image past the container edge; gap: 0 + center
-       fixes that without touching the flex-item structure. */
-    .player-row { align-items: stretch; justify-content: center; gap: 0; container-type: normal; }
-    .day-nav-btn { font-size: 16px; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
-    #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
-    #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
-    .image-container { width: auto; height: 100%; flex-shrink: 0; }
+    /* Size the image by width (reserving 2.5 rem for each arrow button) so
+       it can never overflow horizontally.  aspect-ratio: 1 on the base rule
+       keeps it square.  Buttons get flex: 0 0 auto so they take their natural
+       width and don't compete with the image for space. */
+    .player-row { align-items: center; justify-content: center; gap: 0; container-type: normal; }
+    .day-nav-btn { font-size: 16px; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; min-width: 2.5rem; }
+    #previous-button { right: auto; }
+    #next-button { left: auto; }
+    .image-container { width: calc(100% - 5rem); height: auto; flex: 0 0 auto; }
     .nav-toggle { font-size: 16px; }
     .nav-dropdown a { font-size: 16px; }
     .file-name { font-size: 0.7rem; max-width: 55vw; }
@@ -534,4 +533,11 @@
     .day-num { font-size: 0.62rem; }
     .file-entry { font-size: 0.5rem; }
     .file-more { font-size: 0.48rem; }
+}
+
+/* ── Safe area insets ─────────────────────────────────────────── */
+/* Push the fixed social footer above the iPhone home indicator /
+   Instagram bottom bar. */
+.social-footer {
+    padding-bottom: max(1.2vh, env(safe-area-inset-bottom, 0px));
 }
