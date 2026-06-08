@@ -499,14 +499,15 @@
     /* Center the image in the full-width row; absolute-position the arrows so
        they don't participate in flex sizing and can't push the image off-center.
        Also remove gap and container-type which aren't needed on mobile. */
-    /* stretch makes the image fill the row height; width: auto + aspect-ratio: 1
-       (set in the base rule) then makes it square — no container queries needed,
-       so this works in Instagram's WKWebView.  Buttons are absolute so they
-       don't affect the flex layout or push the image off-centre. */
+    /* Keep buttons as static flex items (flex: 1 each) so all three children
+       stretch together — this is what makes height: 100% resolve correctly on
+       the image in Instagram's WebView.  The original bug was flex-start + a
+       0.6 rem gap pushing the image past the container edge; gap: 0 + center
+       fixes that without touching the flex-item structure. */
     .player-row { align-items: stretch; justify-content: center; gap: 0; container-type: normal; }
-    .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.5rem; position: absolute; top: 50%; transform: translateY(-50%); flex: unset; display: block; }
-    #previous-button { left: 0; right: auto; }
-    #next-button { right: 0; left: auto; }
+    .day-nav-btn { font-size: 1.1rem; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; }
+    #previous-button { right: auto; justify-content: flex-end; padding-right: 0.3rem; }
+    #next-button { left: auto; justify-content: flex-start; padding-left: 0.3rem; }
     .image-container { width: auto; height: 100%; flex-shrink: 0; }
     .file-name { font-size: 0.7rem; max-width: 55vw; }
     .day-headers         { gap: 0.18rem; }
