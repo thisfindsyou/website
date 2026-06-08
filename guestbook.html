@@ -294,12 +294,21 @@
             right: 0;
             border-top: 1px solid #222;
             padding: 1.2vh 2vw;
-            display: flex;
-            justify-content: space-evenly;
             background: rgba(17, 17, 17, 0.97);
             z-index: 50;
             backdrop-filter: blur(10px);
         }
+
+        .social-link {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .social-link.soundcloud { left: 25%; }
+        .social-link.bandcamp { left: 50%; }
+        .social-link.instagram { left: 75%; }
+
+
 
         .social-link {
             color: #666;

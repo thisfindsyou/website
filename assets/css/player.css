@@ -516,3 +516,12 @@
 .social-footer {
     padding-bottom: max(1.2vh, env(safe-area-inset-bottom, 0px));
 }
+
+.social-link {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.social-link.soundcloud { left: 25%; }
+.social-link.bandcamp { left: 50%; }
+.social-link.instagram { left: 75%; }
