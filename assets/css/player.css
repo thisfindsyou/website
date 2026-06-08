@@ -482,7 +482,7 @@
 
 /* ── Mobile ──────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-    .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
+    .player-section { padding: calc(2.5svh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
     /* Remove the vh-based max-width — it shrinks the player narrower than the
        calendar when viewport height is reduced (e.g. Instagram's in-app bar),
        making the player appear offset to the right relative to the calendar. */
