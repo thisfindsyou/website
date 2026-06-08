@@ -56,14 +56,14 @@
 
 .month-nav-bar h1 {
     font-family: 'Old Standard TT', serif;
-    font-size: 2.5vh;
+    font-size: 16px;
     font-weight: normal;
     letter-spacing: 1px;
     margin: 0;
 }
 
 .month-nav-bar .month-nav-btn {
-    font-size: 1.8vh;
+    font-size: 16px;
     padding: 0 0.3rem;
 }
 
@@ -510,8 +510,7 @@
         padding: 0.3rem 0.6rem calc(0.2rem + 4px);
     }
     .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
-    .month-nav-bar h1 { font-size: 16px; }
-    .month-nav-bar .month-nav-btn { font-size: 16px; }
+
     /* Center the image in the full-width row; absolute-position the arrows so
        they don't participate in flex sizing and can't push the image off-center.
        Also remove gap and container-type which aren't needed on mobile. */
