@@ -514,5 +514,5 @@
 /* Push the fixed social footer above the iPhone home indicator /
    Instagram bottom bar. */
 .social-footer {
-    padding-bottom: max(calc(1.2vh - 4px), env(safe-area-inset-bottom, 0px));
+    padding-bottom: max(1.2vh, env(safe-area-inset-bottom, 0px));
 }
