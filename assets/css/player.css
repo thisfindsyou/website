@@ -495,18 +495,20 @@
     }
     .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
 
-    /* Center the image in the full-width row; absolute-position the arrows so
-       they don't participate in flex sizing and can't push the image off-center.
-       Also remove gap and container-type which aren't needed on mobile. */
-    /* Size the image by width (reserving 2.5 rem for each arrow button) so
-       it can never overflow horizontally.  aspect-ratio: 1 on the base rule
-       keeps it square.  Buttons get flex: 0 0 auto so they take their natural
-       width and don't compete with the image for space. */
+    /* Buttons get flex: 0 0 auto so they keep their natural 2.5 rem width.
+       Image uses the padding-bottom trick to stay perfectly square regardless
+       of what browser you're on (aspect-ratio support not required). */
     .player-row { align-items: center; justify-content: center; gap: 0; container-type: normal; overflow: hidden; }
     .day-nav-btn { font-size: 16px; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; min-width: 2.5rem; }
     #previous-button { right: auto; }
     #next-button { left: auto; }
-    .image-container { width: calc(100% - 5rem); height: auto; flex: 0 0 auto; aspect-ratio: unset; }
+    /* padding-bottom = same value as width creates a perfect square in every
+       browser ever made, no aspect-ratio or JS needed.  height: 0 makes the
+       content-box zero and the padding provides the rendered height.  The img/
+       video must be absolutely positioned inside the container to fill it. */
+    .image-container { width: calc(100% - 5rem); height: 0; padding-bottom: calc(100% - 5rem); flex: 0 0 auto; aspect-ratio: unset; }
+    .image-container img,
+    .image-container video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .file-name { font-size: 0.7rem; max-width: 55vw; }
     .day-headers         { gap: 0.18rem; }
     .day-header          { font-size: 0.52rem; }
