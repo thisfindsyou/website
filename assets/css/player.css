@@ -524,5 +524,6 @@
 }
 .social-link.soundcloud { left: 25%; }
 .social-link.bandcamp { left: 50%; }
+.social-link.bandcamp svg { width: 20px; height: 20px; }
 .social-link.instagram { left: 75%; }
 .social-link.instagram svg { width: 16px; height: 16px; }
