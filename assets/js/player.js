@@ -530,6 +530,7 @@ function initPage() {
         renderCalendar();
         updateFileInfo();
     }
+    requestAnimationFrame(fixImageSquare);
 }
 
 function updateMonthTitle() {
