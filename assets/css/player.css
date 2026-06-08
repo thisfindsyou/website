@@ -481,6 +481,13 @@
     }
 }
 
+/* ── Nav dropdown background ──────────────────────────────────── */
+/* Override per-page rgba(0,0,0,0.95) on month pages to match the
+   rgba(17,17,17,0.95) used on every other page. */
+.site-nav:has(.nav-dropdown.open) {
+    background: rgba(17, 17, 17, 0.95);
+}
+
 /* ── Mobile ──────────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
