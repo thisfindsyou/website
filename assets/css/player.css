@@ -6,7 +6,6 @@
     flex-direction: column;
     align-items: center;
     padding: calc(3vh + 0.3rem) 0 0.3rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .player-inner {
