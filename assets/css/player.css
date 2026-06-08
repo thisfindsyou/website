@@ -481,21 +481,6 @@
     }
 }
 
-/* ── Nav font size ────────────────────────────────────────────── */
-/* Desktop and mobile: 16 px prevents iOS auto-zoom on tap targets.
-   player.css loads after the per-page <style> so this wins on month pages. */
-.nav-toggle,
-.nav-dropdown a {
-    font-size: 16px;
-}
-
-/* ── Nav dropdown background ──────────────────────────────────── */
-/* Override per-page rgba(0,0,0,0.95) on month pages to match the
-   rgba(17,17,17,0.95) used on every other page. */
-.site-nav:has(.nav-dropdown.open) {
-    background: rgba(17, 17, 17, 0.95);
-}
-
 /* ── Mobile ──────────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .player-section { padding: calc(2.5vh + 0.1rem) 0 0.2rem; flex: 1; min-height: 0; }
@@ -523,8 +508,6 @@
     #previous-button { right: auto; }
     #next-button { left: auto; }
     .image-container { width: calc(100% - 5rem); height: auto; flex: 0 0 auto; }
-    .nav-toggle { font-size: 16px; }
-    .nav-dropdown a { font-size: 16px; }
     .file-name { font-size: 0.7rem; max-width: 55vw; }
     .day-headers         { gap: 0.18rem; }
     .day-header          { font-size: 0.52rem; }
