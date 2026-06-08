@@ -495,20 +495,11 @@
     }
     .calendar-grid-wrap  { max-width: calc(7 * ((100svh - 46px - var(--footer-h)) * 2 / 3 - 2.37rem - 4px) / 6 + 6 * 0.18rem); }
 
-    /* Buttons get flex: 0 0 auto so they keep their natural 2.5 rem width.
-       Image uses the padding-bottom trick to stay perfectly square regardless
-       of what browser you're on (aspect-ratio support not required). */
-    .player-row { align-items: center; justify-content: center; gap: 0; container-type: normal; overflow: hidden; }
-    .day-nav-btn { font-size: 16px; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; min-width: 2.5rem; }
+    .player-row { align-items: stretch; justify-content: center; gap: 0; container-type: normal; overflow: hidden; }
+    .day-nav-btn { font-size: 16px; padding: 0.4rem 0.3rem; position: static; transform: none; top: auto; flex: 1; display: flex; align-items: center; justify-content: center; }
     #previous-button { right: auto; }
     #next-button { left: auto; }
-    /* padding-bottom = same value as width creates a perfect square in every
-       browser ever made, no aspect-ratio or JS needed.  height: 0 makes the
-       content-box zero and the padding provides the rendered height.  The img/
-       video must be absolutely positioned inside the container to fill it. */
-    .image-container { width: calc(100% - 5rem); height: 0; padding-bottom: calc(100% - 5rem); flex: 0 0 auto; aspect-ratio: unset; }
-    .image-container img,
-    .image-container video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .image-container { width: auto; height: 100%; flex-shrink: 0; aspect-ratio: 1; }
     .file-name { font-size: 0.7rem; max-width: 55vw; }
     .day-headers         { gap: 0.18rem; }
     .day-header          { font-size: 0.52rem; }
