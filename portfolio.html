@@ -144,9 +144,18 @@
             padding: 1.2vh 2vw;
             z-index: 50;
             backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-evenly;
+            min-height: 24px;
         }
+
+        .social-link {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .social-link.soundcloud { left: 25%; }
+        .social-link.bandcamp { left: 50%; }
+        .social-link.instagram { left: 75%; }
+
 
 
 
