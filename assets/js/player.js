@@ -531,6 +531,7 @@ function initPage() {
         updateFileInfo();
     }
     requestAnimationFrame(fixImageSquare);
+    setTimeout(fixImageSquare, 150);
 }
 
 function updateMonthTitle() {
